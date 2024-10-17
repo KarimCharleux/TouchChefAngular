@@ -1,0 +1,27 @@
+<div class="video-container">
+  <video #backgroundVideo
+         autoplay
+         muted
+         loop
+         preload="auto"
+         (loadeddata)="onLoadedData()"
+         (waiting)="onVideoWaiting()"
+         (pause)="onLoadedData()"
+         id="background-video">
+    <source src="/assets/video-background.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+  <div class="content">
+    <h2>Welcome to</h2>
+    <h1>TouchChef</h1>
+
+    <h2>Nombre de joueurs</h2>
+    <div class="flex flex-row items-center justify-center gap-2 mb-9">
+      <button class="game-button counter-button red text-9xl">-</button>
+      <h2 class="text-6xl">1</h2>
+      <button class="game-button counter-button green">+</button>
+    </div>
+
+    <button class="game-button orange">Let's Cook !</button>
+  </div>
+</div>

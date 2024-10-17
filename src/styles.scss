@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "variables";
+
+body {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: 'Raleway', sans-serif;
+  border-radius: $border-radius-high;
+  margin: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: $font-size-large;
+  transition: all 0.3s ease;
+}
+
+h1 {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14rem;
+  line-height: normal;
+  font-family: "Allison", cursive;
+  user-select: none;
+  text-shadow: 0 0 10px #ffc800;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+h2 {
+  font-weight: 900;
+  font-size: 2.5rem;
+  line-height: normal;
+  user-select: none;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+h3 {
+  font-weight: 900;
+  font-size: 2rem;
+  line-height: normal;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+h4 {
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: normal;
+
+  &:hover {
+    cursor: default;
+  }
+}
