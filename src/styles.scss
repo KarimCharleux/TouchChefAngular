@@ -13,7 +13,7 @@ body {
 
 button {
   font-family: 'Raleway', sans-serif;
-  border-radius: $border-radius-high;
+  border-radius: $border-radius-high; //TODO : bizarre d'appliquer ça à tous les boutons du site
   margin: 0.5rem;
   padding: 0.6rem 1.5rem;
   border: none;
