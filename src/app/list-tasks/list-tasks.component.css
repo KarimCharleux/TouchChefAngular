@@ -1,0 +1,25 @@
+.scrollable-list {
+  max-height: 240px;
+  overflow-y: scroll; /* Always shows the scrollbar */
+}
+
+::-webkit-scrollbar {
+  width: 100px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ff0000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8d2626;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #772020;
+}
+
+/* TODO: Faire apparaître la scrollbar et la customiser, le code ci-dessus ne marche pas */

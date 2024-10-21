@@ -1,0 +1,7 @@
+<div class="task-container w-fit h-fit flex flex-row gap-6 items-center bg-gray-200 rounded-2xl p-1.5 shadow-md"
+     style="min-width: 552px">
+  <div class="task-checkbox w-16 h-16 min-w-16 min-h-16 max-w-96 max-h-96 bg-white rounded-xl" (click)="$isTaskChecked=!$isTaskChecked">
+    <img ngSrc="/assets/checkIcon-1.svg" alt="checkIcon.svg" *ngIf="$isTaskChecked" height="296" width="296"/>
+  </div>
+  <span class="font-semibold text-xl">{{ $taskToDo }}</span>
+</div>
