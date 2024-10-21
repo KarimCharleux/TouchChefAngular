@@ -15,11 +15,11 @@
     <h2>Welcome to</h2>
     <h1>TouchChef</h1>
 
-    <h2>Nombre de joueurs</h2>
-    <div class="flex flex-row items-center justify-center gap-2 mb-9">
-      <button class="game-button counter-button red text-9xl">-</button>
-      <h2 class="text-6xl">1</h2>
-      <button class="game-button counter-button green">+</button>
+    <h2>Nombre de cuisiniers</h2>
+    <div class="flex flex-row justify-center items-center gap-12 mb-9">
+      <button class="game-button counter-button red text-9xl" (click)="decreaseNbPlayersByOne()">-</button>
+      <h2 class="text-6xl text-center">{{ $nbPlayers }}</h2>
+      <button class="game-button counter-button green" (click)="increaseNbPlayersByOne()">+</button>
     </div>
 
     <button class="game-button orange">Let's Cook !</button>
