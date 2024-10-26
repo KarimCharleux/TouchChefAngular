@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NgForOf} from '@angular/common';
 import {TaskComponent} from './task/task.component';
 
