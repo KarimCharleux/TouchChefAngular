@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from '@angular/common';
 
 @Component({
@@ -13,8 +13,10 @@ import {NgForOf, NgOptimizedImage} from '@angular/common';
 })
 export class CommentPanelComponent {
 
+  @Input() $firstNameUser: string = "Jean-Michel"
+  @Input() $lastNameUser: string = "JEMEPA"
+
   $commentContent: string = "La pizza est trop cuite j'ai jamais vu ça !";
   $nbStars: number = 3;
   $maxNbStars: number = 5;
-
 }
