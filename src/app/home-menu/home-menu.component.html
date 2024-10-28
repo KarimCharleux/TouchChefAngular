@@ -1,4 +1,4 @@
-<div class="video-container">
+<div class="home-container">
   <video #backgroundVideo
          autoplay
          muted
@@ -7,21 +7,24 @@
          (loadeddata)="onLoadedData()"
          (waiting)="onVideoWaiting()"
          (pause)="onLoadedData()"
-         id="background-video">
+         class="background-video">
     <source src="/assets/video-background.mp4" type="video/mp4">
   </video>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Welcome to</h2>
-    <h1>TouchChef</h1>
+  <div class="home-overlay"></div>
+  <div class="home-content flex flex-col items-center justify-center gap-8">
+    <img ngSrc="/assets/logo.png" priority class="home-logo" alt="Logo Touch Chef" height="1280" width="1280">
 
-    <h2>Nombre de cuisiniers</h2>
-    <div class="flex flex-row justify-center items-center gap-12 mb-9">
-      <button class="game-button counter-button red text-9xl" (click)="decreaseNbPlayersByOne()">-</button>
-      <h2 class="text-6xl text-center">{{ $nbPlayers }}</h2>
-      <button class="game-button counter-button green" (click)="increaseNbPlayersByOne()">+</button>
+    <h2>Tu dois choisir <br>entre <b>{{ minNbPlayers }}</b> et <b>{{ maxNbPlayers }}</b> cuisiniers 🧑‍🍳</h2>
+    <div class="home-button-container flex flex-row justify-center items-center gap-12 w-fit h-fit">
+      <button [disabled]="counterStatus === 'min'" [ngClass]="counterStatus === 'min' ? 'button-disabled' : 'button-red'" (click)="decreaseNbPlayersByOne()">
+        <img ngSrc="/assets/minus.png" height="32" width="32" alt="">
+      </button>
+      <h2 class="text-6xl text-center">{{ currentNbPlayer }}</h2>
+      <button [disabled]="counterStatus === 'max'" [ngClass]="counterStatus === 'max' ? 'button-disabled' : 'button-green'" (click)="increaseNbPlayersByOne()">
+        <img ngSrc="/assets/plus.png" height="32" width="32" alt="">
+      </button>
     </div>
 
-    <button class="game-button orange">Let's Cook !</button>
+    <button class="game-button button-orange text-5xl px-9 py-5" (click)="startGame()">Let's Cook !</button>
   </div>
 </div>

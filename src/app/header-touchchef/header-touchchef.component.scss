@@ -1,6 +1,4 @@
-:root {
-  --yellow-star: #EFB507; //TODO : je sais pas pourquoi, la variable locale veut pas marcher
-}
+@import "../../variables";
 
 .star {
   width: 35px;
