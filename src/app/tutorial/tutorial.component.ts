@@ -21,7 +21,7 @@ export class TutorialComponent implements OnInit, AfterViewInit {
     // Si vous voulez être sûr que la vidéo se lance en plein écran sur mobile
     document.documentElement.requestFullscreen?.().then();
     // Mettre le son
-    this.videoElement.nativeElement.muted = false;
+    if(this.videoElement?.nativeElement) this.videoElement.nativeElement.muted = false;
   }
 
   ngAfterViewInit() {
@@ -31,6 +31,9 @@ export class TutorialComponent implements OnInit, AfterViewInit {
 
       // Écouter la fin de la vidéo
       this.videoElement.nativeElement.onended = () => {
+        // Enlever le fullscreen
+        document.exitFullscreen?.().then();
+        // Afficher le bouton de démarrage
         this.showPlayButton = true;
         // Animation d'apparition du bouton
         setTimeout(() => {
@@ -42,7 +45,12 @@ export class TutorialComponent implements OnInit, AfterViewInit {
   }
 
   startGame() {
-    this.router.navigate(['/game']).then();
+    this.router.navigate(['/dashboard']).then();
+    // TODO Send websocket message to unity
+  }
+
+  skipVideo() {
+    this.videoElement.nativeElement.currentTime = this.videoElement.nativeElement.duration;
     // TODO Send websocket message to unity
   }
 }

@@ -10,6 +10,13 @@
   </video>
 
   <button
+    *ngIf="!showPlayButton"
+    class="skip-button"
+    (click)="skipVideo()">
+    Passer le tutoriel
+  </button>
+
+  <button
     *ngIf="showPlayButton"
     class="play-button button-orange"
     (click)="startGame()">
