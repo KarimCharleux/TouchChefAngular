@@ -1,0 +1,18 @@
+<div class="tutorial-container">
+  <video
+    #tutorialVideo
+    class="tutorial-video"
+    [class.finished]="showPlayButton"
+    playsinline
+    preload="auto">
+    <source src="/assets/tutorial.mp4" type="video/mp4">
+    Votre navigateur ne supporte pas la lecture de vidéos.
+  </video>
+
+  <button
+    *ngIf="showPlayButton"
+    class="play-button button-orange"
+    (click)="startGame()">
+    C'est parti ! ▶
+  </button>
+</div>

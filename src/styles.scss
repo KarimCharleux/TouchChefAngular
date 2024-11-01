@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
 
 @import "variables";
 
@@ -151,8 +153,8 @@ button.button-green:active {
 button.button-disabled {
   background: repeating-linear-gradient(45deg, #b0b0b0, #b0b0b0 5px, #a8a8a8 5px, #a8a8a8 10px);
   box-shadow: 0 6px 0 #7a7a7a, 0 8px 1px 1px rgba(0, 0, 0, .3), 0 10px 0 5px #4f4f4f, 0 12px 0 5px #6a6a6a, 0 15px 0 5px #3f3f3f, 0 15px 1px 6px rgba(0, 0, 0, .3);
-  border-bottom: 3px solid rgba(160, 25, 23, 0.5);
-  text-shadow: 2px 2px 1px #d72d21, -2px 2px 1px #d72d21, 2px -2px 1px #d72d21, -2px -2px 1px #d72d21, 0px 2px 1px #d72d21, 0px -2px 1px #d72d21, 0px 4px 1px #930704, 2px 4px 1px #930704, -2px 4px 1px #930704;
+  border-bottom: 3px solid rgba(131, 131, 131, 0.5);
+  text-shadow: 2px 2px 1px #8c8c8c, -2px 2px 1px #8c8c8c, 2px -2px 1px #8c8c8c, -2px -2px 1px #8c8c8c, 0px 2px 1px #8c8c8c, 0px -2px 1px #8c8c8c, 0px 4px 1px #5e5e5e, 2px 4px 1px #5e5e5e, -2px 4px 1px #5e5e5e;
 }
 
 button.button-disabled:active {

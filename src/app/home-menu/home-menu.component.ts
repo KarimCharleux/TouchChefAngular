@@ -1,18 +1,23 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {WebSocketService} from '../websocket.service';
 import {Subscription} from 'rxjs';
-import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
+import {UntilDestroy} from '@ngneat/until-destroy';
 import {NgClass, NgOptimizedImage} from '@angular/common';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home-menu',
   standalone: true,
   imports: [
     NgOptimizedImage,
-    NgClass
+    NgClass,
+    ToastModule,
   ],
   templateUrl: './home-menu.component.html',
-  styleUrl: './home-menu.component.scss'
+  styleUrl: './home-menu.component.scss',
+  providers: [MessageService]
 })
 @UntilDestroy()
 export class HomeMenuComponent implements OnInit, OnDestroy {
@@ -24,25 +29,25 @@ export class HomeMenuComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription | undefined;
 
-
-  constructor(private webSocketService: WebSocketService) {
-  }
+  constructor(private webSocketService: WebSocketService,
+              private messageService: MessageService,
+              private router: Router) {}
 
   ngOnInit() {
-    this.subscription = this.webSocketService.getMessages().pipe(untilDestroyed(this)).subscribe(
-      message => {
-        console.log('Message reçu:', message);
-      }
-    );
+    this.subscription = this.webSocketService.messages$.subscribe((message) => {
+      console.log('Message reçu:', message.toString());
+    });
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.webSocketService.closeConnection();
   }
 
   onLoadedData() {
+    this.backgroundVideo.nativeElement.muted = true;
     this.backgroundVideo?.nativeElement.play()
       .then()
       .catch(() => {
@@ -77,6 +82,8 @@ export class HomeMenuComponent implements OnInit, OnDestroy {
   }
 
   startGame() {
-    this.webSocketService.sendMessage("allloooo");
+    this.messageService.add({severity: 'info', summary: 'Info', detail: 'Websocket connected'});
+    this.webSocketService.sendMessage({type: 'start-game', nbPlayers: this.currentNbPlayer});
+    this.router.navigate(['/tutorial']).then();
   }
 }
