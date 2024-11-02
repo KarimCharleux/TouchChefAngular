@@ -1,0 +1,311 @@
+@import '../../../variables';
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+$bgColor: $dark-color;
+
+$numOfColBlocks: 3;
+$deg: calc(360deg / $numOfColBlocks);
+
+$blocksColors: (
+  1: rgb(217, 114, 255),
+  2: rgb(176, 66, 255),
+  3: rgb(68, 174, 255)
+);
+
+
+$size: 200px;
+$sizeBig: 500px;
+$pad: 10px;
+$numSize: 150px;
+$totalAT: 4s;
+$contBr: 20px;
+
+$num1Len: 72.1554946899414;
+$num2Len: 136.02162170410156;
+$num3Len: 144.4256591796875;
+$numJoin1-2: 82.63925170898438;
+$numJoin2-3: 42.81303787231445;
+$numJoin3-0: 40;
+
+$totalLen: $num1Len + $num2Len + $num3Len + $numJoin1-2 + $numJoin2-3 + $numJoin3-0;
+
+body {
+  background: $bgColor;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.demo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: $sizeBig;
+  height: $size;
+  margin-top: calc($size / -2);
+  padding: $pad;
+  border-radius: 20px;
+  transform: translateX(-50%);
+
+  &__colored-blocks {
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: $sizeBig;
+    height: 100%;
+    margin-left: calc($sizeBig/(-2));
+    padding: $pad;
+    border-radius: $contBr;
+    perspective: 1000px;
+    animation: demoAnim $totalAT ease-in-out forwards, contAnim $totalAT forwards;
+
+    &-rotater {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      animation: rotation 1.3s linear forwards;
+    }
+
+    &-inner {
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      background: $bgColor;
+      border-radius: inherit;
+    }
+  }
+
+  &__colored-block {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 300%;
+    height: 300%;
+    transform-origin: 0 0;
+
+    @for $i from 1 through $numOfColBlocks {
+      &:nth-child(#{$i}) {
+        $rt: $deg * ($i - 1);
+        $skew: 90deg - $deg;
+        transform: rotate($rt) skewX($skew);
+        background-color: map-get($blocksColors, $i);
+      }
+    }
+  }
+
+  &__inner {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__numbers {
+    overflow: visible;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: $numSize;
+    height: $numSize;
+    margin-left: calc($numSize/(-2));
+    margin-top: calc($numSize/(-2));
+
+    &-path {
+      fill: none;
+      stroke-width: 10px;
+      stroke: #fff;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 0, $totalLen;
+      stroke-dashoffset: 0;
+      animation: numAnim $totalAT ease-in-out forwards;
+      opacity: 0;
+    }
+  }
+
+  &__text {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: $sizeBig;
+    height: 100%;
+    margin-left: calc($sizeBig/(-2));
+    text-align: center;
+    line-height: $size;
+    font-size: 100px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 15px;
+    transform: translateX(10px);
+    animation: hideText $totalAT forwards;
+  }
+
+  &__circle-transition {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: $white-color;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    pointer-events: none;
+    animation: circleTransition $totalAT cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+@keyframes circleTransition {
+  0%, 85% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  90% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  99% {
+    transform: translate(-50%, -50%) scale(200);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(200);
+    opacity: 1;
+    display: none;
+  }
+}
+
+@keyframes contAnim {
+  15%, 100% {
+    margin-left: calc($sizeBig/(-2));
+    width: $sizeBig;
+  }
+  25%, 90% {
+    margin-left: calc($size/(-2));
+    width: $size;
+  }
+}
+
+@keyframes numAnim {
+  15% {
+    stroke-dasharray: 0, $totalLen;
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  25%, 41% {
+    opacity: 1;
+    stroke-dasharray: $num3Len, $totalLen;
+    stroke-dashoffset: -$numJoin3-0;
+  }
+  53%, 66% {
+    stroke-dasharray: $num2Len, $totalLen;
+    stroke-dashoffset: (-$num3Len) - $numJoin2-3 - $numJoin3-0;
+  }
+  76% {
+    stroke-dasharray: $num1Len + calc($numJoin1-2/2), $totalLen;
+    stroke-dashoffset: (-$num3Len) - $numJoin2-3 - $num2Len - $numJoin1-2 - $numJoin3-0;
+  }
+  88%, 100% {
+    stroke-dasharray: $num1Len, $totalLen;
+    stroke-dashoffset: (-$num3Len) - $numJoin2-3 - $num2Len - $numJoin1-2 - $numJoin3-0;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes demoAnim {
+  15% {
+    border-radius: $contBr;
+    transform: rotate(0);
+  }
+  30%, 43% {
+    border-radius: 50%;
+    transform: rotate(360deg);
+  }
+
+  52%, 65% {
+    border-radius: 0;
+    transform: rotate(720deg);
+  }
+
+  78%, 90% {
+    border-radius: 50%;
+    transform: rotate(1080deg);
+  }
+
+  99% {
+    border-radius: $contBr;
+    transform: rotate(1440deg);
+    opacity: 1;
+  }
+
+  100% {
+    display: none;
+  }
+}
+
+@keyframes hideText {
+  15%, 100% {
+    opacity: 1;
+  }
+  20%, 96% {
+    opacity: 0;
+  }
+}
+
+.countdown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    -45deg,
+    #FFC403,
+    #FF9A3C,
+    #FFD700,
+    #ffface
+  );
+  background-size: 400% 400%;
+  animation: gradientBG 5s ease infinite;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

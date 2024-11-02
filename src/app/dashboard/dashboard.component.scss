@@ -1,0 +1,29 @@
+@import '../../variables';
+
+.dashboard__countdown {
+    height: 100vh;
+    width: 100vw;
+    background-color: $white-color;
+    display: none; // TODO remove
+}
+
+.dashboard__content {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: $white-color;
+    background-image: url('/assets/wood-back.png');
+    background-size: cover;
+    background-position: center;
+    // TODO animation: showContent 0.5s ease-out 4s forwards;
+    // TODO opacity: 0;
+}
+
+@keyframes showContent {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}

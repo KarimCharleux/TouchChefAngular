@@ -1,1 +1,16 @@
-<app-countdown />
+<div class="dashboard__countdown">
+    <app-countdown />
+</div>
+<div class="dashboard__content">
+    <app-dashboard-header [showEarnedStars]="true" [showStopGameButton]="true" [nbEarnedStars]="15"/>
+    <app-dashboard-clock 
+        (statusChange)="onStatusChange($event)"
+        (timeChange)="onTimeChange($event)"
+        [durationTime]="durationTime"
+    />
+    <div class="dashboard__controls">
+        <button class="button-green" (click)="startTimer()" *ngIf="currentStatus !== 'started'">Start</button>
+        <button class="button-red" (click)="stopTimer()" *ngIf="currentStatus === 'started'">Stop</button>
+        <button class="button-orange" (click)="resetTimer()">Reset</button>
+    </div>
+</div>

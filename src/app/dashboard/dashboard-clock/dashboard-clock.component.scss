@@ -1,0 +1,13 @@
+#chrono {
+  background: linear-gradient(140deg, #333 0%, rgba(0,0,0,.7) 60%, #333 61%, #333 100%);
+  border: .25em solid #ff5845;
+  border-radius: .75em;
+  box-shadow:  0 .4em 0 #BD3E31, 0 .5em .5em rgba(0,0,0,.5);
+  color: #fff;
+  display: inline-block;
+  font-size: 5em;
+  margin-bottom: 1em;
+  padding: .5em 1em;
+  text-shadow: 0 0 5px #bbb;
+  transform: perspective(500px) rotateX(25deg);
+}
