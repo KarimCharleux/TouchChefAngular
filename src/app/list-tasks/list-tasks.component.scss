@@ -1,5 +1,6 @@
 .scrollable-list {
   overflow-y: auto;
+  max-height: 59vh;
   padding-right: 10px; /* Ajoute un peu d'espace pour la scrollbar */
 }
 
