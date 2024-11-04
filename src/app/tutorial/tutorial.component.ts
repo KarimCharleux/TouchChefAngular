@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {NgIf} from '@angular/common';
+import {WebSocketService} from "../websocket.service";
 
 @Component({
   selector: 'app-tutorial',
@@ -15,7 +16,7 @@ export class TutorialComponent implements OnInit, AfterViewInit {
   @ViewChild('tutorialVideo') videoElement!: ElementRef<HTMLVideoElement>;
   showPlayButton = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private websocketService: WebSocketService) {}
 
   ngOnInit() {
     // Si vous voulez être sûr que la vidéo se lance en plein écran sur mobile
@@ -46,11 +47,9 @@ export class TutorialComponent implements OnInit, AfterViewInit {
 
   startGame() {
     this.router.navigate(['/dashboard']).then();
-    // TODO Send websocket message to unity
   }
 
   skipVideo() {
     this.videoElement.nativeElement.currentTime = this.videoElement.nativeElement.duration;
-    // TODO Send websocket message to unity
   }
 }

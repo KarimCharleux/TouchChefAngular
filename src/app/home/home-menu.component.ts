@@ -1,5 +1,4 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {WebSocketService} from '../websocket.service';
 import {Subscription} from 'rxjs';
 import {UntilDestroy} from '@ngneat/until-destroy';
 import {NgClass, NgOptimizedImage} from '@angular/common';
@@ -20,34 +19,20 @@ import {Router} from '@angular/router';
   providers: [MessageService]
 })
 @UntilDestroy()
-export class HomeMenuComponent implements OnInit, OnDestroy {
+export class HomeMenuComponent implements OnInit {
   @ViewChild('backgroundVideo') backgroundVideo!: ElementRef<HTMLVideoElement>;
   protected counterStatus: 'normal' | 'max' | 'min' = 'min';
   protected readonly maxNbPlayers: number = 4;
   protected readonly minNbPlayers: number = 1;
   protected currentNbPlayer: number = this.minNbPlayers;
 
-  private subscription: Subscription | undefined;
-
-  constructor(private webSocketService: WebSocketService,
-              private messageService: MessageService,
-              private router: Router) {}
-
+  constructor(private readonly router: Router) {}
+ 
   ngOnInit() {
-    this.subscription = this.webSocketService.messages$.subscribe((message) => {
-      console.log('Message reçu:', message.toString());
-    });
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.webSocketService.closeConnection();
-  }
 
   onLoadedData() {
-    this.backgroundVideo.nativeElement.muted = true;
     this.backgroundVideo?.nativeElement.play()
       .then()
       .catch(() => {
@@ -82,8 +67,6 @@ export class HomeMenuComponent implements OnInit, OnDestroy {
   }
 
   startGame() {
-    this.messageService.add({severity: 'info', summary: 'Info', detail: 'Websocket connected'});
-    this.webSocketService.sendMessage({type: 'start-game', nbPlayers: this.currentNbPlayer});
     this.router.navigate(['/tutorial']).then();
   }
 }

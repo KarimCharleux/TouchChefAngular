@@ -5,10 +5,10 @@
       <span class="text-star-color font-bold text-center text-5xl">{{ nbEarnedStars }}</span>
       <img src="assets/star.png" alt="star" class="w-12">
     </div>
-    <h3 class="text-center" style="color: #E86300">TouchChef</h3>
+    <img src="assets/logo.png" alt="logo" class="dashboard-header__logo w-16 mx-auto relative top-10">
     <div class="flex flex-row justify-end">
-      <button class="button-red" *ngIf="showStopGameButton">
-        Arrêter la partie
+      <button class="button-red scale-90 text-nowrap" *ngIf="showStopGameButton" (click)="stopGame()">
+        Stop
       </button>
     </div>
   </div>

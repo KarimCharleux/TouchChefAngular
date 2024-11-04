@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-countdown',
@@ -9,13 +9,15 @@ import { ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CountdownComponent {
-  private readonly totalAnimationTime = 4000; // 4 secondes, basé sur votre variable $totalAT
+  @Output() countdownComplete = new EventEmitter<void>();
+  private readonly totalAnimationTime = 4000;
 
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
     setTimeout(() => {
       this.elementRef.nativeElement.querySelector('.countdown').classList.add('hidden');
+      this.countdownComplete.emit();
     }, this.totalAnimationTime);
   }
 }

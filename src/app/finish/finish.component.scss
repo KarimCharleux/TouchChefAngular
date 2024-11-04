@@ -1,0 +1,51 @@
+@import "../../variables";
+
+.finish-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/assets/wood-back.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.finish-content {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: $border-radius-high;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+
+  h1 {
+    font-size: 3rem;
+    color: $primary-color;
+    margin-bottom: 2rem;
+  }
+}
+
+.score-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+
+  .score-icon {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
+  }
+
+  span {
+    font-weight: bold;
+    color: $primary-color;
+  }
+} 

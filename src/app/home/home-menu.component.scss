@@ -6,7 +6,6 @@
   height: 100vh;
   overflow: hidden;
 
-
   .background-video {
     position: absolute;
     top: 50%;
@@ -28,8 +27,8 @@
     background: radial-gradient(
         ellipse at center,
         transparent 0%,
-        rgba(0, 0, 0, 0.5) 70%,
-        rgba(0, 0, 0, 0.8) 100%
+        rgba(0, 0, 0, 0.3) 70%,
+        rgba(0, 0, 0, 0.5) 100%
     );
     backdrop-filter: blur(10px);
   }

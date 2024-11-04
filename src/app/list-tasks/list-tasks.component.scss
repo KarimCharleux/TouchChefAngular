@@ -1,25 +1,47 @@
 .scrollable-list {
-  max-height: 240px;
-  overflow-y: scroll; /* Always shows the scrollbar */
+  overflow-y: auto;
+  padding-right: 10px; /* Ajoute un peu d'espace pour la scrollbar */
 }
 
+/* Largeur de la scrollbar */
 ::-webkit-scrollbar {
-  width: 100px;
+  width: 8px;
 }
 
-/* Track */
+/* Track (fond) */
 ::-webkit-scrollbar-track {
-  background: #ff0000;
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
-/* Handle */
+/* Handle (barre de défilement) */
 ::-webkit-scrollbar-thumb {
-  background: #8d2626;
+  background: #c1c1c1;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
 }
 
-/* Handle on hover */
+/* Handle au survol */
 ::-webkit-scrollbar-thumb:hover {
-  background: #772020;
+  background: #a8a8a8;
 }
 
-/* TODO: Faire apparaître la scrollbar et la customiser, le code ci-dessus ne marche pas */
+/* Pour Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+::ng-deep .p-dialog {
+  .p-dialog-header {
+    .p-dialog-title {
+      font-size: 2.5rem !important;
+      font-weight: bold;
+      font-family: "Bricolage Grotesque", sans-serif !important;
+    }
+  }
+
+  li::marker {
+    font-weight: bold;
+  }
+}

@@ -1,29 +1,96 @@
-@import '../../variables';
+@import "../../variables";
+
+$transition-time: 4s;
+$fade-time: 0.5s;
 
 .dashboard__countdown {
-    height: 100vh;
-    width: 100vw;
-    background-color: $white-color;
-    display: none; // TODO remove
+  height: 100vh;
+  width: 100vw;
+  background-color: $white-color;
+  animation: hideCountdown $fade-time ease-out $transition-time forwards;
+}
+
+@keyframes hideCountdown {
+  to {
+    display: none;
+  }
 }
 
 .dashboard__content {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: $white-color;
-    background-image: url('/assets/wood-back.png');
-    background-size: cover;
-    background-position: center;
-    // TODO animation: showContent 0.5s ease-out 4s forwards;
-    // TODO opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: $white-color;
+  background-image: url("/assets/wood-back.png");
+  background-size: cover;
+  background-position: center;
+  animation: showContent $fade-time ease-out #{$transition-time + 0.5s} forwards;
+  opacity: 0;
+}
+
+.left-right-container {
+  gap: 2%;
+  height: 85%;
+
+  .left-container {
+    padding: 2% 0 0 2%;
+  }
+
+  .right-container {
+    padding: 2% 2% 0 0;
+  }
+}
+
+.progression {
+  &__container {
+    width: 100%;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.777);
+    border-radius: $border-radius-high;
+    box-shadow: 0 0 2cap 0 rgba(0, 0, 0, 0.1);
+  }
+
+  &__title {
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+    span {
+      color: $primary-color;
+    }
+  }
+}
+
+.todo {
+  &__container {
+    width: 100%;
+    padding: 2rem 4rem;
+    background-color: rgba(255, 255, 255, 0.777);
+    border-radius: $border-radius-high;
+    box-shadow: 0 0 2cap 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.current-plate {
+  width: 100%;
+  height: 100%;
+  padding: 4rem;
+  background-color: rgba(255, 255, 255, 0.777);
+  border-radius: $border-radius-high;
+  box-shadow: 0 0 2cap 0 rgba(0, 0, 0, 0.1); 
+  cursor: pointer;
+
+  h2:nth-child(3) {
+    font-weight: bold;
+    text-align: center;
+    color: $primary-color;
+  }
 }
 
 @keyframes showContent {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
+  to {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }

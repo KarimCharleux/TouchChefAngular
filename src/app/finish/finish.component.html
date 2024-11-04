@@ -1,0 +1,27 @@
+<div class="finish-container">
+  <div class="finish-content">
+    <h1>Partie terminée !</h1>
+    <img src="assets/win.png" alt="" class="mx-auto">
+    
+    <div class="score-container" *ngIf="score">
+      <div class="score-item">
+        <img src="assets/burger/burger1.png" alt="burger" class="score-icon">
+        <p>Burgers préparés : <span>{{ score.nbBurgers }}</span></p>
+      </div>
+      
+      <div class="score-item">
+        <img src="assets/chronometer.png" alt="clock" class="score-icon">
+        <p>Temps total : <span>{{ formatTime(score.totalTime) }}</span></p>
+      </div>
+      
+      <div class="score-item">
+        <img src="assets/star.png" alt="star" class="score-icon">
+        <p>Étoiles gagnées : <span>{{ score.totalStars }}</span></p>
+      </div>
+    </div>
+
+    <button class="button-orange" (click)="backToMenu()">
+      Retour au menu
+    </button>
+  </div>
+</div> 

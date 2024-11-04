@@ -1,5 +1,5 @@
 <div class="progress-container">
   <div class="progress-bar" [style.width]="progress + '%'">
-    <span class="progress-text">{{progress}}%</span>
+    <span class="progress-text">{{ progress == 0 ? '' : progress + '%' }}</span>
   </div>
 </div>
