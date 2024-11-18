@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { CommentPanelComponent } from './comment-panel/comment-panel.component';
 import { WebSocketService } from '../websocket.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -25,10 +27,12 @@ import { WebSocketService } from '../websocket.service';
     ProgressBarComponent,
     ListTasksComponent,
     DialogModule,
-    CommentPanelComponent
+    CommentPanelComponent,
+    ToastModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
+  providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit, OnDestroy {
@@ -38,7 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   earnedStars: number = 0; // Nombre d'étoiles gagnées
   currentStatus: TimerStatus = 'ready'; // Statut du timer
   currentTime: number = 0;
-  durationTime: number = 5 * 60; // C'est le temps d'une partie (5 minutes)
+  durationTime: number = 15 * 60; // C'est le temps d'une partie (15 minutes)
   burgers: Burger[] = BURGERS; // Liste des burgers
   selectedBurger: Burger = this.burgers[0]; // Par défaut, sélectionne le premier burger
   progress: number = 0; // Progression du burger
@@ -48,7 +52,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly finishSound: HTMLAudioElement;
   private readonly backgroundMusic: HTMLAudioElement;
   
-  constructor(private readonly router: Router, private readonly websocketService: WebSocketService) {
+  constructor(
+    private readonly router: Router,
+    private readonly websocketService: WebSocketService,
+    private readonly messageService: MessageService
+  ) {
     // Initialiser les sons
     this.successSound = new Audio("assets/sounds/success.mp3");
     this.finishSound = new Audio("assets/sounds/finish.mp3");
@@ -128,7 +136,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.earnedStars += this.currentComment.nbStars;
     this.showCommentDialog = true;
     
-    // Si c'est le dernier burger, terminer la partie
+    // Si c'est le dernier burger, attendre plus longtemps avant de naviguer
     if (currentIndex === this.burgers.length - 1) {
       const finalScore = {
         nbBurgers: this.burgers.length,
@@ -136,12 +144,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         totalStars: this.earnedStars
       };
       
-      // Attendre que l'utilisateur ferme la modal avant de naviguer
+      // Attendre que l'utilisateur ferme la modal ou 5 secondes
       setTimeout(() => {
-        this.router.navigate(['/finish'], { 
-          state: { score: finalScore }
-        }).then();
-      }, 2000);
+        this.showCommentDialog = false; // Fermer la modal
+        setTimeout(() => {
+          this.router.navigate(['/finish'], { 
+            state: { score: finalScore }
+          }).then();
+        }, 1000); // Attendre encore 1 seconde après la fermeture
+      }, 10000); // Attendre 10 secondes au total
     } else {
       // Sinon, passer au burger suivant
       this.selectedBurger = this.burgers[currentIndex + 1];
@@ -169,5 +180,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/finish'], { 
       state: { score: finalScore }
     }).then();
+  }
+
+  showToast(severity: 'success' | 'info' | 'warn' | 'error', summary: string, detail: string) {
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+      life: 3000
+    });
+  }
+
+  onWebSocketError() {
+    this.showToast('error', 'Erreur', 'La connexion avec le jeu a été perdue');
+  }
+
+  onWebSocketSuccess() {
+    this.showToast('success', 'Connexion établie', 'La connexion avec le jeu est active');
   }
 }

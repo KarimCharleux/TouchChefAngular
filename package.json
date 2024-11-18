@@ -4,8 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:network": "ng serve --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
-    "websocket": "node websocket-server.js"
+    "websocket": "node websocket-server.js",
+    "ngrok": "ngrok http 4200"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +20,9 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@ngneat/until-destroy": "^10.0.0",
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.3",
+    "@zxing/ngx-scanner": "^19.0.0",
     "angular-flip-clock": "^0.4.0",
     "express": "^4.21.1",
     "primeng": "^17.18.11",

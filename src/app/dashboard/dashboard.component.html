@@ -37,7 +37,7 @@
         <h2>Vous devez préparer :</h2>
         <img [src]="selectedBurger.imageUrl" [alt]="selectedBurger.name" class="mx-auto"/>
         <h2>{{ selectedBurger.name }}</h2>
-        <button class="button-orange" *ngIf="progress === 100" (click)="nextBurger()">Terminé</button>
+        <button class="button button-orange" *ngIf="progress === 100" (click)="nextBurger()">Terminé</button>
         <p-overlayPanel #op>
           <div class="ingredients-list text-center text-xl">
             <div

@@ -17,7 +17,7 @@ export const BURGERS: Burger[] = [
       {
         name: 'Préparer le steak',
         subTasks: [
-          { order: 1, description: 'Prendre le steako' },
+          { order: 1, description: 'Prendre le steak' },
           { order: 2, description: 'Déplacer le steak sur la poele du haut' },
           { order: 3, description: 'Attendre la cuisson pendant 3 secondes' },
           { order: 4, description: 'Eteindre la plaque de cuisson' }
@@ -27,6 +27,7 @@ export const BURGERS: Burger[] = [
         name: 'Récupérer des tranches de tomate',
         subTasks: [
           { order: 1, description: 'Prendre une tomate' },
+          { order: 2, description: 'Déplacer la tomate sur la planche à découper' },
           { order: 3, description: 'Couper la tomate en tranches avec la tranche de la main' }
         ]
       },
@@ -34,14 +35,15 @@ export const BURGERS: Burger[] = [
         name: 'Laver une salade',
         subTasks: [
           { order: 1, description: 'Prendre une salade' },
-          { order: 2, description: 'Laver la salade' }
+          { order: 2, description: 'Déplacer la salade dans l\'évier' },
+          { order: 3, description: 'Laver la salade' }
         ]
       },
       {
         name: 'Préparer le fromage',
         subTasks: [
           { order: 1, description: 'Prendre du fromage' },
-          { order: 2, description: 'Le déplacer sur la planche à découper en haut à gauche' }
+          { order: 2, description: 'Le déplacer sur la planche à découper' }
         ]
       },
       {
@@ -53,68 +55,63 @@ export const BURGERS: Burger[] = [
         subTasks: []
       },
       {
-        name: 'Ajouter la tomate',
-        subTasks: [
-          { order: 1, description: 'Déplacer la tomate coupée sur le steak qui est sur l\'assiette' }
-        ]
+        name: 'Déplacer le steak sur le pain',
+        subTasks: []
+      },
+      {
+        name: 'Déplacer la tomate coupée sur le steak qui est sur l\'assiette',
+        subTasks: []
       },
       {
         name: 'Préparer la salade',
         subTasks: [
-          { order: 1, description: 'Déplacer la salade sur la planche à découper en bas' }
+          { order: 1, description: 'Prendre une salade' },
+          { order: 2, description: 'Déplacer la salade sur la planche à découper en bas' },
+          { order: 3, description: 'Couper la salade' }
         ]
       },
       {
-        name: 'Couper la salade',
-        subTasks: [
-          { order: 1, description: 'Couper la salade sur la planche' }
-        ]
-      },
-      {
-        name: 'Ajouter la salade',
-        subTasks: [
-          { order: 1, description: 'Déplacer la salade sur le steak' }
-        ]
+        name: 'Déplacer la salade coupée sur la tomate',
+        subTasks: []
       },
       {
         name: 'Préparer le fromage',
         subTasks: [
-          { order: 1, description: 'Couper le fromage sur la planche en haut' }
+          { order: 1, description: 'Prendre du fromage' },
+          { order: 2, description: 'Déplacer le fromage sur la planche à découper' }
         ]
       },
       {
-        name: 'Ajouter le fromage',
-        subTasks: [
-          { order: 1, description: 'Déplacer le fromage sur la salade' }
-        ]
+        name: 'Couper le fromage et le déplacer sur l\'assiette',
+        subTasks: []
       },
       {
         name: 'Finaliser le burger',
         subTasks: [
-          { order: 1, description: 'Prendre un autre pain et le mettre sur le fromage' }
+          { order: 1, description: 'Prendre un autre pain et le mettre sur le haut du burger qui est sur l\'assiette' }
         ]
       },
       {
-        name: 'Mettre au four',
+        name: 'Mettre le burger au four',
         subTasks: [
           { order: 1, description: 'Ouvrir le four en glissant vers le bas avec le doigt' },
           { order: 2, description: 'Maintenir le doigt sur le four et déplacer le burger fini dans le four' }
         ]
       },
       {
-        name: 'Cuisson',
+        name: 'Légère cuisson du burger',
         subTasks: [
           { order: 1, description: 'Lâcher le doigt pour fermer le four' },
-          { order: 2, description: 'Attendre 5 minutes' }
+          { order: 2, description: 'Attendre 5 secondes' }
         ]
       },
       {
         name: 'Sortir le burger',
         subTasks: [
           { order: 1, description: 'Ouvrir le four en glissant vers le bas avec le doigt' },
-          { order: 2, description: 'Maintenir le doigt et déplacer le burger sur l\'assiette' }
+          { order: 2, description: 'Maintenir le doigt et déplacer le burger sur l\'assiette au centre' }
         ]
-      }
+      },
     ]
   }
 ]; 

@@ -1,0 +1,88 @@
+<div class="scan-container">
+  <p-toast></p-toast>
+
+  <div class="scanner-overlay">
+    <div class="scan-instructions">
+      <h2>Scanner les montres des cuisiniers ⌚🧑‍🍳</h2>
+      <p>Placez l'appareil photo devant le QR code sur la montre de chaque cuisinier</p>
+    </div>
+    
+    <div class="progress-indicator">
+      {{ deviceService.getCooks().length }}/{{ deviceService.getNbPlayers() }}
+    </div>
+
+    <div class="players-slots">
+      <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
+        <div class="player-slot" [class.empty]="!deviceService.getCooks()[idx]">
+          <div class="player-icon" [class.empty]="!deviceService.getCooks()[idx]">
+            👨‍🍳
+          </div>
+          <span class="player-name">
+            {{ deviceService.getCooks()[idx].name || 'En attente du cuisinier...' }}
+          </span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="scannerEnabled" class="scanner-wrapper">
+    <zxing-scanner
+      [enable]="scannerEnabled"
+      [device]="currentCamera"
+      (scanSuccess)="onCodeResult($event)"
+      (camerasFound)="onCamerasFound($event)"
+    ></zxing-scanner>
+
+    <div *ngIf="availableCameras.length > 1" class="camera-select">
+      <p-dropdown
+        [options]="availableCameras"
+        [(ngModel)]="currentCamera"
+        optionLabel="label"
+        optionValue="deviceId"
+        (onChange)="onCameraChange($event.value)"
+        placeholder="Sélectionner une caméra"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <div *ngIf="!scannerEnabled" class="scanner-complete">
+    <i class="pi pi-check-circle"></i>
+    <h2>Scan terminé !</h2>
+    <p>Tous les cuisiniers ont été ajoutés avec succès.</p>
+    <div class="buttons-container">
+      <button class="button button-orange" routerLink="/tutorial">Voir le tutoriel</button>
+      <button class="buttonbutton-green" routerLink="/dashboard">Skip le tutoriel</button>
+    </div>
+  </div>
+
+  <p-dialog 
+    [(visible)]="showNameDialog" 
+    [modal]="true"
+    header="Nom du cuisinier"
+    [style]="{width: '90%', maxWidth: '400px'}"
+    [closable]="false"
+  >
+    <div class="name-input-container">
+      <span class="p-float-label">
+        <input 
+          pInputText 
+          id="cookName" 
+          [(ngModel)]="cookName" 
+          (keyup.enter)="addCook()"
+          autofocus
+        />
+        <label for="cookName">Nom du cuisinier</label>
+      </span>
+    </div>
+    <div class="dialog-footer">
+      <button 
+        class="button button-orange"
+        (click)="addCook()" 
+        [disabled]="!cookName.trim()"
+      >
+        Ajouter
+      </button>
+      <button class="button button-green" (click)="showNameDialog = false">Annuler</button>
+    </div>
+  </p-dialog>
+</div>

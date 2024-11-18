@@ -16,15 +16,15 @@
 
     <h2>Tu dois choisir <br>entre <b>{{ minNbPlayers }}</b> et <b>{{ maxNbPlayers }}</b> cuisiniers 🧑‍🍳</h2>
     <div class="home-button-container flex flex-row justify-center items-center gap-12 w-fit h-fit">
-      <button [disabled]="counterStatus === 'min'" [ngClass]="counterStatus === 'min' ? 'button-disabled' : 'button-red'" (click)="decreaseNbPlayersByOne()">
+      <button class="button" [disabled]="counterStatus === 'min'" [ngClass]="counterStatus === 'min' ? 'button-disabled' : 'button-red'" (click)="decreaseNbPlayersByOne()">
         <img ngSrc="/assets/minus.png" height="32" width="32" alt="">
       </button>
       <h2 class="text-6xl text-center">{{ currentNbPlayer }}</h2>
-      <button [disabled]="counterStatus === 'max'" [ngClass]="counterStatus === 'max' ? 'button-disabled' : 'button-green'" (click)="increaseNbPlayersByOne()">
+      <button class="button" [disabled]="counterStatus === 'max'" [ngClass]="counterStatus === 'max' ? 'button-disabled' : 'button-green'" (click)="increaseNbPlayersByOne()">
         <img ngSrc="/assets/plus.png" height="32" width="32" alt="">
       </button>
     </div>
 
-    <button class="game-button button-orange text-5xl px-9 py-5" (click)="startGame()">Let's Cook !</button>
+    <button class="button game-button button-orange text-5xl px-9 py-5" (click)="startGame()">Let's Cook !</button>
   </div>
 </div>
