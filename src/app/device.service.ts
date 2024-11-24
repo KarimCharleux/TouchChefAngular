@@ -9,6 +9,7 @@ export interface ScannedDevice {
 export interface Cook {
   name: string;
   deviceId: string;
+  avatar: string;
 }
 
 @Injectable({

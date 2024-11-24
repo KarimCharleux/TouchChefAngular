@@ -1,12 +1,15 @@
 <div class="scan-container">
   <p-toast></p-toast>
 
-  <div class="scanner-overlay">
+  <div class="scanner-overlay" *ngIf="scannerEnabled">
     <div class="scan-instructions">
       <h2>Scanner les montres des cuisiniers ⌚🧑‍🍳</h2>
-      <p>Placez l'appareil photo devant le QR code sur la montre de chaque cuisinier</p>
+      <p>
+        Placez l'appareil photo devant le QR code sur la montre de chaque
+        cuisinier
+      </p>
     </div>
-    
+
     <div class="progress-indicator">
       {{ deviceService.getCooks().length }}/{{ deviceService.getNbPlayers() }}
     </div>
@@ -14,11 +17,25 @@
     <div class="players-slots">
       <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
         <div class="player-slot" [class.empty]="!deviceService.getCooks()[idx]">
-          <div class="player-icon" [class.empty]="!deviceService.getCooks()[idx]">
-            👨‍🍳
+          <div
+            class="player-icon"
+            [class.empty]="!deviceService.getCooks()[idx]"
+          >
+            @if (deviceService.getCooks()[idx]) {
+            <img
+              [src]="
+                'assets/cooks/' + deviceService.getCooks()[idx].avatar + '.png'
+              "
+              [alt]="'Avatar du cuisinier'"
+            />
+            } @else { 👨‍🍳 }
           </div>
           <span class="player-name">
-            {{ deviceService.getCooks()[idx].name || 'En attente du cuisinier...' }}
+            @if (deviceService.getCooks()[idx]) {
+            {{ deviceService.getCooks()[idx].name }}
+            } @else {
+            {{ "En attente du cuisinier..." }}
+            }
           </span>
         </div>
       </ng-container>
@@ -46,43 +63,82 @@
   </div>
 
   <div *ngIf="!scannerEnabled" class="scanner-complete">
-    <i class="pi pi-check-circle"></i>
+    <img src="assets/checkIcon-1.svg" alt="Scan terminé" width="100" />
     <h2>Scan terminé !</h2>
     <p>Tous les cuisiniers ont été ajoutés avec succès.</p>
     <div class="buttons-container">
-      <button class="button button-orange" routerLink="/tutorial">Voir le tutoriel</button>
-      <button class="buttonbutton-green" routerLink="/dashboard">Skip le tutoriel</button>
+      <button class="button button-orange" (click)="showTutorial()">
+        Voir le tutoriel
+      </button>
+      <button class="button button-green" (click)="skipTutorial()">
+        Skip le tutoriel
+      </button>
+    </div>
+    <div class="players-slots">
+      <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
+        <div class="player-slot">
+          <div class="player-icon">
+            <img
+              [src]="
+                'assets/cooks/' + deviceService.getCooks()[idx].avatar + '.png'
+              "
+              [alt]="'Avatar du cuisinier'"
+            />
+          </div>
+          <span class="player-name">
+            {{ deviceService.getCooks()[idx].name }}
+          </span>
+        </div>
+      </ng-container>
     </div>
   </div>
 
-  <p-dialog 
-    [(visible)]="showNameDialog" 
+  <p-dialog
+    [(visible)]="showNameDialog"
     [modal]="true"
     header="Nom du cuisinier"
-    [style]="{width: '90%', maxWidth: '400px'}"
-    [closable]="false"
+    [style]="{ width: '90%', maxWidth: '500px' }"
   >
+    <div class="avatar-selection">
+      <h3>1. Choisissez un avatar</h3>
+      <div class="avatar-scroll-container">
+        <div class="avatar-grid">
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+            class="avatar-option"
+            [class.selected]="selectedAvatar === i"
+            (click)="selectAvatar(i)"
+            (keydown.enter)="selectAvatar(i)"
+            (keydown.space)="selectAvatar(i)"
+          >
+            <img [src]="'assets/cooks/' + i + '.png'" [alt]="'Avatar ' + i" />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="name-input-container">
+      <h3>2. Choisissez un nom</h3>
       <span class="p-float-label">
-        <input 
-          pInputText 
-          id="cookName" 
-          [(ngModel)]="cookName" 
+        <input
+          pInputText
+          id="cookName"
+          [(ngModel)]="cookName"
           (keyup.enter)="addCook()"
           autofocus
         />
         <label for="cookName">Nom du cuisinier</label>
       </span>
     </div>
+
     <div class="dialog-footer">
-      <button 
+      <button
         class="button button-orange"
-        (click)="addCook()" 
-        [disabled]="!cookName.trim()"
+        (click)="addCook()"
+        [class.button-disabled]="!cookName.trim() || !selectedAvatar"
       >
         Ajouter
       </button>
-      <button class="button button-green" (click)="showNameDialog = false">Annuler</button>
     </div>
   </p-dialog>
 </div>

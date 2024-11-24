@@ -23,12 +23,12 @@ import { Router } from '@angular/router';
     DialogModule,
     InputTextModule,
     ButtonModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [MessageService],
   templateUrl: './scan-qr.component.html',
   styleUrl: './scan-qr.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScanQrComponent {
   scannerEnabled = true;
@@ -37,6 +37,7 @@ export class ScanQrComponent {
   showNameDialog = false;
   currentDeviceId = '';
   cookName = '';
+  selectedAvatar = 1;
 
   constructor(
     protected messageService: MessageService,
@@ -46,49 +47,58 @@ export class ScanQrComponent {
 
   onCodeResult(resultString: string) {
     if (this.isValidDeviceFormat(resultString)) {
-      if (this.deviceService.getCooks().some(cook => cook.deviceId === resultString)) {
-        this.messageService.add({ 
-          severity: 'warn', 
-          summary: 'Attention', 
-          detail: 'Ce QR code a déjà été scanné!' 
+      if (
+        this.deviceService
+          .getCooks()
+          .some((cook) => cook.deviceId === resultString)
+      ) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Attention',
+          detail: 'Ce QR code a déjà été scanné!',
         });
         return;
       }
-      
+
       this.currentDeviceId = resultString;
       this.showNameDialog = true;
     } else {
-      this.messageService.add({ 
-        severity: 'error', 
-        summary: 'Erreur', 
-        detail: 'QR code invalide!' 
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'QR code invalide!',
       });
     }
   }
 
   addCook() {
-    if (this.cookName.trim()) {
+    if (this.cookName.trim() && this.selectedAvatar) {
       const added = this.deviceService.addCook({
         name: this.cookName,
-        deviceId: this.currentDeviceId
+        deviceId: this.currentDeviceId,
+        avatar: this.selectedAvatar.toString(),
       });
-      
+
       if (added) {
-        this.messageService.add({ 
-          severity: 'success', 
-          summary: 'Succès', 
-          detail: `${this.cookName} a été ajouté comme cuisinier!` 
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: `${this.cookName} a été ajouté comme cuisinier!`,
         });
 
         this.showNameDialog = false;
         this.cookName = '';
-        
-        if (this.deviceService.getCooks().length >= this.deviceService.getNbPlayers()) {
+        this.selectedAvatar = 1;
+
+        if (
+          this.deviceService.getCooks().length >=
+          this.deviceService.getNbPlayers()
+        ) {
           this.scannerEnabled = false;
-          this.messageService.add({ 
-            severity: 'info', 
-            summary: 'Info', 
-            detail: 'Tous les cuisiniers ont été ajoutés!' 
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Info',
+            detail: 'Tous les cuisiniers ont été ajoutés!',
           });
         }
       }
@@ -97,13 +107,16 @@ export class ScanQrComponent {
 
   onCamerasFound(cameras: MediaDeviceInfo[]): void {
     this.availableCameras = cameras;
-    const backCamera = cameras.find(camera => 
-      camera.label.toLowerCase().includes('back'));
+    const backCamera = cameras.find((camera) =>
+      camera.label.toLowerCase().includes('back')
+    );
     this.currentCamera = backCamera || cameras[0];
   }
 
   onCameraChange(deviceId: string): void {
-    this.currentCamera = this.availableCameras.find(camera => camera.deviceId === deviceId);
+    this.currentCamera = this.availableCameras.find(
+      (camera) => camera.deviceId === deviceId
+    );
   }
 
   private isValidDeviceFormat(code: string): boolean {
@@ -113,5 +126,17 @@ export class ScanQrComponent {
 
   getPlayerSlots(): number[] {
     return Array(this.deviceService.getNbPlayers()).fill(0);
+  }
+
+  selectAvatar(avatarNumber: number) {
+    this.selectedAvatar = avatarNumber;
+  }
+
+  showTutorial() {
+    this.router.navigate(['/tutorial']);
+  }
+
+  skipTutorial() {
+    this.router.navigate(['/dashboard']);
   }
 }

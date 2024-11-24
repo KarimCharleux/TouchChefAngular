@@ -20,7 +20,7 @@
         <img ngSrc="/assets/minus.png" height="32" width="32" alt="">
       </button>
       <h2 class="text-6xl text-center">{{ currentNbPlayer }}</h2>
-      <button class="button" [disabled]="counterStatus === 'max'" [ngClass]="counterStatus === 'max' ? 'button-disabled' : 'button-green'" (click)="increaseNbPlayersByOne()">
+      <button [disabled]="counterStatus === 'max'" [ngClass]="counterStatus === 'max' ? 'button button-disabled' : 'button button-green'" (click)="increaseNbPlayersByOne()">
         <img ngSrc="/assets/plus.png" height="32" width="32" alt="">
       </button>
     </div>
