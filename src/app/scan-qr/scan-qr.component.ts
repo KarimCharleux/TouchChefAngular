@@ -10,6 +10,10 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { DeviceService } from '../device.service';
 import { Router } from '@angular/router';
+import { WebSocketService } from '../websocket.service';
+import { firstValueFrom } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 @Component({
   selector: 'app-scan-qr',
@@ -24,6 +28,7 @@ import { Router } from '@angular/router';
     InputTextModule,
     ButtonModule,
     FormsModule,
+    ProgressSpinnerModule,
   ],
   providers: [MessageService],
   templateUrl: './scan-qr.component.html',
@@ -38,10 +43,12 @@ export class ScanQrComponent {
   currentDeviceId = '';
   cookName = '';
   selectedAvatar = 1;
+  isWaitingResponse = false;
 
   constructor(
     protected messageService: MessageService,
     protected deviceService: DeviceService,
+    protected wsService: WebSocketService,
     private readonly router: Router
   ) {}
 
@@ -71,8 +78,33 @@ export class ScanQrComponent {
     }
   }
 
-  addCook() {
-    if (this.cookName.trim() && this.selectedAvatar) {
+  async addCook() {
+    if (!this.cookName.trim() || !this.selectedAvatar) return;
+    
+    this.isWaitingResponse = true;
+
+    try {
+      this.wsService.sendMessage({
+        from: 'angular',
+        to: this.currentDeviceId,
+        type: 'addCook',
+        name: this.cookName,
+        avatar: this.selectedAvatar.toString(),
+      });
+
+      console.log('Message envoyé');
+      
+
+      const response = await Promise.race([
+        firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
+        new Promise((_, reject) => 
+          setTimeout(() => reject('timeout'), 5000)
+        )
+      ]);
+
+      console.log('Response:', response);
+      
+
       const added = this.deviceService.addCook({
         name: this.cookName,
         deviceId: this.currentDeviceId,
@@ -102,6 +134,14 @@ export class ScanQrComponent {
           });
         }
       }
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur de connexion',
+        detail: 'Veuillez vérifier que la montre de ' + this.cookName + ' est bien connectée au réseau WiFi',
+      });
+    } finally {
+      this.isWaitingResponse = false;
     }
   }
 

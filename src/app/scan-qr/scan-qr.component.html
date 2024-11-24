@@ -96,15 +96,15 @@
   <p-dialog
     [(visible)]="showNameDialog"
     [modal]="true"
-    header="Nom du cuisinier"
-    [style]="{ width: '90%', maxWidth: '500px' }"
+    header="Ajoutez un nouveau cuisinier 🧑‍🍳"
+    [style]="{ width: '90%', maxWidth: '525px' }"
   >
     <div class="avatar-selection">
       <h3>1. Choisissez un avatar</h3>
       <div class="avatar-scroll-container">
         <div class="avatar-grid">
           <div
-            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+            *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
             class="avatar-option"
             [class.selected]="selectedAvatar === i"
             (click)="selectAvatar(i)"
@@ -131,14 +131,24 @@
       </span>
     </div>
 
-    <div class="dialog-footer">
-      <button
-        class="button button-orange"
-        (click)="addCook()"
-        [class.button-disabled]="!cookName.trim() || !selectedAvatar"
-      >
-        Ajouter
-      </button>
+    <div class="flex justify-center items-center">
+      <ng-container *ngIf="!isWaitingResponse; else loading">
+        <button
+          class="button button-orange"
+          (click)="addCook()"
+          [class.button-disabled]="!cookName.trim() || !selectedAvatar"
+        >
+          Ajouter
+        </button>
+      </ng-container>
+      <ng-template #loading>
+        <p-progressSpinner 
+          [style]="{width: '70px', height: '70px'}"
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+        />
+      </ng-template>
     </div>
   </p-dialog>
 </div>

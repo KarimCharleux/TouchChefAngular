@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import {Subject} from 'rxjs';
+import {Subject, Observable} from 'rxjs';
+import {filter} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  private socket$: WebSocketSubject<any>;
-  private messagesSubject = new Subject<any>();
+  private readonly socket$: WebSocketSubject<any>;
+  private readonly messagesSubject = new Subject<any>();
   public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
@@ -20,7 +21,13 @@ export class WebSocketService {
     });
   }
 
+  waitMessage(message: string): Observable<any> {
+    return this.messages$;
+  }
+
   sendMessage(message: any): void {
+    console.log('Message envoyé:', message);
+    
     this.socket$.next(message);
   }
 
