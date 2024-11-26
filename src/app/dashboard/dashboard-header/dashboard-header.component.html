@@ -1,10 +1,6 @@
 <div class="dashboard-header">
   <div class="dashboard-header__container grid grid-cols-3 items-center h-fit">
-    <div class="flex flex-row bg-white px-6 py-4 h-fit justify-between w-fit items-center rounded-xl gap-3"
-        *ngIf="showEarnedStars">
-      <span class="text-star-color font-bold text-center text-5xl">{{ nbEarnedStars }}</span>
-      <img src="assets/star.png" alt="star" class="w-12">
-    </div>
+    <app-stars [nbEarnedStars]="nbEarnedStars"></app-stars>
     <img src="assets/logo.png" alt="logo" class="dashboard-header__logo w-16 mx-auto relative top-10">
     <div class="flex flex-row justify-end">
       <button class="button button-red scale-90 text-nowrap" *ngIf="showStopGameButton" (click)="stopGame()">
