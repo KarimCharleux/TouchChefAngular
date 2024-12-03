@@ -1,0 +1,11 @@
+<div class="flex flex-col w-fit h-fit justify-center items-center p-4 bg-gray-100 rounded-lg gap-1">
+  <div class="flex flex-row justify-center items-center">
+    <app-player-data-value [playerData]="$playerActivity" pathToIcon="/assets/thunder-icon.svg"
+                           alternativeText="Player Activity score" [iconHeight]="24" [iconWidth]="24"></app-player-data-value>
+    <app-player-data-value [playerData]="$playerHeartRate" pathToIcon="/assets/heart-icon.svg"
+                           alternativeText="Player Heart Rate value" [iconHeight]="24" [iconWidth]="24"></app-player-data-value>
+  </div>
+  <div class="flex flex-row justify-center items-center">
+    <img ngSrc="/assets/cooks/1.png" alt="User Avatar" width="128" height="128">
+  </div>
+</div>
