@@ -1,24 +1,40 @@
 <div class="container-minuteur">
   <div class="left-container">
     <div class="display-numbers">
+      <div class="display">
+        <div class="flex flex-row items-center bg-gray-200 rounded-lg w-fit">
+          <div class="time flex items-center justify-center space-x-2 p-4 w-48">
+            <!-- Minutes -->
+            <div class="text-2xl font-bold flex gap-0.5">
+              <span>{{ input[0] || '_' }}</span>
+              <span>{{ input[1] || '_' }}</span>
+            </div>
 
+            <!-- Deux points -->
+            <div class="text-xl font-bold">:</div>
+
+            <!-- Secondes -->
+            <div class="text-2xl font-bold flex gap-0.5">
+              <span>{{ input[2] || '_' }}</span>
+              <span>{{ input[3] || '_' }}</span>
+            </div>
+          </div>
+          <button class="bg-red-700 p-4 rounded-lg" (click)="clearInput()">
+            <img src="/assets/cross-full-icon.svg" alt="croix" height="22" width="22" />
+          </button>
+        </div>
+      </div>
     </div>
     <div class="numbers-buttons inline-block">
       <div class="grid grid-cols-3 gap-4 p-4">
         <div
           *ngFor="let number of numbers"
-          class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white text-2xl font-bold"
+          class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white text-2xl font-bold cursor-pointer"
+          (click)="onNumberClick(number)"
         >
           {{ number }}
         </div>
       </div>
-
     </div>
   </div>
-  <div class="right-container">
-    <div class="">
-
-    </div>
-  </div>
-
 </div>
