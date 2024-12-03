@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {dirname} from '@angular/compiler-cli';
 import {NgClass} from '@angular/common';
 
 @Component({
@@ -13,14 +12,15 @@ import {NgClass} from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BarTimerComponent implements OnInit {
-  @Input() width: string = '80%'; // Largeur par défaut
+  @Input() width: string = '100%'; // Largeur par défaut
   @Input() height: string = '24px'; // Hauteur par défaut
   @Input() totalTime: number = 60; // Temps total en secondes
 
   currentTime: number = this.totalTime; // Temps restant
   progressWidth: string = '100%'; // Largeur de la barre de progression
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
     this.startTimer();
