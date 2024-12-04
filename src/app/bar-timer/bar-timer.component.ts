@@ -16,13 +16,18 @@ export class BarTimerComponent implements OnInit {
   @Input() height: string = '24px'; // Hauteur par défaut
   @Input() totalTime: number = 60; // Temps total en secondes
 
-  currentTime: number = this.totalTime; // Temps restant
+  currentTime: number = 0; // Temps restant
   progressWidth: string = '100%'; // Largeur de la barre de progression
 
   constructor(private cdr: ChangeDetectorRef) {
+    console.log(this.currentTime);
+    console.log(this.totalTime);
+    console.log(this.progressWidth);
   }
 
   ngOnInit(): void {
+    this.currentTime = this.totalTime;
+    this.updateProgress();
     this.startTimer();
   }
 
@@ -39,6 +44,7 @@ export class BarTimerComponent implements OnInit {
 
   updateProgress() {
     this.progressWidth = `${(this.currentTime / this.totalTime) * 100}%`;
+
     this.cdr.detectChanges(); // Force la mise à jour de la vue
   }
 
