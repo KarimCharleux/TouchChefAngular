@@ -11,13 +11,14 @@ import {NgForOf} from '@angular/common';
   styleUrl: './shop.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class ShopComponent {
 
-  products = [
-    { id: 1, name: 'Produit 1', icon: '🍎' },
-    { id: 2, name: 'Produit 2', icon: '🥕' },
-    { id: 3, name: 'Produit 3', icon: '☁️' },
-    { id: 4, name: 'Produit 4', icon: '🥔' },
+  products:Product[] = [
+    { id: 1, name: 'Tomate', icon: '🍅' },
+    { id: 2, name: 'Laitue', icon: '🥬' },
+    { id: 3, name: 'Viande', icon: '🥩' },
+    { id: 4, name: 'Pain', icon: '🫓' },
     { id: 5, name: 'Produit 5', icon: '🍗' },
     { id: 6, name: 'Produit 6', icon: '🍇' },
     { id: 7, name: 'Produit 7', icon: '🥒' },
@@ -26,4 +27,15 @@ export class ShopComponent {
     { id: 10, name: 'Produit 10', icon: '🍋' },
   ];
 
+  OnProductClick(product: Product){
+    console.log("Le produit : " + product.name + " a été cliqué");
+    return product;
+  }
+
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  icon: string;
 }
