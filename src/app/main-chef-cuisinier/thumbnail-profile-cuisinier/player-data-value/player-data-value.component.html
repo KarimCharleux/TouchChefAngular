@@ -1,0 +1,4 @@
+<div class="flex flex-row w-fit h-fit justify-center items-center gap-2 min-h-10 max-h-10 min-w-20 relative">
+  <p-knob class="absolute top-0 left-0" readonly [(ngModel)]="playerData" [min]="0" [max]="200" [size]="75" [strokeWidth]="5" [valueColor]="getGradientColor()"/>
+  <img class="absolute top-full left-1/2" style="transform: translate(-50%, 50%);" [ngSrc]="pathToIcon" [alt]="alternativeText" [height]="iconHeight" [width]="iconWidth">
+</div>
