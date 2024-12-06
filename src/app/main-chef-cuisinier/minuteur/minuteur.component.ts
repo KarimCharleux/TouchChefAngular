@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from '@angular/common';
-import {ListTimersItemComponent} from './list-timers-item/list-timers-item.component';
+import {ListTimersItemComponent, Timer} from './list-timers-item/list-timers-item.component';
+import {ShareDataService} from '../../share-data.service';
 
 @Component({
   selector: 'app-minuteur',
@@ -14,12 +15,25 @@ import {ListTimersItemComponent} from './list-timers-item/list-timers-item.compo
   styleUrl: './minuteur.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MinuteurComponent {
+export class MinuteurComponent implements OnInit {
 
   numbers: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9']; // Chiffres à afficher
   input: string[] = ['', '', '', ''];
 
-  @Output() createTimer = new EventEmitter<number>(); // Événement pour le composant parent
+  id: number = 0;
+  timers: { id: number, timer: Timer }[] = [];
+
+  receivedObject?: Timer = undefined;
+
+  constructor(private shareDataService: ShareDataService, private cdr: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.shareDataService.data$.subscribe((data) => {
+      this.receivedObject = data;
+      this.handleReceivedObject(data);
+    });
+  }
 
   onNumberClick(number: string): void {
     // Remplir les espaces vides dans l'ordre
@@ -30,7 +44,7 @@ export class MinuteurComponent {
 
     // Transforme en 59 si les deux premiers chiffres ensemble dépassent 59
     if (firstEmptyIndex <= 1) { // Vérifie les deux premiers chiffres
-      const minutes = parseInt(this.input.slice(0,2).join(''), 10);
+      const minutes = parseInt(this.input.slice(0, 2).join(''), 10);
       if (minutes > 59) {
         this.input[0] = '5'; // On fixe à 59 si la valeur dépasse 59
         this.input[1] = '9';
@@ -51,4 +65,33 @@ export class MinuteurComponent {
     this.input = ['', '', '', ''];
   }
 
+  onDragStart(event: DragEvent) {
+    if (event.dataTransfer) {
+      const inputData = this.input.join(''); // Convertit l'objet input en une chaîne ex: "1234"
+      event.dataTransfer.setData('text/plain', inputData); // Ajoute les données dans le DataTransfer
+    }
+  }
+
+  handleReceivedObject(timer: Timer) {
+    this.addTimer(timer);
+  }
+
+  addTimer(timer: Timer): void {
+    console.log(timer.timerDuration);
+    this.timers.push({id: this.id++, timer: timer});
+    this.cdr.detectChanges();
+  }
+
+  onTimerComplete(id: number) {
+    this.removeTimer(id);
+  }
+
+  removeTimer(id: number): void {
+    // TODO : quand le timer prend fin
+    this.timers.forEach((element, index) => {
+      if (id === element.id) {
+        this.timers.splice(index, 1);
+      }
+    });
+  }
 }

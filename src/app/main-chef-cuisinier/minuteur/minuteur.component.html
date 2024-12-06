@@ -3,7 +3,8 @@
     <div class="display-numbers">
       <div class="display">
         <div class="flex flex-row items-center bg-gray-200 rounded-lg w-fit">
-          <div class="time flex items-center justify-center space-x-2 p-4 w-48">
+          <div class="time flex items-center justify-center space-x-2 p-4 w-48" draggable="true"
+               (dragstart)="onDragStart($event)">
             <!-- Minutes -->
             <div class="text-2xl font-bold flex gap-0.5">
               <span>{{ input[0] || '_' }}</span>
@@ -20,7 +21,7 @@
             </div>
           </div>
           <button class="bg-red-700 p-4 rounded-lg" (click)="clearInput()">
-            <img src="/assets/cross-full-icon.svg" alt="croix" height="22" width="22" />
+            <img src="/assets/cross-full-icon.svg" alt="croix" height="22" width="22"/>
           </button>
         </div>
       </div>
@@ -39,5 +40,10 @@
   </div>
   <div class="right-container outline outline-1 outline-black">
     <app-list-timers-item [totalTime]="60"></app-list-timers-item>
+    <app-list-timers-item
+      *ngFor="let timer of timers"
+      [totalTime]="timer.timer.timerDuration"
+    (timerComplete)="onTimerComplete(timer.id)">
+    </app-list-timers-item>
   </div>
 </div>

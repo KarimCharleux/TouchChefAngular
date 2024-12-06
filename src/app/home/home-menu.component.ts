@@ -1,10 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { NgClass, NgOptimizedImage } from '@angular/common';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { Router } from '@angular/router';
-import { DeviceService } from '../device.service';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {UntilDestroy} from '@ngneat/until-destroy';
+import {NgClass, NgOptimizedImage} from '@angular/common';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import {Router} from '@angular/router';
+import {DeviceService} from '../device.service';
 
 @Component({
   selector: 'app-home-menu',
@@ -25,7 +25,8 @@ export class HomeMenuComponent {
   constructor(
     private readonly router: Router,
     private readonly deviceService: DeviceService
-  ) {}
+  ) {
+  }
 
   onLoadedData() {
     this.backgroundVideo?.nativeElement
@@ -65,6 +66,8 @@ export class HomeMenuComponent {
 
   startGame() {
     this.deviceService.setNbPlayers(this.currentNbPlayer);
-    this.router.navigate(['/scan-qr']).then();
+    // TODO : DELETE THIS
+    this.router.navigate(['/main-page']).then(); // TODO : delete this
+    //this.router.navigate(['/scan-qr']).then(); // TODO : uncomment this
   }
 }
