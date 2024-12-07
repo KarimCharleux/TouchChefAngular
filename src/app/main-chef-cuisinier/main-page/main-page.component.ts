@@ -26,7 +26,7 @@ import {ShareDataService} from '../../share-data.service';
 export class MainPageComponent {
 
   deviceService?: DeviceService = undefined;
-  isDraggedOver = false;
+  isDraggedOver: boolean[] = [false, false, false, false];
 
   @Input() cooks: Cook[] = [];
 
@@ -39,19 +39,19 @@ export class MainPageComponent {
     this.cooks = this.deviceService.getCooks();
   }
 
-  allowDrop(event: DragEvent) {
+  allowDrop(event: DragEvent, profileNumber: number) {
     event.preventDefault(); // Permet le drop
-    this.isDraggedOver = true;
+    this.isDraggedOver[profileNumber] = true;
   }
 
-  dropLeave(event: DragEvent) {
+  dropLeave(event: DragEvent, profileNumber: number) {
     event.preventDefault();
-    this.isDraggedOver = false;
+    this.isDraggedOver[profileNumber] = false;
   }
 
-  onDrop(event: DragEvent, cook: Cook) {
+  onDrop(event: DragEvent, profileNumber: number, cook: Cook) {
     event.preventDefault();
-    this.isDraggedOver = false;
+    this.isDraggedOver[profileNumber] = false;
 
     if (event.dataTransfer) {
       const timerData = event.dataTransfer.getData('text/plain'); // Récupère les données transférées
@@ -72,4 +72,6 @@ export class MainPageComponent {
     const timer = {"timerTime": timerTimeInSeconds, "cook": cook};
     this.shareDataService.sendData(timer);
   }
+
+  // TODO : not use shareDataService anymore for this but @Input with a list instead
 }

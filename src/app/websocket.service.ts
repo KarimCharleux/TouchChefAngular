@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import {Subject, Observable} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +24,13 @@ export class WebSocketService {
     return this.messages$;
   }
 
+  /* Message format :
+  {from: 'angular', to: this.currentDeviceId,
+  type: 'addCook', name: this.cookName,
+  avatar: this.selectedAvatar.toString()};*/
   sendMessage(message: any): void {
     console.log('Message envoyé:', message);
-    
+
     this.socket$.next(message);
   }
 

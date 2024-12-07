@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@an
 import {NgForOf, NgOptimizedImage} from '@angular/common';
 import {ListTimersItemComponent, Timer} from './list-timers-item/list-timers-item.component';
 import {ShareDataService} from '../../share-data.service';
+import {Cook} from '../../device.service';
+import {WebSocketService} from '../../websocket.service';
 
 @Component({
   selector: 'app-minuteur',
@@ -25,7 +27,7 @@ export class MinuteurComponent implements OnInit {
 
   receivedObject?: Timer = undefined;
 
-  constructor(private shareDataService: ShareDataService, private cdr: ChangeDetectorRef) {
+  constructor(private shareDataService: ShareDataService, private cdr: ChangeDetectorRef, private wsService: WebSocketService) {
   }
 
   ngOnInit() {
@@ -73,13 +75,19 @@ export class MinuteurComponent implements OnInit {
   }
 
   handleReceivedObject(timer: Timer) {
+    this.clearInput();
     this.addTimer(timer);
   }
 
   addTimer(timer: Timer): void {
     console.log(timer.timerDuration);
+    //this.sendTimerToRightWatch(timer.cook); TODO : uncomment this to send timer to the watch of the right cook
     this.timers.push({id: this.id++, timer: timer});
     this.cdr.detectChanges();
+  }
+
+  async sendTimerToRightWatch(cook: Cook) {
+    this.wsService.sendMessage({from: 'angular', to: cook.deviceId, type: 'addTimer', avatar: cook.avatar});
   }
 
   onTimerComplete(id: number) {
@@ -87,7 +95,6 @@ export class MinuteurComponent implements OnInit {
   }
 
   removeTimer(id: number): void {
-    // TODO : quand le timer prend fin
     this.timers.forEach((element, index) => {
       if (id === element.id) {
         this.timers.splice(index, 1);
