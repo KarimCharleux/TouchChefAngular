@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { Task } from '../dashboard/burger.model';
+import { BURGERS } from '../dashboard/burgers.data';
 
 @Component({
   selector: 'app-list-tasks',
@@ -13,7 +14,7 @@ import { Task } from '../dashboard/burger.model';
 export class ListTasksComponent {
   @Input() tasks: Task[] = [];
   @Output() progressChange = new EventEmitter<number>();
-  
+
   checkedTasks: Set<number> = new Set();
   showDialog: boolean = false;
   selectedTask: Task | null = null;
@@ -21,6 +22,7 @@ export class ListTasksComponent {
 
   constructor(){
     this.tapSound = new Audio("assets/sounds/tap.mp3");
+    this.tasks = BURGERS[0].steps;
   }
 
   toggleCheck(index: number, event: Event) {
@@ -31,7 +33,7 @@ export class ListTasksComponent {
     } else {
       this.checkedTasks.add(index);
     }
-    
+
     const progress = (this.checkedTasks.size / this.tasks.length) * 100;
     this.progressChange.emit(Math.round(progress));
   }
