@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import {NgForOf} from '@angular/common';
+import { WebSocketService } from '../../websocket.service';
 
 @Component({
   selector: 'app-shop',
@@ -27,8 +28,35 @@ export class ShopComponent {
     { id: 10, name: 'Produit 10', icon: '🍋' },
   ];
 
-  OnProductClick(product: Product){
+  private readonly tapSound: HTMLAudioElement;
+
+  @ViewChildren('productItem') productItems!: QueryList<ElementRef>;
+
+  constructor(private wsService: WebSocketService) {
+    this.tapSound = new Audio("assets/sounds/confirm.mp3");
+  }
+
+  OnProductClick(product: Product, index: number) {
+    // Jouer le son
+    this.tapSound.play().then();
+    
+    // Ajouter la classe pour l'animation
+    const element = this.productItems.get(index)?.nativeElement;
+    element.classList.add('clicked');
+    
+    // Retirer la classe après l'animation
+    setTimeout(() => {
+      element.classList.remove('clicked');
+    }, 500);
+
     console.log("Le produit : " + product.name + " a été cliqué");
+    const message = {
+      type: 'add_product',
+      product: product,
+      from: 'angular',
+      to: 'table'
+    };
+    this.wsService.sendMessage(message);
     return product;
   }
 

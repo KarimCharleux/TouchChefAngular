@@ -11,7 +11,7 @@ import {GameTimeLeftComponent} from './main-chef-cuisinier/game-time-left/game-t
 
 export const routes: Routes = [
   {
-    path: '', component: GameTimeLeftComponent,
+    path: '', component: ShopComponent,
   },
   {
     path: 'scan-qr', component: ScanQrComponent,
