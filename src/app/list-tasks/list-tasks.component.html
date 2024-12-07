@@ -26,44 +26,46 @@
          [class.hover:bg-gray-300]="task.subTasks && task.subTasks.length > 0"
          (click)="task.subTasks && task.subTasks.length > 0 && showTaskDetails(task)">
 
-      <div class="first-row flex flex-row flex-1">
-        <div class="chronometer-container">
-          <span class="text-xl">5 minutes</span>
-          <img ngSrc="/assets/chronometer.png"
-               alt="Image de chronomètre"
-               height="64"
-               width="64"
-               class=""/>
+      <div class="flex flex-row items-center gap-2">
+        <div class="task-checkbox w-16 h-16 min-w-16 min-h-16 max-w-96 max-h-96 bg-white rounded-xl"
+             (click)="toggleCheck(i, $event)">
+          <img ngSrc="/assets/checkIcon-1.svg"
+               alt="checkIcon.svg"
+               *ngIf="checkedTasks.has(i)"
+               height="296"
+               width="296"/>
         </div>
-        <div class="assigned-cooks-list flex flex-row absolute right-0 top-0">
+        <span class="w-fit min-w-44 text-5xl bg-white rounded-2xl outline outline-1 outline-black p-4">🔪🍅</span>
+        <div class="flex flex-col w-full items-center justify-center">
+          <div class="chronometer-container flex flex-col justify-center items-center gap-1">
+            <!-- TODO : durée seulement pour les cuissons et récup durée depuis JSON -->
+            <span class="text-md font-semibold">5 minutes</span>
+            <img ngSrc="/assets/chronometer.png" alt="Image de chronomètre" height="42" width="42"/>
+          </div>
+          <span class="text-xl w-full text-center">{{ task.name }}</span>
+        </div>
+
+        <div class="assigned-cooks-list flex flex-row absolute top-0 right-0">
           <div class="assigned-cook-profile flex flex-col justify-center items-center">
-            <img ngSrc="/assets/cooks/3.png"
-                 alt="Icone de profil de cuisinier"
-                 height="64"
-                 width="64"
-                 class=""/>
-            <span>Michel</span>
+              <img ngSrc="/assets/cooks/3.png"
+                   alt="Icone de profil de cuisinier"
+                   height="48"
+                   width="48"
+                   class=""/>
+            <span class="font-bold text-sm">Michel</span>
           </div>
           <div class="assigned-cook-profile flex flex-col justify-center items-center">
+            <div class="cook-profile-img">
             <img ngSrc="/assets/unknown-icon.svg"
                  alt="Icone point interrogation"
-                 height="64"
-                 width="64"
-                 class=""/>
-            <span>?</span>
+                 height="48"
+                 width="48"/>
+            </div>
+            <span class="font-bold text-sm">?</span>
           </div>
-
         </div>
 
-
       </div>
-      <div class="second-row">
-
-      </div>
-      <div class="third-row">
-
-      </div>
-
     </div>
 
   </ng-container>
