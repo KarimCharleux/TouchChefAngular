@@ -21,7 +21,7 @@
             </div>
           </div>
           <button class="bg-red-700 p-4 rounded-lg" (click)="clearInput()">
-            <img src="/assets/cross-full-icon.svg" alt="croix" height="22" width="22"/>
+            <img ngSrc="/assets/cross-full-icon.svg" alt="croix" height="22" width="22"/>
           </button>
         </div>
       </div>
@@ -42,10 +42,10 @@
     class="right-container flex flex-col w-fit h-fit max-h-64 rounded-2xl outline outline-1 outline-black overflow-y-scroll p-2">
     <app-list-timers-item [totalTime]="60"></app-list-timers-item>
     <app-list-timers-item
-      *ngFor="let timer of timers"
-      [totalTime]="timer.timer.timerDuration"
-      (timerComplete)="onTimerComplete(timer.id)"
-      [avatar]="timer.timer.cook.avatar">
+      *ngFor="let timerItem of timers"
+      [totalTime]="timerItem.timer.timerDuration"
+      (timerComplete)="onTimerComplete(timerItem.id)"
+      [avatar]="timerItem.timer.cook.avatar">
     </app-list-timers-item>
   </div>
 </div>
