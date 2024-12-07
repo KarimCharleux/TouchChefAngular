@@ -80,8 +80,8 @@ export class MinuteurComponent implements OnInit {
   }
 
   addTimer(timer: Timer): void {
-    console.log(timer.timerDuration);
-    //this.sendTimerToRightWatch(timer.cook); TODO : uncomment this to send timer to the watch of the right cook
+
+    this.sendTimerToRightWatch(timer.cook);
     this.timers.push({id: this.id++, timer: timer});
     this.cdr.detectChanges();
   }

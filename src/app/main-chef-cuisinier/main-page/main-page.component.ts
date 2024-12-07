@@ -7,6 +7,7 @@ import {Cook, DeviceService} from '../../device.service';
 import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
 import {NgClass} from '@angular/common';
 import {ShareDataService} from '../../share-data.service';
+import {Timer} from '../minuteur/list-timers-item/list-timers-item.component';
 
 @Component({
   selector: 'app-main-page',
@@ -69,7 +70,7 @@ export class MainPageComponent {
   }
 
   sendTimerOfCookToTimersList(timerTimeInSeconds: number, cook: Cook) {
-    const timer = {"timerTime": timerTimeInSeconds, "cook": cook};
+    const timer: Timer = {"timerDuration": timerTimeInSeconds, "cook": cook};
     this.shareDataService.sendData(timer);
   }
 
