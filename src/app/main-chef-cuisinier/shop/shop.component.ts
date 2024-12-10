@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import {NgForOf} from '@angular/common';
-import { WebSocketService } from '../../websocket.service';
+import {ChangeDetectionStrategy, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {NgClass, NgForOf} from '@angular/common';
+import {WebSocketService} from '../../websocket.service';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
@@ -15,17 +16,17 @@ import { WebSocketService } from '../../websocket.service';
 
 export class ShopComponent {
 
-  products:Product[] = [
-    { id: 1, name: 'Tomate', icon: '🍅' },
-    { id: 2, name: 'Laitue', icon: '🥬' },
-    { id: 3, name: 'Viande', icon: '🥩' },
-    { id: 4, name: 'Pain', icon: '🫓' },
-    { id: 5, name: 'Produit 5', icon: '🍗' },
-    { id: 6, name: 'Produit 6', icon: '🍇' },
-    { id: 7, name: 'Produit 7', icon: '🥒' },
-    { id: 8, name: 'Produit 8', icon: '🍉' },
-    { id: 9, name: 'Produit 9', icon: '🥭' },
-    { id: 10, name: 'Produit 10', icon: '🍋' },
+  products: Product[] = [
+    {id: 1, name: 'Tomate', icon: '🍅', isOnCooldown: false},
+    {id: 2, name: 'Laitue', icon: '🥬', isOnCooldown: false},
+    {id: 3, name: 'Viande', icon: '🥩', isOnCooldown: false},
+    {id: 4, name: 'Pain', icon: '🫓', isOnCooldown: false},
+    {id: 5, name: 'Produit 5', icon: '🍗', isOnCooldown: false},
+    {id: 6, name: 'Produit 6', icon: '🍇', isOnCooldown: false},
+    {id: 7, name: 'Produit 7', icon: '🥒', isOnCooldown: false},
+    {id: 8, name: 'Produit 8', icon: '🍉', isOnCooldown: false},
+    {id: 9, name: 'Produit 9', icon: '🥭', isOnCooldown: false},
+    {id: 10, name: 'Produit 10', icon: '🍋', isOnCooldown: false},
   ];
 
   private readonly tapSound: HTMLAudioElement;
@@ -37,26 +38,45 @@ export class ShopComponent {
   }
 
   OnProductClick(product: Product, index: number) {
+    let canSend: boolean = true;
     // Jouer le son
     this.tapSound.play().then();
-    
+
     // Ajouter la classe pour l'animation
     const element = this.productItems.get(index)?.nativeElement;
     element.classList.add('clicked');
-    
+    element.classList.add('border-animate');
+
     // Retirer la classe après l'animation
     setTimeout(() => {
       element.classList.remove('clicked');
     }, 500);
 
-    console.log("Le produit : " + product.name + " a été cliqué");
-    const message = {
-      type: 'add_product',
-      product: product,
-      from: 'angular',
-      to: 'table'
-    };
-    this.wsService.sendMessage(message);
+    product.isOnCooldown = true;
+
+    // Désactiver le cooldown après 1.5 secondes
+    setTimeout(() => {
+      product.isOnCooldown = false;
+      canSend = true;
+      console.log(canSend);
+      element.classList.remove('border-animate');
+    }, 1500);
+
+    console.log(canSend);
+
+    if (canSend) {
+      canSend = false;
+      console.log("Le produit : " + product.name + " a été cliqué");
+      const message = {
+        type: 'add_product',
+        product: product,
+        from: 'angular',
+        to: 'table'
+      };
+      this.wsService.sendMessage(message);
+    }
+
+
     return product;
   }
 
@@ -66,4 +86,5 @@ export interface Product {
   id: number;
   name: string;
   icon: string;
+  isOnCooldown: boolean;
 }
