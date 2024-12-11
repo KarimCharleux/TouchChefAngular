@@ -1,18 +1,18 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { DropdownModule } from 'primeng/dropdown';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import { DeviceService } from '../device.service';
-import { Router } from '@angular/router';
-import { WebSocketService } from '../websocket.service';
-import { firstValueFrom } from 'rxjs';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {NgForOf, NgIf} from '@angular/common';
+import {ZXingScannerModule} from '@zxing/ngx-scanner';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import {DropdownModule} from 'primeng/dropdown';
+import {DialogModule} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import {FormsModule} from '@angular/forms';
+import {DeviceService} from '../device.service';
+import {Router} from '@angular/router';
+import {WebSocketService} from '../websocket.service';
+import {firstValueFrom} from 'rxjs';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 
 @Component({
@@ -50,7 +50,8 @@ export class ScanQrComponent {
     protected deviceService: DeviceService,
     protected wsService: WebSocketService,
     private readonly router: Router
-  ) {}
+  ) {
+  }
 
   onCodeResult(resultString: string) {
     if (this.isValidDeviceFormat(resultString)) {
@@ -80,7 +81,7 @@ export class ScanQrComponent {
 
   async addCook() {
     if (!this.cookName.trim() || !this.selectedAvatar) return;
-    
+
     this.isWaitingResponse = true;
 
     try {
@@ -93,17 +94,17 @@ export class ScanQrComponent {
       });
 
       console.log('Message envoyé');
-      
+
 
       const response = await Promise.race([
         firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
-        new Promise((_, reject) => 
+        new Promise((_, reject) =>
           setTimeout(() => reject('timeout'), 5000)
         )
       ]);
 
       console.log('Response:', response);
-      
+
 
       const added = this.deviceService.addCook({
         name: this.cookName,
@@ -177,6 +178,7 @@ export class ScanQrComponent {
   }
 
   skipTutorial() {
-    this.router.navigate(['/dashboard']);
+    //this.router.navigate(['/dashboard']); // TODO : to access the old dashboard
+    this.router.navigate(['/main-page']);
   }
 }

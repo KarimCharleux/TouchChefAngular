@@ -66,8 +66,6 @@ export class HomeMenuComponent {
 
   startGame() {
     this.deviceService.setNbPlayers(this.currentNbPlayer);
-    // TODO : DELETE THIS
-    this.router.navigate(['/main-page']).then(); // TODO : delete this
-    //this.router.navigate(['/scan-qr']).then(); // TODO : uncomment this
+    this.router.navigate(['/scan-qr']).then();
   }
 }

@@ -33,10 +33,6 @@ export class MainPageComponent {
 
   constructor(deviceService: DeviceService, private shareDataService: ShareDataService) {
     this.deviceService = deviceService;
-    this.deviceService.addCook({'name': "Damien", 'deviceId': "1", 'avatar': "3"});
-    this.deviceService.addCook({'name': "Karim", 'deviceId': "2", 'avatar': "1"});
-    this.deviceService.addCook({'name': "Anas", 'deviceId': "3", 'avatar': "4"});
-    this.deviceService.addCook({'name': "Saad", 'deviceId': "4", 'avatar': "2"});
     this.cooks = this.deviceService.getCooks();
   }
 
@@ -74,5 +70,5 @@ export class MainPageComponent {
     this.shareDataService.sendData(timer);
   }
 
-  // TODO : not use shareDataService anymore for this but @Input with a list instead
+  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
 }
