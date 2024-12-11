@@ -38,34 +38,29 @@ export class ShopComponent {
   }
 
   OnProductClick(product: Product, index: number) {
-    let canSend: boolean = true;
-    // Jouer le son
-    this.tapSound.play().then();
+    if (!product.isOnCooldown) {
+      // Jouer le son
+      this.tapSound.play().then();
 
-    // Ajouter la classe pour l'animation
-    const element = this.productItems.get(index)?.nativeElement;
-    element.classList.add('clicked');
-    element.classList.add('border-animate');
+      // Ajouter la classe pour l'animation
+      const element = this.productItems.get(index)?.nativeElement;
+      element.classList.add('clicked');
+      element.classList.add('border-animate');
 
-    // Retirer la classe après l'animation
-    setTimeout(() => {
-      element.classList.remove('clicked');
-    }, 500);
+      // Retirer la classe après l'animation
+      setTimeout(() => {
+        element.classList.remove('clicked');
+      }, 500);
 
-    product.isOnCooldown = true;
+      product.isOnCooldown = true;
 
-    // Désactiver le cooldown après 1.5 secondes
-    setTimeout(() => {
-      product.isOnCooldown = false;
-      canSend = true;
-      console.log(canSend);
-      element.classList.remove('border-animate');
-    }, 1500);
+      // Désactiver le cooldown après 1.5 secondes
+      setTimeout(() => {
+        product.isOnCooldown = false;
+        element.classList.remove('border-animate');
+      }, 1500);
 
-    console.log(canSend);
 
-    if (canSend) {
-      canSend = false;
       console.log("Le produit : " + product.name + " a été cliqué");
       const message = {
         type: 'add_product',
