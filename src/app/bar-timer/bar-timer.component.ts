@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {NgClass} from '@angular/common';
 
 @Component({
@@ -16,13 +24,12 @@ export class BarTimerComponent implements OnInit {
   @Input() height: string = '24px'; // Hauteur par défaut
   @Input() totalTime: number = 60; // Temps total en secondes
 
+  @Output() timerComplete = new EventEmitter<void>(); // Émet un événement lorsque le temps est écoulé
+
   currentTime: number = 0; // Temps restant
   progressWidth: string = '100%'; // Largeur de la barre de progression
 
   constructor(private cdr: ChangeDetectorRef) {
-    console.log(this.currentTime);
-    console.log(this.totalTime);
-    console.log(this.progressWidth);
   }
 
   ngOnInit(): void {
@@ -38,6 +45,7 @@ export class BarTimerComponent implements OnInit {
         this.updateProgress(); // Met à jour la largeur de la barre
       } else {
         clearInterval(interval); // Arrête le timer
+        this.timerComplete.emit(); // Émet l'événement
       }
     }, 1000);
   }

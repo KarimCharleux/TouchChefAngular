@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {BarTimerComponent} from '../../../bar-timer/bar-timer.component';
 import {NgOptimizedImage} from '@angular/common';
+import {Cook} from '../../../device.service';
 
 @Component({
   selector: 'app-list-timers-item',
@@ -18,4 +19,15 @@ export class ListTimersItemComponent {
   @Input() totalTime: number = 60;
   @Input() avatar: string = "unknown-icon";
 
+  @Output() timerComplete = new EventEmitter<void>();
+
+  onTimerComplete() {
+    this.timerComplete.emit();
+  }
+
+}
+
+export interface Timer {
+  timerDuration: number;
+  cook: Cook;
 }

@@ -1,0 +1,44 @@
+<div class="flex flex-col h-full gap-2 items-center place-content-between">
+  <div class="flex flex-row max-w-full top-row">
+    <app-thumbnail-profile-cuisinier [$playerName]="this.cooks[0].name" [$playerAvatar]="this.cooks[0].avatar"
+                                     (dragover)="allowDrop($event, 0)"
+                                     (dragleave)="dropLeave($event, 0)"
+                                     (drop)="onDrop($event,0, this.cooks[0])"
+                                     [ngClass]="{'drag-over': isDraggedOver[0]}"
+                                     class="transition-transform transform hover:scale-105"></app-thumbnail-profile-cuisinier>
+    <app-thumbnail-profile-cuisinier [$playerName]="this.cooks[1].name" [$playerAvatar]="this.cooks[1].avatar"
+                                     (dragover)="allowDrop($event, 1)"
+                                     (dragleave)="dropLeave($event, 1)"
+                                     (drop)="onDrop($event,1, this.cooks[1])"
+                                     [ngClass]="{'drag-over': isDraggedOver[1]}"
+                                     class="transition-transform transform hover:scale-105"></app-thumbnail-profile-cuisinier>
+    <app-thumbnail-profile-cuisinier [$playerName]="this.cooks[2].name" [$playerAvatar]="this.cooks[2].avatar"
+                                     (dragover)="allowDrop($event, 2)"
+                                     (dragleave)="dropLeave($event, 2)"
+                                     (drop)="onDrop($event,2, this.cooks[2])"
+                                     [ngClass]="{'drag-over': isDraggedOver[2]}"
+                                     class="transition-transform transform hover:scale-105"></app-thumbnail-profile-cuisinier>
+    <app-thumbnail-profile-cuisinier [$playerName]="this.cooks[3].name" [$playerAvatar]="this.cooks[3].avatar"
+                                     (dragover)="allowDrop($event, 3)"
+                                     (dragleave)="dropLeave($event, 3)"
+                                     (drop)="onDrop($event,3, this.cooks[3])"
+                                     [ngClass]="{'drag-over': isDraggedOver[3]}"
+    class="transition-transform transform hover:scale-105"></app-thumbnail-profile-cuisinier>
+  </div>
+  <div class="flex flex-row w-full space-between items-center mid-row gap-4">
+    <div class="flex flex-col flex-1 w-full gap-3">
+      <app-shop></app-shop>
+      <app-minuteur></app-minuteur>
+    </div>
+    <div class="flex flex-col flex-1 w-full gap-3">
+      <app-shop></app-shop>
+      <app-minuteur></app-minuteur>
+    </div>
+  </div>
+  <div class="flex flex-row w-full space-between items-center bottom-row gap-4">
+    <div class="w-full">
+      <app-game-time-left [gameDuration]="250"></app-game-time-left>
+    </div>
+    <app-score></app-score>
+  </div>
+</div>

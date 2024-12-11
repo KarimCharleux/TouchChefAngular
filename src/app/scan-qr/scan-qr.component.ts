@@ -52,7 +52,8 @@ export class ScanQrComponent implements OnInit {
     protected deviceService: DeviceService,
     protected wsService: WebSocketService,
     private readonly router: Router
-  ) {}
+  ) {
+  }
 
   async ngOnInit() {
     try {
@@ -108,7 +109,7 @@ export class ScanQrComponent implements OnInit {
 
   async addCook() {
     if (!this.cookName.trim() || !this.selectedAvatar) return;
-    
+
     this.isWaitingResponse = true;
 
     try {
@@ -121,7 +122,7 @@ export class ScanQrComponent implements OnInit {
       });
 
       console.log('Message envoyé');
-      
+
 
       const response = await Promise.race([
         firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
@@ -131,7 +132,7 @@ export class ScanQrComponent implements OnInit {
       ]);
 
       console.log('Response:', response);
-      
+
 
       const added = this.deviceService.addCook({
         name: this.cookName,
@@ -205,6 +206,7 @@ export class ScanQrComponent implements OnInit {
   }
 
   skipTutorial() {
-    this.router.navigate(['/dashboard']);
+    //this.router.navigate(['/dashboard']); // TODO : to access the old dashboard
+    this.router.navigate(['/main-page']);
   }
 }

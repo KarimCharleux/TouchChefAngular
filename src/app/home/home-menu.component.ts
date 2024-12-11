@@ -1,11 +1,12 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { NgClass, NgOptimizedImage } from '@angular/common';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { Router } from '@angular/router';
-import { DeviceService } from '../device.service';
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {UntilDestroy} from '@ngneat/until-destroy';
+import {NgClass, NgOptimizedImage} from '@angular/common';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import {Router} from '@angular/router';
+import {DeviceService} from '../device.service';
 import { WebSocketService } from '../websocket.service';
+
 @Component({
   selector: 'app-home-menu',
   standalone: true,

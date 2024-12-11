@@ -46,7 +46,8 @@ export class TutorialComponent implements OnInit, AfterViewInit {
   }
 
   startGame() {
-    this.router.navigate(['/dashboard']).then();
+    //this.router.navigate(['/dashboard']).then();
+    this.router.navigate(['/main-page']).then();
   }
 
   skipVideo() {

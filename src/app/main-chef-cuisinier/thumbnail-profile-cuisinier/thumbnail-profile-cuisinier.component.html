@@ -6,6 +6,6 @@
                            alternativeText="Player Heart Rate value" [iconHeight]="24" [iconWidth]="24"></app-player-data-value>
   </div>
   <div class="flex flex-row justify-center items-center">
-    <img ngSrc="/assets/cooks/1.png" alt="User Avatar" width="128" height="128">
+    <img [ngSrc]="'/assets/cooks/'+ this.$playerAvatar + '.png'" alt="User Avatar" width="128" height="128">
   </div>
 </div>
