@@ -151,4 +151,25 @@
       </ng-template>
     </div>
   </p-dialog>
+
+  <p-dialog
+    [(visible)]="showPermissionDialog"
+    [modal]="true"
+    [closable]="false"
+    header="Autorisation requise 📸"
+    [style]="{ width: '90%', maxWidth: '400px' }"
+  >
+    <div class="text-center">
+      <h3>Accès à la caméra</h3>
+      <p>Pour scanner les QR codes, nous avons besoin d'accéder à votre caméra.</p>
+      <div class="mt-4">
+        <button
+          class="button button-orange"
+          (click)="requestPermission()"
+        >
+          Autoriser l'accès à la caméra
+        </button>
+      </div>
+    </div>
+  </p-dialog>
 </div>

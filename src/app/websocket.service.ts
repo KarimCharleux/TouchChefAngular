@@ -11,7 +11,7 @@ export class WebSocketService {
   public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
-    this.socket$ = webSocket('ws://localhost:8080');
+    this.socket$ = webSocket('ws://websocket.chhilif.com/ws');
 
     this.socket$.subscribe({
       next: (message) => this.messagesSubject.next(message),

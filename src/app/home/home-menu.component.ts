@@ -5,6 +5,7 @@ import {MessageService} from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import {Router} from '@angular/router';
 import {DeviceService} from '../device.service';
+import { WebSocketService } from '../websocket.service';
 
 @Component({
   selector: 'app-home-menu',
@@ -23,6 +24,7 @@ export class HomeMenuComponent {
   protected currentNbPlayer: number = this.minNbPlayers;
 
   constructor(
+    private readonly wsService: WebSocketService,
     private readonly router: Router,
     private readonly deviceService: DeviceService
   ) {

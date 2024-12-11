@@ -1,18 +1,18 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
-import {ZXingScannerModule} from '@zxing/ngx-scanner';
-import {MessageService} from 'primeng/api';
-import {ToastModule} from 'primeng/toast';
-import {DropdownModule} from 'primeng/dropdown';
-import {DialogModule} from 'primeng/dialog';
-import {InputTextModule} from 'primeng/inputtext';
-import {ButtonModule} from 'primeng/button';
-import {FormsModule} from '@angular/forms';
-import {DeviceService} from '../device.service';
-import {Router} from '@angular/router';
-import {WebSocketService} from '../websocket.service';
-import {firstValueFrom} from 'rxjs';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { NgForOf, NgIf } from '@angular/common';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { DeviceService } from '../device.service';
+import { Router } from '@angular/router';
+import { WebSocketService } from '../websocket.service';
+import { firstValueFrom } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @Component({
@@ -35,7 +35,7 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
   styleUrl: './scan-qr.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ScanQrComponent {
+export class ScanQrComponent implements OnInit {
   scannerEnabled = true;
   availableCameras: MediaDeviceInfo[] = [];
   currentCamera: MediaDeviceInfo | undefined;
@@ -44,6 +44,8 @@ export class ScanQrComponent {
   cookName = '';
   selectedAvatar = 1;
   isWaitingResponse = false;
+  hasPermission = false;
+  showPermissionDialog = false;
 
   constructor(
     protected messageService: MessageService,
@@ -51,6 +53,32 @@ export class ScanQrComponent {
     protected wsService: WebSocketService,
     private readonly router: Router
   ) {
+  }
+
+  async ngOnInit() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      this.hasPermission = true;
+      stream.getTracks().forEach(track => track.stop());
+    } catch (err) {
+      this.showPermissionDialog = true;
+      alert('Permission denied');
+    }
+  }
+
+  async requestPermission() {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true });
+      this.hasPermission = true;
+      this.showPermissionDialog = false;
+      this.scannerEnabled = true;
+    } catch (err) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Impossible d\'accéder à la caméra. Veuillez vérifier les permissions dans les paramètres de votre navigateur.',
+      });
+    }
   }
 
   onCodeResult(resultString: string) {
@@ -98,8 +126,8 @@ export class ScanQrComponent {
 
       const response = await Promise.race([
         firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
-        new Promise((_, reject) =>
-          setTimeout(() => reject('timeout'), 5000)
+        new Promise((_, reject) => 
+          setTimeout(() => reject('timeout'), 1000)
         )
       ]);
 
@@ -162,7 +190,7 @@ export class ScanQrComponent {
 
   private isValidDeviceFormat(code: string): boolean {
     // Vérifier si le format correspond à "Model-AndroidID"
-    return /^[\w-]+-[\w-]+$/.test(code);
+    return true;
   }
 
   getPlayerSlots(): number[] {
