@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
     ThumbnailProfileCuisinierComponent,
     NgClass,
     NgFor,
+    ScoreComponent,
     ListTasksComponent,
     DashboardHeaderComponent,
   ],
@@ -58,10 +59,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.successSound = new Audio("assets/sounds/success.mp3");
     this.finishSound = new Audio("assets/sounds/finish.mp3");
     this.backgroundMusic = new Audio("assets/sounds/background-music.mp3");
-    
+
     // Configurer la musique de fond
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
+
+    this.sendCooksListToWatch(this.cooks);
   }
 
   ngOnInit() {
@@ -135,22 +138,36 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.shareDataService.sendData(shareDataServiceData);
   }
 
+  async sendCooksListToWatch(cooks: Cook[]) {
+    if (cooks) {
+      this.wsService.sendMessage({
+        from: 'angular',
+        to: 'allWatches',
+        type: 'cooksList',
+        cooksList: this.cooks
+      });
+    }
+  }
+
+  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
+
+
   onTimeEnd() {
     // Arrêter la musique de fond avant de jouer le son de fin
     this.backgroundMusic.pause();
-    
+
     // Jouer le son de fin
     this.finishSound.play().then();
-    
+
     // Calculer le score final
     const finalScore = {
       nbBurgers: 1, // TODO get from burgers
       totalTime: this.clockComponent.currentTime,
       totalStars: this.nbEarnedStars
     };
-    
+
     // Naviguer vers la page de fin avec les données
-    this.router.navigate(['/finish'], { 
+    this.router.navigate(['/finish'], {
       state: { score: finalScore }
     }).then();
   }
@@ -206,5 +223,5 @@ export interface ShareDataServiceDataObject {
 
 export enum ShareDataServiceTypes {
   ASSIGNED_TIMER,
-  ASSIGNED_TASK,
+  ASSIGNED_TASK
 }
