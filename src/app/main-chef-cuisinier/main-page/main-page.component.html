@@ -25,12 +25,11 @@
                                      [ngClass]="{'drag-over': isDraggedOver[3]}"
     class="transition-transform transform hover:scale-105"></app-thumbnail-profile-cuisinier>
   </div>
-  <div class="flex flex-row w-full space-between items-center mid-row gap-4">
-    <div class="flex flex-col flex-1 w-full gap-3">
-      <app-shop></app-shop>
-      <app-minuteur></app-minuteur>
+  <div class="flex flex-row w-full space-between items-start mid-row gap-4">
+    <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
+      <app-list-tasks></app-list-tasks>
     </div>
-    <div class="flex flex-col flex-1 w-full gap-3">
+    <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
       <app-shop></app-shop>
       <app-minuteur></app-minuteur>
     </div>

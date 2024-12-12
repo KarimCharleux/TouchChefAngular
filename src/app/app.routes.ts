@@ -3,6 +3,7 @@ import {TutorialComponent} from './tutorial/tutorial.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import { FinishComponent } from './finish/finish.component';
 import { ScanQrComponent } from './scan-qr/scan-qr.component';
+import {ListTasksComponent} from './list-tasks/list-tasks.component';
 import {MainPageComponent} from './main-chef-cuisinier/main-page/main-page.component';
 import {HomeMenuComponent} from './home/home-menu.component';
 
