@@ -35,13 +35,15 @@ import { Router } from '@angular/router';
 export class MainPageComponent implements OnInit, OnDestroy {
   @ViewChild(GameTimeLeftComponent) clockComponent!: GameTimeLeftComponent;
 
-  isDraggedOver: boolean[] = [false, false, false, false];
-  nbEarnedStars: number = 0;
+
+  isDraggedOver: boolean[] = [false, false, false, false];nbEarnedStars: number = 0;
   gameDuration: number = 250; // 250 seconds = 4 minutes and 10 seconds
   private readonly successSound: HTMLAudioElement;
   private readonly finishSound: HTMLAudioElement;
   private readonly backgroundMusic: HTMLAudioElement;
   cooks: Cook[] = [];
+  heartRates: number[] = [];
+
   private deviceService: DeviceService;
 
   constructor(
@@ -134,10 +136,18 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.shareDataService.sendData(shareDataServiceData);
   }
 
-  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
+  getBPMOfCook(deviceId: string): Observable<number> {
+    return this.wsService.waitMessage("")
+      .pipe(
+        filter(message =>
+          message.from === deviceId && message.to === "angular" && message.type === "heartrate"
+        ),
+        map((message: { from: number; to: string; type: string; bpm: number }) => message.bpm)
+      );
+  }
 
 
-  onTimeEnd() {
+  // TODO nice to have : not use shareDataService anymore for this but @Input with a list insteadonTimeEnd() {
     // Arrêter la musique de fond avant de jouer le son de fin
     this.backgroundMusic.pause();
 
