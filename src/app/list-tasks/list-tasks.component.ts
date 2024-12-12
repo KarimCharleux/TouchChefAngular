@@ -101,20 +101,20 @@ export class ListTasksComponent {
         matchingTask.assignedCooks = [];
         matchingTask.assignedCooks[0] = assignedTask.cook;
       }
-
-
+      this.sendTaskToRightWatch(assignedTask);
       this.cdr.detectChanges();
     }
   }
 
-  /*async sendTimerToRightWatch(cook: Cook, timerDuration: string) {
+  async sendTaskToRightWatch(assignedTask: AssignedTask) {
     this.wsService.sendMessage({
       from: 'angular',
-      to: cook.deviceId,
-      type: 'addTimer',
-      timer: {timerId: this.id.toString(), timerDuration: timerDuration}
+      to: assignedTask.cook.deviceId,
+      type: 'addTask',
+      assignedTask: assignedTask
     });
-  }*/
+  }
+
   protected readonly Array = Array;
 }
 
