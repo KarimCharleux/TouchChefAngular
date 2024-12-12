@@ -9,7 +9,7 @@ import {HomeMenuComponent} from './home/home-menu.component';
 
 export const routes: Routes = [
   {
-    path: '', component: ListTasksComponent,
+    path: '', component: HomeMenuComponent,
   },
   {
     path: 'scan-qr', component: ScanQrComponent,
