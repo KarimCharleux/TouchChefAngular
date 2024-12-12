@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {NgForOf, NgOptimizedImage} from '@angular/common';
+import {NgClass, NgForOf, NgOptimizedImage} from '@angular/common';
 import {ListTimersItemComponent, Timer} from './list-timers-item/list-timers-item.component';
 import {ShareDataService} from '../../share-data.service';
 import {Cook} from '../../device.service';
@@ -11,7 +11,8 @@ import {WebSocketService} from '../../websocket.service';
   imports: [
     NgForOf,
     NgOptimizedImage,
-    ListTimersItemComponent
+    ListTimersItemComponent,
+    NgClass
   ],
   templateUrl: './minuteur.component.html',
   styleUrl: './minuteur.component.scss',
@@ -19,7 +20,7 @@ import {WebSocketService} from '../../websocket.service';
 })
 export class MinuteurComponent implements OnInit {
 
-  numbers: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9']; // Chiffres à afficher
+  numbers: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']; // Chiffres à afficher
   input: string[] = ['', '', '', ''];
 
   id: number = 0;
