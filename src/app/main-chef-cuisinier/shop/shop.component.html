@@ -12,6 +12,15 @@
         {{ product.icon }}
       </div>
       <span class="mt-2 text-sm font-medium text-gray-700">{{ product.name }}</span>
+      
+      <div class="cooldown-overlay" *ngIf="product.isOnCooldown">
+        <svg class="circular-progress" viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="16" 
+                  [style.strokeDasharray]="'100 100'"
+                  [style.strokeDashoffset]="product.isOnCooldown ? '100' : '0'">
+          </circle>
+        </svg>
+      </div>
     </div>
   </div>
 </div>
