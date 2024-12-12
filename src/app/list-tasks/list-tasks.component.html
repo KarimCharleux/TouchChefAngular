@@ -1,68 +1,63 @@
 <div class="list-tasks-container scrollable-list flex flex-col gap-7">
   <ng-container *ngFor="let task of tasks; let i = index">
-    <!-- <div class="task-container relative w-full h-fit flex flex-row gap-6 items-center bg-gray-200 rounded-2xl p-3 shadow-md"
+    <div class="flex flex-col w-full flex-1 bg-gray-200 rounded-2xl p-4 shadow-md relative"
          [class.cursor-pointer]="task.subTasks && task.subTasks.length > 0"
          [class.hover:bg-gray-300]="task.subTasks && task.subTasks.length > 0"
-         (click)="task.subTasks && task.subTasks.length > 0 && showTaskDetails(task)">
-      <div class="task-checkbox w-16 h-16 min-w-16 min-h-16 max-w-96 max-h-96 bg-white rounded-xl"
-           (click)="toggleCheck(i, $event)">
-        <img ngSrc="/assets/checkIcon-1.svg"
-             alt="checkIcon.svg"
-             *ngIf="checkedTasks.has(i)"
-             height="296"
-             width="296"/>
-      </div>
-      <span class="font-semibold text-3xl pr-24">{{ task.name }}</span>
-      <img *ngIf="task.subTasks && task.subTasks.length > 0"
-           ngSrc="/assets/information.png"
-           alt="information.png"
-           height="32"
-           width="32"
-           class="absolute right-10"/>
-    </div>
-    -->
-    <div class="flex flex-col w-full h-fit bg-gray-200 rounded-2xl p-4 shadow-md relative"
-         [class.cursor-pointer]="task.subTasks && task.subTasks.length > 0"
-         [class.hover:bg-gray-300]="task.subTasks && task.subTasks.length > 0"
-         (click)="task.subTasks && task.subTasks.length > 0 && showTaskDetails(task)">
+         (click)="task.subTasks && task.subTasks.length > 0 && showTaskDetails(task)"
+         draggable="true"
+         (dragstart)="onDragStart($event, task)">
 
-      <div class="flex flex-row items-center gap-2">
-        <div class="task-checkbox w-16 h-16 min-w-16 min-h-16 max-w-96 max-h-96 bg-white rounded-xl"
-             (click)="toggleCheck(i, $event)">
+      <div class="flex flex-row items-center">
+        <div
+          class="task-checkbox flex flex-col justify-center items-center w-12 h-12 min-w-12 min-h-12 bg-white rounded-xl"
+          (click)="toggleCheck(i, $event)">
           <img ngSrc="/assets/checkIcon-1.svg"
                alt="checkIcon.svg"
                *ngIf="checkedTasks.has(i)"
-               height="296"
-               width="296"/>
+               height="64"
+               width="64"/>
         </div>
-        <span class="w-fit min-w-44 text-5xl bg-white rounded-2xl outline outline-1 outline-black p-4">🔪🍅</span>
-        <div class="flex flex-col w-full items-center justify-center">
+        <div class="flex flex-col w-full items-center justify-end min-h-28">
           <div class="chronometer-container flex flex-col justify-center items-center gap-1">
             <!-- TODO : durée seulement pour les cuissons et récup durée depuis JSON -->
             <span class="text-md font-semibold">5 minutes</span>
             <img ngSrc="/assets/chronometer.png" alt="Image de chronomètre" height="42" width="42"/>
+            <span class="w-fit text-xl bg-white rounded-2xl outline outline-1 outline-black p-2">🔪🍅</span>
           </div>
           <span class="text-xl w-full text-center">{{ task.name }}</span>
         </div>
 
+
         <div class="assigned-cooks-list flex flex-row absolute top-0 right-0">
-          <div class="assigned-cook-profile flex flex-col justify-center items-center">
-              <img ngSrc="/assets/cooks/3.png"
-                   alt="Icone de profil de cuisinier"
-                   height="48"
-                   width="48"
-                   class=""/>
-            <span class="font-bold text-sm">Michel</span>
-          </div>
-          <div class="assigned-cook-profile flex flex-col justify-center items-center">
-            <div class="cook-profile-img">
-            <img ngSrc="/assets/unknown-icon.svg"
-                 alt="Icone point interrogation"
-                 height="48"
-                 width="48"/>
+          <ng-container
+            *ngFor="let nbCookNeeded_unused of Array.from({ length: this.task.nbCooksNeeded }); let ind = index"
+          >
+
+            <ng-container *ngIf="this.task.assignedCooks && this.task.assignedCooks[ind];else unknown_cook">
+              <div class="assigned-cook-profile flex flex-col justify-center items-center">
+                <img [ngSrc]="'/assets/cooks/'+ this.task.assignedCooks[ind].avatar + '.png'" alt="User Avatar"
+                     width="48"
+                     height="48"
+                     alt="Icone de profil de cuisinier"
+                     height="48"
+                     width="48"/>
+                <span class="font-bold text-sm">{{ this.task.assignedCooks[ind].name }}</span>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #unknown_cook>
+            <div class="assigned-cook-profile flex flex-col justify-center items-center">
+              <div class="cook-profile-img">
+                <img ngSrc="/assets/unknown-icon.svg"
+                     alt="Icone point interrogation"
+                     height="48"
+                     width="48"/>
+              </div>
+              <span class="font-bold text-sm">?</span>
             </div>
-            <span class="font-bold text-sm">?</span>
-          </div>
+          </ng-template>
+
         </div>
 
       </div>

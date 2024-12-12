@@ -1,3 +1,5 @@
+import {Cook} from '../device.service';
+
 export interface Ingredient {
   name: string;
   imageUrl: string;
@@ -11,6 +13,8 @@ export interface SubTask {
 export interface Task {
   name: string;
   subTasks: SubTask[];
+  nbCooksNeeded: number;
+  assignedCooks?: Cook[];
 }
 
 export interface Burger {
@@ -19,4 +23,4 @@ export interface Burger {
   imageUrl: string;
   ingredients: Ingredient[];
   steps: Task[];
-} 
+}
