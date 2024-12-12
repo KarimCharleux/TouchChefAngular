@@ -14,6 +14,18 @@ import { WebSocketService } from '../websocket.service';
 import { firstValueFrom } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+export const COOK_COLORS = {
+  RED: '#FF6B6B',
+  BLUE: '#4ECDC4',
+  GREEN: '#95E1D3',
+  YELLOW: '#FCE38A'
+};
+
+export interface CookColor {
+  name: string;
+  value: string;
+  isSelected: boolean;
+}
 
 @Component({
   selector: 'app-scan-qr',
@@ -46,6 +58,13 @@ export class ScanQrComponent implements OnInit {
   isWaitingResponse = false;
   hasPermission = false;
   showPermissionDialog = false;
+  selectedColor: string = '';
+  availableColors: CookColor[] = [
+    { name: 'Rouge', value: COOK_COLORS.RED, isSelected: false },
+    { name: 'Bleu', value: COOK_COLORS.BLUE, isSelected: false },
+    { name: 'Vert', value: COOK_COLORS.GREEN, isSelected: false },
+    { name: 'Jaune', value: COOK_COLORS.YELLOW, isSelected: false }
+  ];
 
   constructor(
     protected messageService: MessageService,
@@ -108,7 +127,7 @@ export class ScanQrComponent implements OnInit {
   }
 
   async addCook() {
-    if (!this.cookName.trim() || !this.selectedAvatar) return;
+    if (!this.cookName.trim() || !this.selectedAvatar || !this.selectedColor) return;
 
     this.isWaitingResponse = true;
 
@@ -138,6 +157,7 @@ export class ScanQrComponent implements OnInit {
         name: this.cookName,
         deviceId: this.currentDeviceId,
         avatar: this.selectedAvatar.toString(),
+        color: this.selectedColor
       });
 
       if (added) {
@@ -162,6 +182,13 @@ export class ScanQrComponent implements OnInit {
             detail: 'Tous les cuisiniers ont été ajoutés!',
           });
         }
+
+        const colorIndex = this.availableColors.findIndex(c => c.value === this.selectedColor);
+        if (colorIndex !== -1) {
+          this.availableColors[colorIndex].isSelected = true;
+        }
+
+        this.selectedColor = '';
       }
     } catch (error) {
       this.messageService.add({
@@ -208,5 +235,11 @@ export class ScanQrComponent implements OnInit {
   skipTutorial() {
     //this.router.navigate(['/dashboard']); // TODO : to access the old dashboard
     this.router.navigate(['/main-page']);
+  }
+
+  selectColor(color: CookColor) {
+    if (!color.isSelected) {
+      this.selectedColor = color.value;
+    }
   }
 }

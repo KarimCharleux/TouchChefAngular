@@ -20,6 +20,7 @@
           <div
             class="player-icon"
             [class.empty]="!deviceService.getCooks()[idx]"
+            [style.--cook-color]="deviceService.getCooks()[idx]?.color ?? 'white'"
           >
             @if (deviceService.getCooks()[idx]) {
             <img
@@ -99,14 +100,29 @@
     header="Ajoutez un nouveau cuisinier 🧑‍🍳"
     [style]="{ width: '90%', maxWidth: '525px' }"
   >
+    <div class="color-selection">
+      <h3>1. Choisissez une couleur</h3>
+      <div class="color-grid">
+        <div
+          *ngFor="let color of availableColors"
+          class="color-option"
+          [class.selected]="selectedColor === color.value"
+          [class.disabled]="color.isSelected"
+          [style.backgroundColor]="color.value"
+          (click)="selectColor(color)"
+        ></div>
+      </div>
+    </div>
+
     <div class="avatar-selection">
-      <h3>1. Choisissez un avatar</h3>
+      <h3>2. Choisissez un avatar</h3>
       <div class="avatar-scroll-container">
         <div class="avatar-grid">
           <div
             *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
             class="avatar-option"
             [class.selected]="selectedAvatar === i"
+            [style.--selected-color]="selectedColor"
             (click)="selectAvatar(i)"
             (keydown.enter)="selectAvatar(i)"
             (keydown.space)="selectAvatar(i)"
@@ -118,7 +134,7 @@
     </div>
 
     <div class="name-input-container">
-      <h3>2. Choisissez un nom</h3>
+      <h3>3. Choisissez un nom</h3>
       <span class="p-float-label">
         <input
           pInputText
@@ -142,8 +158,8 @@
         </button>
       </ng-container>
       <ng-template #loading>
-        <p-progressSpinner 
-          [style]="{width: '70px', height: '70px'}"
+        <p-progressSpinner
+          [style]="{ width: '70px', height: '70px' }"
           strokeWidth="8"
           fill="transparent"
           animationDuration=".5s"
@@ -161,12 +177,11 @@
   >
     <div class="text-center">
       <h3>Accès à la caméra</h3>
-      <p>Pour scanner les QR codes, nous avons besoin d'accéder à votre caméra.</p>
+      <p>
+        Pour scanner les QR codes, nous avons besoin d'accéder à votre caméra.
+      </p>
       <div class="mt-4">
-        <button
-          class="button button-orange"
-          (click)="requestPermission()"
-        >
+        <button class="button button-orange" (click)="requestPermission()">
           Autoriser l'accès à la caméra
         </button>
       </div>

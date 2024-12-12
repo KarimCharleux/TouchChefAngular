@@ -10,6 +10,7 @@ export interface Cook {
   name: string;
   deviceId: string;
   avatar: string;
+  color: string;
 }
 
 @Injectable({
