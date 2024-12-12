@@ -63,9 +63,8 @@ export class MainPageComponent {
   }
 
   assignTimerToCook(timerData: string, cook: Cook) {
-    const minutes = timerData.substring(0, 2);
-    const seconds = timerData.substring(2, 4);
-    const timerTimeInSeconds = (parseInt(minutes) * 60) + parseInt(seconds);
+    const seconds = timerData.substring(0, 2);
+    const timerTimeInSeconds = parseInt(seconds);
     this.sendTimerOfCookToTimersList(timerTimeInSeconds, cook);
   }
 
