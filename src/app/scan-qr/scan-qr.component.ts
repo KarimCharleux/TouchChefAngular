@@ -8,24 +8,12 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
-import { DeviceService } from '../device.service';
+import { COOK_COLORS, CookColor, DeviceService } from '../device.service';
 import { Router } from '@angular/router';
 import { WebSocketService } from '../websocket.service';
 import { firstValueFrom } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
-export const COOK_COLORS = {
-  RED: '#FF6B6B',
-  BLUE: '#4ECDC4',
-  GREEN: '#95E1D3',
-  YELLOW: '#FCE38A'
-};
-
-export interface CookColor {
-  name: string;
-  value: string;
-  isSelected: boolean;
-}
 
 @Component({
   selector: 'app-scan-qr',

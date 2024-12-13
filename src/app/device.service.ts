@@ -13,6 +13,26 @@ export interface Cook {
   color: string;
 }
 
+export interface CookColor {
+  name: string;
+  value: string;
+  isSelected: boolean;
+}
+
+export const COOK_COLORS = {
+  RED: '#ff9c9c',
+  BLUE: '#64ceeb',
+  GREEN: '#9fe195',
+  YELLOW: '#FCE38A'
+};
+
+const mockCooks: Cook[] = [
+  { name: 'Karim', deviceId: '1', avatar: '1', color: COOK_COLORS.RED },
+  { name: 'Anas', deviceId: '2', avatar: '2', color: COOK_COLORS.BLUE },
+  { name: 'Damien', deviceId: '3', avatar: '3', color: COOK_COLORS.GREEN },
+  { name: 'Saad', deviceId: '4', avatar: '4', color: COOK_COLORS.YELLOW }
+];
+
 @Injectable({
   providedIn: 'root'
 })

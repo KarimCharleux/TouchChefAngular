@@ -3,14 +3,16 @@
 .dashboard-header {
   width: 100%;
   height: fit-content;
+  position: relative;
+  z-index: 100;
 
   &__container {
     margin: 0 auto;
     background-color: #02212d;
-    width: 60%;
+    width: 90%;
     border-radius: 0 0 $border-radius-high $border-radius-high;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
-    padding: 1em 5em;
+    padding: 0 5em;
   }
 
   &__logo {
@@ -19,5 +21,10 @@
 
   .text-star-color {
     color: #EFB507;
+  }
+
+  button {
+    font-size: 1em;
+    margin: 15px 30px 24px 30px;
   }
 }

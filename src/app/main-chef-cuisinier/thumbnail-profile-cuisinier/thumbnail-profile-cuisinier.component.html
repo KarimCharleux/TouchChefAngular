@@ -1,11 +1,36 @@
-<div class="flex flex-col w-fit h-fit justify-center items-center p-4 bg-gray-100 rounded-lg gap-1">
-  <div class="flex flex-row justify-center items-center">
-    <app-player-data-value [playerData]="$playerActivity" pathToIcon="/assets/thunder-icon.svg"
-                           alternativeText="Player Activity score" [iconHeight]="24" [iconWidth]="24"></app-player-data-value>
-    <app-player-data-value [playerData]="$playerHeartRate" pathToIcon="/assets/heart-icon.svg"
-                           alternativeText="Player Heart Rate value" [iconHeight]="24" [iconWidth]="24"></app-player-data-value>
-  </div>
-  <div class="flex flex-row justify-center items-center">
-    <img [ngSrc]="'/assets/cooks/'+ this.$playerAvatar + '.png'" alt="User Avatar" width="128" height="128">
+<div class="profile-container">
+  <div class="profile-background" [style.background-color]="$playerColor" [style.outline]="'7px solid ' + $playerColor + '20'"></div>
+  <div class="content">
+    <div class="stats-container">
+      <div class="heart-rate">
+        <app-player-data-value 
+          [playerData]="$playerHeartRate" 
+          iconType="heart"
+          alternativeText="BPM" 
+          iconColor="#d96060"
+          [iconHeight]="24" 
+          [iconWidth]="24">
+        </app-player-data-value>
+      </div>
+      <div class="energy">
+        <app-player-data-value 
+          [playerData]="$playerActivity" 
+          iconType="thunder"
+          alternativeText="Énergie" 
+          iconColor="#6098d9"
+          [iconHeight]="24" 
+          [iconWidth]="24">
+        </app-player-data-value>
+      </div>
+    </div>
+    <img 
+      [ngSrc]="'/assets/cooks/'+ $playerAvatar + '.png'" 
+      [alt]="$playerName" 
+      width="128" 
+      height="128" 
+      class="avatar">
+    <span class="player-name" [style.--cook-color]="$playerColor">
+      {{ $playerName }}
+    </span>
   </div>
 </div>

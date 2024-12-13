@@ -132,9 +132,13 @@
 .avatar-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  justify-items: center;
+  align-items: center;
 }
 
 .avatar-option {
+  width: 7rem;
+  height: 7rem;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 1rem;
@@ -198,8 +202,9 @@
   .color-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
     margin-top: 1rem;
+    justify-items: center;
+    align-items: center;
   }
 
   .color-option {

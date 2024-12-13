@@ -1,3 +1,38 @@
 .drag-over {
   transform: scale(1.2);
 }
+
+.wooden-table {
+  height: 60px;
+  background-image: url('/assets/wood.jpeg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 3px solid #d7b497;
+  flex-grow: 10;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &.drag-over {
+    transform: scale(1.02);
+    border-color: #8b5e3c;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .table-text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+}

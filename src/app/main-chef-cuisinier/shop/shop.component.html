@@ -5,8 +5,7 @@
          [ngClass]="{'border-animate': product.isOnCooldown}"
          (click)="OnProductClick(product, i)"
          (keypress)="OnProductClick(product, i)"
-         role="button"
-         tabindex="0"
+         [tabindex]="i"
          #productItem>
       <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-xl">
         {{ product.icon }}

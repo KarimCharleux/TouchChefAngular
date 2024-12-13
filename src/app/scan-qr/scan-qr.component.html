@@ -13,34 +13,34 @@
     <div class="progress-indicator">
       {{ deviceService.getCooks().length }}/{{ deviceService.getNbPlayers() }}
     </div>
+  </div>
 
-    <div class="players-slots">
-      <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
-        <div class="player-slot" [class.empty]="!deviceService.getCooks()[idx]">
-          <div
-            class="player-icon"
-            [class.empty]="!deviceService.getCooks()[idx]"
-            [style.--cook-color]="deviceService.getCooks()[idx]?.color ?? 'white'"
-          >
-            @if (deviceService.getCooks()[idx]) {
-            <img
-              [src]="
-                'assets/cooks/' + deviceService.getCooks()[idx].avatar + '.png'
-              "
-              [alt]="'Avatar du cuisinier'"
-            />
-            } @else { 👨‍🍳 }
-          </div>
-          <span class="player-name">
-            @if (deviceService.getCooks()[idx]) {
-            {{ deviceService.getCooks()[idx].name }}
-            } @else {
-            {{ "En attente du cuisinier..." }}
-            }
-          </span>
+  <div class="players-slots">
+    <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
+      @if (deviceService.getCooks()[idx]) {
+      <div class="player-slot">
+        <div
+          class="player-icon"
+          [style.--cook-color]="deviceService.getCooks()[idx].color"
+        >
+          <img
+            [src]="
+              'assets/cooks/' + deviceService.getCooks()[idx].avatar + '.png'
+            "
+            [alt]="'Avatar du cuisinier'"
+          />
         </div>
-      </ng-container>
-    </div>
+        <span class="player-name">
+          {{ deviceService.getCooks()[idx].name }}
+        </span>
+      </div>
+      } @else {
+      <div class="player-slot empty">
+        <div class="player-icon empty">👨‍🍳</div>
+        <span class="player-name">En attente du cuisinier...</span>
+      </div>
+      }
+    </ng-container>
   </div>
 
   <div *ngIf="scannerEnabled" class="scanner-wrapper">
@@ -74,23 +74,6 @@
       <button class="button button-green" (click)="skipTutorial()">
         Skip le tutoriel
       </button>
-    </div>
-    <div class="players-slots">
-      <ng-container *ngFor="let i of getPlayerSlots(); let idx = index">
-        <div class="player-slot">
-          <div class="player-icon">
-            <img
-              [src]="
-                'assets/cooks/' + deviceService.getCooks()[idx].avatar + '.png'
-              "
-              [alt]="'Avatar du cuisinier'"
-            />
-          </div>
-          <span class="player-name">
-            {{ deviceService.getCooks()[idx].name }}
-          </span>
-        </div>
-      </ng-container>
     </div>
   </div>
 
@@ -152,7 +135,7 @@
         <button
           class="button button-orange"
           (click)="addCook()"
-          [class.button-disabled]="!cookName.trim() || !selectedAvatar"
+          [class.button-disabled]="!cookName.trim() || !selectedAvatar || !selectedColor"
         >
           Ajouter
         </button>

@@ -1,4 +1,49 @@
-<div class="flex flex-row w-fit h-fit justify-center items-center gap-2 min-h-10 max-h-10 min-w-20 relative">
-  <p-knob class="absolute top-0 left-0" readonly [(ngModel)]="playerData" [min]="0" [max]="200" [size]="75" [strokeWidth]="5" [valueColor]="getGradientColor()"/>
-  <img class="absolute top-full left-1/2" style="transform: translate(-50%, 50%);" [ngSrc]="pathToIcon" [alt]="alternativeText" [height]="iconHeight" [width]="iconWidth">
+<div
+  class="flex flex-row w-fit h-fit justify-center items-center gap-2 min-h-10 max-h-10 min-w-20 relative"
+>
+  <p-knob
+    class="absolute top-0 left-0"
+    readonly
+    [(ngModel)]="playerData"
+    [min]="0"
+    [max]="maxValue"
+    [size]="75"
+    [strokeWidth]="10"
+    [valueColor]="getGradientColor()"
+    [ngStyle]="getTextStyle()"
+  />
+  <svg
+    *ngIf="iconType === 'heart'"
+    class="absolute top-full left-1/2"
+    style="transform: translate(-50%, 50%)"
+    width="24px"
+    height="24px"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+    [style.fill]="iconColor"
+  >
+    <path
+      d="M1.24264 8.24264L8 15L14.7574 8.24264C15.553 7.44699 16 6.36786 16 5.24264V5.05234C16 2.8143 14.1857 1 11.9477 1C10.7166 1 9.55233 1.55959 8.78331 2.52086L8 3.5L7.21669 2.52086C6.44767 1.55959 5.28338 1 4.05234 1C1.8143 1 0 2.8143 0 5.05234V5.24264C0 6.36786 0.44699 7.44699 1.24264 8.24264Z"
+    />
+  </svg>
+  <svg
+    *ngIf="iconType === 'thunder'"
+    class="absolute top-full left-1/2"
+    style="transform: translate(-50%, 50%); margin-top: -9px;"
+    width="35px"
+    height="35px"
+    viewBox="0 0 28 28"
+    xmlns="http://www.w3.org/2000/svg"
+    [style.fill]="iconColor"
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M11.9 5L7.5 13.615H13V19L18.5 9.308H13L11.9 5Z"
+      [style.stroke]="iconColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
 </div>
