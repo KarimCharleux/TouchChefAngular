@@ -163,6 +163,7 @@ export class ScanQrComponent implements OnInit {
           this.deviceService.getCooks().length >=
           this.deviceService.getNbPlayers()
         ) {
+          console.log('All cooks added to the list : ', this.deviceService.getCooks());
           this.scannerEnabled = false;
           this.messageService.add({
             severity: 'info',

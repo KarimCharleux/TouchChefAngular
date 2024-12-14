@@ -36,15 +36,20 @@ import { Router } from '@angular/router';
 export class MainPageComponent implements OnInit, OnDestroy {
   @ViewChild(GameTimeLeftComponent) clockComponent!: GameTimeLeftComponent;
 
-  deviceService?: DeviceService = undefined;
   isDraggedOver: boolean[] = [false, false, false, false];
   nbEarnedStars: number = 0;
   gameDuration: number = 250; // 250 seconds = 4 minutes and 10 seconds
   private readonly successSound: HTMLAudioElement;
   private readonly finishSound: HTMLAudioElement;
   private readonly backgroundMusic: HTMLAudioElement;
+  cooks: Cook[] = [];
 
-  @Input() cooks: Cook[] = [];
+
+  constructor(
+    private deviceService: DeviceService,
+    private wsService: WebSocketService,
+    private shareDataService: ShareDataService
+  ) {}
 
   constructor(
     private readonly router: Router,
@@ -64,7 +69,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
 
-    this.sendCooksListToWatch(this.cooks);
+    const currentCooks = this.deviceService.getCooks();
+    this.sendCooksListToWatch(currentCooks);
+
+    // Subscribe to future changes
+    this.deviceService.cooks$.subscribe(cooks => {
+      this.cooks = cooks; // Update local property
+      this.sendCooksListToWatch(cooks);
+    });
   }
 
   ngOnInit() {
@@ -140,11 +152,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   async sendCooksListToWatch(cooks: Cook[]) {
     if (cooks) {
+      console.log('Sending cooks list to watch : ', cooks);
       this.wsService.sendMessage({
         from: 'angular',
         to: 'allWatches',
         type: 'cooksList',
-        cooksList: this.cooks
+        cooksList: cooks
       });
     }
   }
