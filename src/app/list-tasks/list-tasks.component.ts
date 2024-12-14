@@ -7,6 +7,7 @@ import {WebSocketService} from '../websocket.service';
 import {Cook} from '../device.service';
 import {ShareDataService} from '../share-data.service';
 import {ShareDataServiceDataObject} from '../main-chef-cuisinier/main-page/main-page.component';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-list-tasks',
@@ -58,8 +59,10 @@ export class ListTasksComponent {
   }
 
   showTaskDetails(task: Task) {
-    this.selectedTask = task;
-    this.showDialog = true;
+    if (task.subTasks && task.subTasks.length > 0) {
+      this.selectedTask = task;
+      this.showDialog = true;
+    }
   }
 
   onDragStart(event: DragEvent, task: Task) {
@@ -116,6 +119,13 @@ export class ListTasksComponent {
   }
 
   protected readonly Array = Array;
+  protected readonly Math = Math;
+
+  getTimerOffset(duration: number): number {
+    const circumference = 2 * Math.PI * 18;
+    const progress = duration / 60; // Calcul du pourcentage par rapport à 60 secondes
+    return circumference * (1 - progress);
+  }
 }
 
 export interface AssignedTask {

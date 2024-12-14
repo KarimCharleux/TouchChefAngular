@@ -17,7 +17,7 @@ import {HostBinding} from '@angular/core';
 export class ThumbnailProfileCuisinierComponent {
   @HostBinding('class') class: string = "profile-cuisinier";
   @HostBinding('style.border') get border() {
-    return `7px solid ${this.$playerColor}20`;
+    return `7px solid ${this.$playerColor}`;
   }
 
   @Input() $playerName: string = "Default name";

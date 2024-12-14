@@ -20,10 +20,10 @@ export interface CookColor {
 }
 
 export const COOK_COLORS = {
-  RED: '#ff9c9c',
-  BLUE: '#64ceeb',
-  GREEN: '#9fe195',
-  YELLOW: '#FCE38A'
+  RED: '#dc4363',
+  BLUE: '#63b2ff',
+  GREEN: '#32cc73',
+  YELLOW: '#ffd900'
 };
 
 const mockCooks: Cook[] = [
@@ -65,7 +65,7 @@ export class DeviceService {
     this.scannedDevices.next([]);
   }
 
-  setNbPlayers(nb: number) {    
+  setNbPlayers(nb: number) {
     this.nbPlayers = nb;
   }
 
@@ -84,7 +84,7 @@ export class DeviceService {
   }
 
   getCooks(): Cook[] {
-    return this.cooks.value;
+    return mockCooks; // TODO: this.cooks.value;
   }
 
   clearCooks() {

@@ -25,6 +25,7 @@
     "@zxing/ngx-scanner": "^19.0.0",
     "angular-flip-clock": "^0.4.0",
     "express": "^4.21.1",
+    "primeicons": "^7.0.0",
     "primeng": "^17.18.11",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

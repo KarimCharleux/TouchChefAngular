@@ -1,84 +1,86 @@
-<div class="list-tasks-container scrollable-list flex flex-col gap-7">
-  <ng-container *ngFor="let task of tasks; let i = index">
-    <div class="flex flex-col w-full flex-1 bg-gray-200 rounded-2xl p-4 shadow-md relative"
-         [class.cursor-pointer]="task.subTasks && task.subTasks.length > 0"
-         [class.hover:bg-gray-300]="task.subTasks && task.subTasks.length > 0"
-         (click)="task.subTasks && task.subTasks.length > 0 && showTaskDetails(task)"
-         draggable="true"
+<div class="list-tasks-container">
+  <div class="scrollable-list">
+    <div *ngFor="let task of tasks; let i = index" 
+         class="task-item"
+         [class.completed]="checkedTasks.has(i)"
+         [style.background]="task.assignedCooks && task.assignedCooks[0]?.color + '10'"
+         [draggable]="!checkedTasks.has(i)"
+         (click)="showTaskDetails(task)"
+         (keydown)="showTaskDetails(task)"
          (dragstart)="onDragStart($event, task)">
-
-      <div class="flex flex-row items-center">
-        <div
-          class="task-checkbox flex flex-col justify-center items-center w-12 h-12 min-w-12 min-h-12 bg-white rounded-xl"
-          (click)="toggleCheck(i, $event)">
-          <img ngSrc="/assets/checkIcon-1.svg"
-               alt="checkIcon.svg"
-               *ngIf="checkedTasks.has(i)"
-               height="64"
-               width="64"/>
+      
+      <div class="task-header">
+        <div class="checkbox" 
+             [class.checked]="checkedTasks.has(i)"
+             (click)="toggleCheck(i, $event)"
+             (keydown)="toggleCheck(i, $event)">
+          <i *ngIf="checkedTasks.has(i)" class="pi pi-check" style="color: white"></i>
         </div>
-        <div class="flex flex-col w-full items-center justify-end min-h-28">
-          <div class="chronometer-container flex flex-col justify-center items-center gap-1">
-            <!-- TODO : durée seulement pour les cuissons et récup durée depuis JSON -->
-            <span class="text-md font-semibold">5 minutes</span>
-            <img ngSrc="/assets/chronometer.png" alt="Image de chronomètre" height="42" width="42"/>
-            <span class="w-fit text-xl bg-white rounded-2xl outline outline-1 outline-black p-2">🔪🍅</span>
-          </div>
-          <span class="text-xl w-full text-center">{{ task.name }}</span>
+        
+        <h3 class="task-title">{{ task.name }}</h3>
+        
+        <div class="task-icons">
+          <div class="icon" >{{ task.icons }}</div>
         </div>
+      </div>
 
-
-        <div class="assigned-cooks-list flex flex-row absolute top-0 right-0">
-          <ng-container
-            *ngFor="let nbCookNeeded_unused of Array.from({ length: this.task.nbCooksNeeded }); let ind = index"
-          >
-
-            <ng-container *ngIf="this.task.assignedCooks && this.task.assignedCooks[ind];else unknown_cook">
-              <div class="assigned-cook-profile flex flex-col justify-center items-center">
-                <img [ngSrc]="'/assets/cooks/'+ this.task.assignedCooks[ind].avatar + '.png'" alt="User Avatar"
-                     width="48"
-                     height="48"
-                     alt="Icone de profil de cuisinier"
-                     height="48"
-                     width="48"/>
-                <span class="font-bold text-sm">{{ this.task.assignedCooks[ind].name }}</span>
-              </div>
-            </ng-container>
-          </ng-container>
-
-          <ng-template #unknown_cook>
-            <div class="assigned-cook-profile flex flex-col justify-center items-center">
-              <div class="cook-profile-img">
-                <img ngSrc="/assets/unknown-icon.svg"
-                     alt="Icone point interrogation"
-                     height="48"
-                     width="48"/>
-              </div>
-              <span class="font-bold text-sm">?</span>
+      <div class="task-footer">
+        <div class="assigned-cooks">
+          <ng-container *ngFor="let nbCook of [].constructor(task.nbCooksNeeded); let ind = index">
+            <div class="cook" 
+                 *ngIf="task.assignedCooks && task.assignedCooks[ind]; else emptyCook"
+                 [style.background]="task.assignedCooks[ind].color">
+              <img [src]="'/assets/cooks/' + task.assignedCooks[ind].avatar + '.png'"
+                   [alt]="task.assignedCooks[ind].name">
             </div>
-          </ng-template>
+            <ng-template #emptyCook>
+              <div class="cook empty">
+                👨‍🍳
+              </div>
+            </ng-template>
+          </ng-container>
+        </div>
 
+        <div class="timer-wheel" *ngIf="task.duration">
+          <svg width="40" height="40">
+            <circle class="bg" cx="20" cy="20" r="18" />
+            <circle class="progress" cx="20" cy="20" r="18"
+                    [style.strokeDasharray]="2 * Math.PI * 18"
+                    [style.strokeDashoffset]="getTimerOffset(task.duration)" />
+          </svg>
+          <div class="timer-text">
+            {{ task.duration }}s
+          </div>
         </div>
 
       </div>
     </div>
-
-  </ng-container>
+  </div>
 </div>
 
 <p-dialog
   [(visible)]="showDialog"
   [header]="selectedTask?.name || ''"
   [modal]="true"
-  [style]="{ width: '50vw', fontFamily: 'Bricolage Grotesque' }"
-  [draggable]="true"
-  [resizable]="false">
-  <div class="p-4 flex flex-col gap-4 items-center justify-center">
-    <ol class="list-decimal pl-6 space-y-4">
-      <li *ngFor="let subtask of selectedTask?.subTasks" class="text-3xl">
-        {{ subtask.description }}
-      </li>
-    </ol>
-    <button class="button" (click)="showDialog = false">J'ai compris</button>
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="task-dialog"
+  [style]="{ width: '60vw' }">
+  
+  <div class="dialog-content">
+    <div class="subtasks-container">
+      <div *ngFor="let subtask of selectedTask?.subTasks; let i = index" 
+           class="subtask-item">
+        <div class="subtask-number">{{ i + 1 }}</div>
+        <p class="subtask-description">{{ subtask.description }}</p>
+      </div>
+    </div>
+    
+    <div class="dialog-footer">
+      <button class="close-button" (click)="showDialog = false">
+        <i class="pi pi-check"></i>
+        J'ai compris
+      </button>
+    </div>
   </div>
 </p-dialog>

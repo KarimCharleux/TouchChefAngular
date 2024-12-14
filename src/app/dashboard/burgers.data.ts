@@ -22,7 +22,9 @@ export const BURGERS: Burger[] = [
           {order: 3, description: 'Attendre la cuisson pendant 3 secondes'},
           {order: 4, description: 'Eteindre la plaque de cuisson'}
         ],
-        nbCooksNeeded: 2
+        nbCooksNeeded: 2,
+        duration: 31,
+        icons: "🔪🥩"
       },
       {
         name: 'Récupérer des tranches de tomate',
@@ -31,7 +33,8 @@ export const BURGERS: Burger[] = [
           {order: 2, description: 'Déplacer la tomate sur la planche à découper'},
           {order: 3, description: 'Couper la tomate en tranches avec la tranche de la main'}
         ],
-        nbCooksNeeded: 2
+        nbCooksNeeded: 2,
+        icons: "🍅"
       },
       {
         name: 'Laver une salade',
@@ -40,7 +43,8 @@ export const BURGERS: Burger[] = [
           {order: 2, description: 'Déplacer la salade dans l\'évier'},
           {order: 3, description: 'Laver la salade'}
         ],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "💦🥬"
       },
       {
         name: 'Préparer le fromage',
@@ -48,27 +52,32 @@ export const BURGERS: Burger[] = [
           {order: 1, description: 'Prendre du fromage'},
           {order: 2, description: 'Le déplacer sur la planche à découper'}
         ],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🧀"
       },
       {
         name: 'Poser une assiette sur la table',
         subTasks: [],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🍽️"
       },
       {
         name: 'Prendre un pain et mettre sur l\'assiette',
         subTasks: [],
-        nbCooksNeeded: 1
+          nbCooksNeeded: 1,
+        icons: "🍞"
       },
       {
         name: 'Déplacer le steak sur le pain',
         subTasks: [],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🥩"
       },
       {
         name: 'Déplacer la tomate coupée sur le steak qui est sur l\'assiette',
         subTasks: [],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🍅"
       },
       {
         name: 'Préparer la salade',
@@ -77,12 +86,14 @@ export const BURGERS: Burger[] = [
           {order: 2, description: 'Déplacer la salade sur la planche à découper en bas'},
           {order: 3, description: 'Couper la salade'}
         ],
-        nbCooksNeeded: 1
+          nbCooksNeeded: 1,
+        icons: "🥬"
       },
       {
         name: 'Déplacer la salade coupée sur la tomate',
         subTasks: [],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🥬"
       },
       {
         name: 'Préparer le fromage',
@@ -90,19 +101,22 @@ export const BURGERS: Burger[] = [
           {order: 1, description: 'Prendre du fromage'},
           {order: 2, description: 'Déplacer le fromage sur la planche à découper'}
         ],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🧀"
       },
       {
         name: 'Couper le fromage et le déplacer sur l\'assiette',
         subTasks: [],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🧀"
       },
       {
         name: 'Finaliser le burger',
         subTasks: [
           {order: 1, description: 'Prendre un autre pain et le mettre sur le haut du burger qui est sur l\'assiette'}
         ],
-        nbCooksNeeded: 1
+          nbCooksNeeded: 1,
+        icons: "🍞"
       },
       {
         name: 'Mettre le burger au four',
@@ -110,7 +124,8 @@ export const BURGERS: Burger[] = [
           {order: 1, description: 'Ouvrir le four en glissant vers le bas avec le doigt'},
           {order: 2, description: 'Maintenir le doigt sur le four et déplacer le burger fini dans le four'}
         ],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🔥"
       },
       {
         name: 'Légère cuisson du burger',
@@ -118,7 +133,8 @@ export const BURGERS: Burger[] = [
           {order: 1, description: 'Lâcher le doigt pour fermer le four'},
           {order: 2, description: 'Attendre 5 secondes'}
         ],
-        nbCooksNeeded: 1
+        nbCooksNeeded: 1,
+        icons: "🔥"
       },
       {
         name: 'Sortir le burger',
@@ -126,7 +142,8 @@ export const BURGERS: Burger[] = [
           {order: 1, description: 'Ouvrir le four en glissant vers le bas avec le doigt'},
           {order: 2, description: 'Maintenir le doigt et déplacer le burger sur l\'assiette au centre'}
         ],
-        nbCooksNeeded: 1
+          nbCooksNeeded: 1,
+        icons: "🍽️"
       },
     ]
   }
