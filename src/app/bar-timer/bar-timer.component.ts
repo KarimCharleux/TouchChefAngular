@@ -23,6 +23,7 @@ export class BarTimerComponent implements OnInit {
   @Input() width: string = '100%'; // Largeur par défaut
   @Input() height: string = '24px'; // Hauteur par défaut
   @Input() totalTime: number = 60; // Temps total en secondes
+  @Input() barColor: string = '#3498db'; // Nouvelle propriété pour la couleur
 
   @Output() timerComplete = new EventEmitter<void>(); // Émet un événement lorsque le temps est écoulé
 

@@ -4,7 +4,7 @@
     <div *ngFor="let task of tasks; let i = index" 
          class="task-item"
          [class.completed]="checkedTasks.has(i)"
-         [style.background]="task.assignedCooks && task.assignedCooks[0]?.color + '10'"
+         [style.background]="task.assignedCooks && task.assignedCooks[0].color + '10'"
          [draggable]="!checkedTasks.has(i)"
          (click)="showTaskDetails(task)"
          (keydown)="showTaskDetails(task)"
@@ -36,7 +36,7 @@
             </div>
             <ng-template #emptyCook>
               <div class="cook empty">
-                👨‍🍳
+                <img src="/assets/person.png" alt="cook" height="32" width="32">
               </div>
             </ng-template>
           </ng-container>

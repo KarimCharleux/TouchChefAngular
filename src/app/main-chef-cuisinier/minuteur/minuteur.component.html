@@ -1,49 +1,34 @@
-<div class="container-minuteur flex flex-row gap-6">
-  <div class="left-container">
-    <div class="display-numbers">
-      <div class="display">
-          <div class="flex flex-row items-center bg-gray-200 rounded-lg w-fit relative">
-              <div class="time flex items-center justify-center space-x-2 p-4 w-48" draggable="true"
-                   (dragstart)="onDragStart($event)">
-                  <!-- Secondes -->
-                  <div class="text-2xl font-bold flex gap-1">
-                      <span>{{ input[0] || '0' }}</span>
-                      <span>{{ input[1] || '0' }}</span>
-                  </div>
-              </div>
-              <span class="text-2xl absolute right-1/3 font-bold">s</span>
-              <button class="bg-red-700 p-4 rounded-lg" (click)="clearInput()">
-                  <img ngSrc="/assets/cross-full-icon.svg" alt="croix" height="22" width="22"/>
-              </button>
-
-          </div>
+<div class="minuteur-container flex flex-wrap">
+  <h3 class="text-white text-2xl font-bold w-full text-center">Minuteur</h3>
+  <div class="minuteur-content">
+    <div class="timer-display" draggable="true" (dragstart)="onDragStart($event)">
+      <div class="time-container">
+        <span class="time-digit">{{ input[0] || '0' }}</span>
+        <span class="time-digit">{{ input[1] || '0' }}</span>
+        <span class="time-unit">s</span>
       </div>
+      <button class="clear-button" (click)="clearInput()">
+        <i class="pi pi-times"></i>
+      </button>
     </div>
 
-    <div class="numbers-buttons">
-      <div
-        class="grid grid-cols-3 gap-2 p-4"
-      >
-      <div
-        *ngFor="let number of numbers; let i = index"
-        class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-white text-2xl font-bold cursor-pointer"
-        (click)="onNumberClick(number)"
-        [ngClass]="{'col-span-1 row-start-4 col-start-2': i === 9}"
-      >
-      {{ number }}
+    <div class="numpad">
+      <button *ngFor="let number of numbers; let i = index"
+              class="number-button"
+              [class.zero-button]="i === 9"
+              (click)="onNumberClick(number)">
+        {{ number }}
+      </button>
     </div>
   </div>
-</div>
-</div>
 
-<div
-  class="right-container flex flex-col w-fit h-fit max-h-64 rounded-2xl outline outline-1 outline-black overflow-y-scroll p-2">
-  <app-list-timers-item [totalTime]="60"></app-list-timers-item>
-  <app-list-timers-item
-    *ngFor="let timerItem of timers"
-    [totalTime]="timerItem.timer.timerDuration"
-    (timerComplete)="onTimerComplete(timerItem.id)"
-    [avatar]="timerItem.timer.cook.avatar">
-  </app-list-timers-item>
-</div>
+  <div class="active-timers">
+    <app-list-timers-item
+      *ngFor="let timerItem of timers"
+      [totalTime]="timerItem.timer.timerDuration"
+      [cookColor]="timerItem.timer.cook.color"
+      (timerComplete)="onTimerComplete(timerItem.id)"
+      [avatar]="timerItem.timer.cook.avatar">
+    </app-list-timers-item>
+  </div>
 </div>

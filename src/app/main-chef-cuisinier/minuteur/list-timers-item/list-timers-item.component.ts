@@ -18,6 +18,7 @@ export class ListTimersItemComponent {
 
   @Input() totalTime: number = 60;
   @Input() avatar: string = "unknown-icon";
+  @Input() cookColor: string = "#3498db";
 
   @Output() timerComplete = new EventEmitter<void>();
 

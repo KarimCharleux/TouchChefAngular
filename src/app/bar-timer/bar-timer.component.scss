@@ -1,0 +1,36 @@
+.timer-container {
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar {
+  position: relative;
+  min-width: 80px;
+  max-width: 120px;
+}
+
+.time-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  color: white;
+  z-index: 10;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.progress-track {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 1s linear;
+  border-radius: 10px;
+}

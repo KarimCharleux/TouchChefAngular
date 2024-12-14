@@ -1,20 +1,13 @@
-<div class="w-full">
-  <div
-    class="relative flex items-center justify-center"
-    [style.width]="width"
-    [style.height]="height"
-  >
-    <!-- Texte centré -->
-    <span class="absolute text-center font-semibold text-sm z-10">
-      Temps restant : {{ currentTime }}s
-    </span>
-
-    <!-- Barre de progression -->
-    <div class="w-full h-full bg-gray-300 rounded-full overflow-hidden">
-      <div
-        class="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-1000"
-        [style.width]="progressWidth"
-      ></div>
+<div class="timer-container">
+  <div class="progress-bar"
+       [style.width]="width"
+       [style.height]="height">
+    <span class="time-text">{{ currentTime }}s</span>
+    <div class="progress-track">
+      <div class="progress-fill"
+           [style.width]="progressWidth"
+           [style.background-color]="barColor">
+      </div>
     </div>
   </div>
 </div>
