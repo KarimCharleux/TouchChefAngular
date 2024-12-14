@@ -2,36 +2,142 @@ root {
   --border-angle: 0deg;
 }
 
-.product-item {
-  transition: all 0.2s ease;
-  border : 4px solid transparent;
+.shop-container {
+  background: #02212da6;
+  width: 46vw;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
+}
 
-  &:active {
-    transform: scale(0.95);
+.shop-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: .5rem;
+  text-align: center;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover:not(.disabled) {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+    
+    .product-icon .glow-effect {
+      opacity: 1;
+    }
   }
-
-  &.border-animate {
-    background: rgb(212, 238, 212);
-    transform: scale(0.95);
+  
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+    
+    .product-icon .glow-effect {
+      opacity: 1;
+    }
   }
+}
 
-  .circular-progress {
+.product-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  position: relative;
+  
+  .glow-effect {
     position: absolute;
-    top: 36%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 4.5rem;
-    height: 4.5rem;
+    inset: -5px;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+}
 
+.product-name {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.cooldown-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .cooldown-progress {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    
     circle {
       fill: none;
-      stroke: rgb(186, 190, 185);
+      stroke: #fff;
       stroke-width: 3;
       stroke-linecap: round;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-      transition: stroke-dashoffset 1.5s linear;
+      stroke-dasharray: 100 100;
+      animation: countdown 1.5s linear forwards;
     }
+  }
+}
+
+
+@keyframes countdown {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 100; }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.4);
   }
 }

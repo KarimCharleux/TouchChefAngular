@@ -18,17 +18,22 @@ import { WebSocketService } from '../../websocket.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopComponent {
+  @ViewChildren('productItem') productItems!: QueryList<ElementRef>;
+  
   products: Product[] = [
     { id: 1, name: 'Tomate', icon: '🍅', isOnCooldown: false },
     { id: 2, name: 'Laitue', icon: '🥬', isOnCooldown: false },
     { id: 3, name: 'Viande', icon: '🥩', isOnCooldown: false },
     { id: 4, name: 'Pain', icon: '🫓', isOnCooldown: false },
-    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false }
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
+    { id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false },
   ];
 
   private readonly tapSound: HTMLAudioElement;
-
-  @ViewChildren('productItem') productItems!: QueryList<ElementRef>;
 
   constructor(
     private readonly wsService: WebSocketService,
@@ -40,23 +45,8 @@ export class ShopComponent {
   OnProductClick(product: Product, index: number) {
     if (!product.isOnCooldown) {
       this.tapSound.play().then();
-
-      const element = this.productItems.get(index)?.nativeElement;
-
       product.isOnCooldown = true;
-
       this.cdr.detectChanges();
-
-      const circle = element.querySelector('circle');
-
-      if (circle) {
-        requestAnimationFrame(() => {
-          circle.style.strokeDashoffset = '100';
-          requestAnimationFrame(() => {
-            circle.style.strokeDashoffset = '0';
-          });
-        });
-      }
 
       setTimeout(() => {
         product.isOnCooldown = false;

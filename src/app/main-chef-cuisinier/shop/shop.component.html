@@ -1,25 +1,30 @@
-<div class="p-4 w-fit">
-  <div class="grid grid-cols-3 gap-4 bg-white shadow-lg rounded-lg p-4 max-h-72 overflow-y-scroll">
+<div class="shop-container">
+  <div class="shop-header">
+    <h4 class="shop-title">Boutique des ingrédients</h4>
+  </div>
+  
+  <div class="shop-grid">
     <div *ngFor="let product of products; let i = index"
-         class="product-item flex flex-col items-center p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-blue-100"
-         [ngClass]="{'border-animate': product.isOnCooldown}"
+         class="product-card"
+         [ngClass]="{'disabled': product.isOnCooldown}"
          (click)="OnProductClick(product, i)"
          (keypress)="OnProductClick(product, i)"
          [tabindex]="i"
          #productItem>
-      <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-xl">
+         
+      <div class="product-icon">
         {{ product.icon }}
+        <div class="glow-effect"></div>
+        <div class="cooldown-overlay" *ngIf="product.isOnCooldown">
+          <svg class="cooldown-progress" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="16"></circle>
+          </svg>
+        </div>
       </div>
-      <span class="mt-2 text-sm font-medium text-gray-700">{{ product.name }}</span>
       
-      <div class="cooldown-overlay" *ngIf="product.isOnCooldown">
-        <svg class="circular-progress" viewBox="0 0 36 36">
-          <circle cx="18" cy="18" r="16" 
-                  [style.strokeDasharray]="'100 100'"
-                  [style.strokeDashoffset]="product.isOnCooldown ? '100' : '0'">
-          </circle>
-        </svg>
-      </div>
+      <span class="product-name">{{ product.name }}</span>
+      
+      
     </div>
   </div>
 </div>
