@@ -1,18 +1,18 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { DropdownModule } from 'primeng/dropdown';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import { COOK_COLORS, CookColor, DeviceService } from '../device.service';
-import { Router } from '@angular/router';
-import { WebSocketService } from '../websocket.service';
-import { firstValueFrom } from 'rxjs';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {NgForOf, NgIf} from '@angular/common';
+import {ZXingScannerModule} from '@zxing/ngx-scanner';
+import {MessageService} from 'primeng/api';
+import {ToastModule} from 'primeng/toast';
+import {DropdownModule} from 'primeng/dropdown';
+import {DialogModule} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
+import {FormsModule} from '@angular/forms';
+import {Cook, COOK_COLORS, CookColor, DeviceService} from '../device.service';
+import {Router} from '@angular/router';
+import {WebSocketService} from '../websocket.service';
+import {firstValueFrom} from 'rxjs';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 
 @Component({
@@ -48,10 +48,10 @@ export class ScanQrComponent implements OnInit {
   showPermissionDialog = false;
   selectedColor: string = '';
   availableColors: CookColor[] = [
-    { name: 'Rouge', value: COOK_COLORS.RED, isSelected: false },
-    { name: 'Bleu', value: COOK_COLORS.BLUE, isSelected: false },
-    { name: 'Vert', value: COOK_COLORS.GREEN, isSelected: false },
-    { name: 'Jaune', value: COOK_COLORS.YELLOW, isSelected: false }
+    {name: 'Rouge', value: COOK_COLORS.RED, isSelected: false},
+    {name: 'Bleu', value: COOK_COLORS.BLUE, isSelected: false},
+    {name: 'Vert', value: COOK_COLORS.GREEN, isSelected: false},
+    {name: 'Jaune', value: COOK_COLORS.YELLOW, isSelected: false}
   ];
 
   constructor(
@@ -64,7 +64,7 @@ export class ScanQrComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.hasPermission = true;
       stream.getTracks().forEach(track => track.stop());
     } catch (err) {
@@ -75,7 +75,7 @@ export class ScanQrComponent implements OnInit {
 
   async requestPermission() {
     try {
-      await navigator.mediaDevices.getUserMedia({ video: true });
+      await navigator.mediaDevices.getUserMedia({video: true});
       this.hasPermission = true;
       this.showPermissionDialog = false;
       this.scannerEnabled = true;
@@ -133,7 +133,7 @@ export class ScanQrComponent implements OnInit {
 
       const response = await Promise.race([
         firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
-        new Promise((_, reject) => 
+        new Promise((_, reject) =>
           setTimeout(() => reject('timeout'), 1000)
         )
       ]);
@@ -164,6 +164,8 @@ export class ScanQrComponent implements OnInit {
           this.deviceService.getNbPlayers()
         ) {
           console.log('All cooks added to the list : ', this.deviceService.getCooks());
+          this.sendCooksListToWatch(this.deviceService.getCooks());
+
           this.scannerEnabled = false;
           this.messageService.add({
             severity: 'info',
@@ -187,6 +189,18 @@ export class ScanQrComponent implements OnInit {
       });
     } finally {
       this.isWaitingResponse = false;
+    }
+  }
+
+  async sendCooksListToWatch(cooks: Cook[]) {
+    if (cooks) {
+      console.log('Sending cooks list to watch : ', cooks);
+      this.wsService.sendMessage({
+        from: 'angular',
+        to: 'allWatches',
+        type: 'cooksList',
+        cooksList: cooks
+      });
     }
   }
 

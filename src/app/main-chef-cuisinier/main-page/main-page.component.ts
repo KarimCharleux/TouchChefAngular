@@ -25,7 +25,6 @@ import { Router } from '@angular/router';
     ThumbnailProfileCuisinierComponent,
     NgClass,
     NgFor,
-    ScoreComponent,
     ListTasksComponent,
     DashboardHeaderComponent,
   ],
@@ -43,13 +42,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   private readonly finishSound: HTMLAudioElement;
   private readonly backgroundMusic: HTMLAudioElement;
   cooks: Cook[] = [];
-
-
-  constructor(
-    private deviceService: DeviceService,
-    private wsService: WebSocketService,
-    private shareDataService: ShareDataService
-  ) {}
+  private deviceService: DeviceService;
 
   constructor(
     private readonly router: Router,
@@ -68,15 +61,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Configurer la musique de fond
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
-
-    const currentCooks = this.deviceService.getCooks();
-    this.sendCooksListToWatch(currentCooks);
-
-    // Subscribe to future changes
-    this.deviceService.cooks$.subscribe(cooks => {
-      this.cooks = cooks; // Update local property
-      this.sendCooksListToWatch(cooks);
-    });
   }
 
   ngOnInit() {
@@ -148,18 +132,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       dataType: ShareDataServiceTypes.ASSIGNED_TASK,
     };
     this.shareDataService.sendData(shareDataServiceData);
-  }
-
-  async sendCooksListToWatch(cooks: Cook[]) {
-    if (cooks) {
-      console.log('Sending cooks list to watch : ', cooks);
-      this.wsService.sendMessage({
-        from: 'angular',
-        to: 'allWatches',
-        type: 'cooksList',
-        cooksList: cooks
-      });
-    }
   }
 
   // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
