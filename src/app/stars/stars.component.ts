@@ -31,11 +31,22 @@ export class StarsComponent {
           type: string,
           from: string,
           to: string,
-          points: number
+          ingredientState: string
         };
-        if (scoreUpdateMessage.type === "updateScore") {
-          const points: number = scoreUpdateMessage.points;
-          this.updateScore(points);
+        if (scoreUpdateMessage.type === "updatescore") {
+          // Vérifier si l'état est valide
+          const ingredientStateKey = Object.keys(IngredientState).find(key => IngredientState[key as keyof typeof IngredientState] === scoreUpdateMessage.ingredientState);
+
+          if (ingredientStateKey) {
+            // Transformer en type enum IngredientState
+            const ingredientState = IngredientState[ingredientStateKey as keyof typeof IngredientState];
+
+            // Obtenir les points associés
+            const points = IngredientStatePoints[ingredientStateKey as keyof typeof IngredientStatePoints];
+            this.updateScore(points);
+          } else {
+            console.error("Invalid ingredientState received:", scoreUpdateMessage.ingredientState);
+          }
         }
       });
   }
@@ -45,3 +56,23 @@ export class StarsComponent {
     this.cdr.detectChanges();
   }
 }
+
+export enum IngredientState {
+  COOKED_STEAK = "cookedState",
+  CUT_TOMATO = "cutTomato",
+  CUT_STEAK = "cutSteak",
+  CUT_LETTUCE = "cutLettuce",
+  WASHED_LETTUCE = "washedLettuce",
+  CUT_CHEESE = "cutCheese"
+}
+
+export enum IngredientStatePoints {
+  COOKED_STEAK = 2,
+  CUT_TOMATO = 1,
+  CUT_LETTUCE = 3,
+  WASHED_LETTUCE = 2,
+  CUT_CHEESE = 4,
+  CUT_STEAK = 1
+}
+
+

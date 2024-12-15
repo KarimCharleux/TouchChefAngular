@@ -174,6 +174,7 @@ export class ListTasksComponent implements OnInit, OnDestroy {
       const index = this.tasks.findIndex(t => t.name === progressData.taskName);
       this.checkedTasks.add(index);
       this.unactiveTaskOnTable(this.tasks[index], progressData.playerId);
+      this.unactiveTaskOnWatch(this.tasks[index], progressData.playerId)
       this.cdr.detectChanges();
     }
   }
@@ -183,6 +184,16 @@ export class ListTasksComponent implements OnInit, OnDestroy {
       this.wsService.sendMessage({
         from: playerId,
         to: "table",
+        type: "unactiveTask"
+      })
+    }
+  }
+
+  unactiveTaskOnWatch(task: Task, playerId: string) {
+    if (task.assignedCooks) {
+      this.wsService.sendMessage({
+        from: 'angular',
+        to: playerId,
         type: "unactiveTask"
       })
     }
