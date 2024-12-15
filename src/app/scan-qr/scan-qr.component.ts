@@ -221,8 +221,7 @@ export class ScanQrComponent implements OnInit {
   }
 
   skipTutorial() {
-    //this.router.navigate(['/dashboard']); // TODO : to access the old dashboard
-    this.router.navigate(['/main-page']);
+    this.router.navigate(['/countdown']);
   }
 
   selectColor(color: CookColor) {

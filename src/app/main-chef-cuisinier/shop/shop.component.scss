@@ -1,9 +1,11 @@
+@import '../../../variables';
+
 root {
   --border-angle: 0deg;
 }
 
 .shop-container {
-  background: #02212da6;
+  background: $light-gray-color;
   width: 46vw;
   border-radius: 20px;
   padding: 1rem;
@@ -20,7 +22,7 @@ root {
 .shop-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: $white-color;
   margin-bottom: .5rem;
   text-align: center;
 }
@@ -29,7 +31,7 @@ root {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  max-height: 300px;
+  max-height: 200px;
   overflow-y: auto;
   padding-right: 0.5rem;
 }
@@ -46,6 +48,7 @@ root {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
   &:hover:not(.disabled) {
     transform: translateY(-5px);
@@ -89,7 +92,7 @@ root {
 }
 
 .product-name {
-  color: #fff;
+  color: $white-color;
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
@@ -109,7 +112,7 @@ root {
     
     circle {
       fill: none;
-      stroke: #fff;
+      stroke: $white-color;
       stroke-width: 3;
       stroke-linecap: round;
       stroke-dasharray: 100 100;

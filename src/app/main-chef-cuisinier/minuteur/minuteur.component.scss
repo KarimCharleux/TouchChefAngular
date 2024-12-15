@@ -1,8 +1,10 @@
+@import '../../../variables';
+
 .minuteur-container {
   width: 46vw;
-  background: #02212da6;
+  background: $light-gray-color;
   border-radius: 20px;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   gap: 0 1rem
 }
@@ -25,7 +27,7 @@
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.05);
-  padding: 0.8rem 1.2rem;
+  padding: 0.1rem 1.2rem;
   border-radius: 10px;
   cursor: grab;
   
@@ -37,20 +39,20 @@
 .time-digit {
   font-size: 2rem;
   font-weight: bold;
-  color: #fff;
+  color: $white-color;
   font-family: 'Bricolage Grotesque', sans-serif;
   margin: 0 0.2rem;
 }
 
 .time-unit {
-  color: #fff;
+  color: $white-color;
   font-size: 1.5rem;
   margin-left: 0.5rem;
   opacity: 0.8;
 }
 
 .clear-button {
-  background: #e74c3c;
+  background: $danger-color;
   border: none;
   border-radius: 10px;
   width: 48px;
@@ -67,7 +69,7 @@
   }
   
   i {
-    color: white;
+    color: $white-color;
     font-size: 1.5rem;
   }
 }
@@ -84,7 +86,7 @@
   border: none;
   border-radius: 12px;
   height: 48px;
-  color: white;
+  color: $white-color;
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;

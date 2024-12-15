@@ -1,15 +1,17 @@
+@import '../../variables';
+
 .list-tasks-container {
   width: 50vw;
   padding: 1rem;
   margin-left: 5px;
-  background: #02212da6;
+  background: $light-gray-color;
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
   .list-tasks-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: white;
+    color: $white-color;
     margin-bottom: 1rem;
     text-align: center;
   }
@@ -28,14 +30,14 @@
     opacity: 0.7;
     order: 1;
     background: #f8f8f8;
-    color: black !important;
+    color: $dark-color;
 
     .task-title {
-      color: black !important;
+      color: $dark-color;
     }
 
     .timer-text {
-      color: black !important;
+      color: $dark-color !important;
     }
   }
 
@@ -76,7 +78,7 @@
   .task-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: white;
+    color: $white-color;
   }
 
   .task-icons {
@@ -131,7 +133,7 @@
         transform: translate(-50%, -50%);
         font-size: 0.7rem;
         font-weight: 600;
-        color: white
+        color: $white-color;
       }
     }
 
@@ -144,7 +146,7 @@
         height: 41px;
         border-radius: 50%;
         overflow: hidden;
-        border: 2px solid white;
+        border: 1px solid rgb(209, 209, 209);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
@@ -171,7 +173,7 @@
 }
 
 .scrollable-list {
-  height: 59.7vh;
+  height: 48vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -207,7 +209,7 @@
     .p-dialog-title {
       font-size: 1.75rem;
       font-weight: 700;
-      color: #2f3542;
+      color: $dark-color;
       font-family: "Bricolage Grotesque", sans-serif;
     }
   }
@@ -240,8 +242,8 @@
       }
 
       .subtask-number {
-        background: #2f3542;
-        color: white;
+        background: $light-gray-color;
+        color: $white-color;
         width: 28px;
         height: 28px;
         border-radius: 50%;
@@ -254,7 +256,7 @@
 
       .subtask-description {
         font-size: 1.2rem;
-        color: #2f3542;
+        color: $dark-color;
         margin: 0;
         line-height: 1.5;
       }
@@ -269,7 +271,7 @@
 
     .close-button {
       background: #4CAF50;
-      color: white;
+      color: $white-color;
       border: none;
       padding: 0.8rem 2rem;
       border-radius: 8px;

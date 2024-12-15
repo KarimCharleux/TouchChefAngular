@@ -7,7 +7,6 @@ import {WebSocketService} from '../websocket.service';
 import {Cook} from '../device.service';
 import {ShareDataService} from '../share-data.service';
 import {ShareDataServiceDataObject} from '../main-chef-cuisinier/main-page/main-page.component';
-import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-list-tasks',
@@ -30,7 +29,7 @@ export class ListTasksComponent {
   indexOfLastAssignation: number = 0;
 
   constructor(private shareDataService: ShareDataService, private cdr: ChangeDetectorRef, private wsService: WebSocketService) {
-    this.tapSound = new Audio("assets/sounds/tap.mp3");
+    this.tapSound = new Audio("assets/sounds/confirm.mp3");
     this.tasks = BURGERS[0].steps;
 
     this.shareDataService.data$.subscribe((data) => {

@@ -39,7 +39,7 @@ export class ShopComponent {
     private readonly wsService: WebSocketService,
     private readonly cdr: ChangeDetectorRef
   ) {
-    this.tapSound = new Audio('assets/sounds/confirm.mp3');
+    this.tapSound = new Audio('assets/sounds/tap.mp3');
   }
 
   OnProductClick(product: Product, index: number) {

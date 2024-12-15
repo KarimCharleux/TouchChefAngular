@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
   }
-
+                                    
   ngOnInit() {
     // Démarrer la musique de fond
     this.backgroundMusic.play().then();

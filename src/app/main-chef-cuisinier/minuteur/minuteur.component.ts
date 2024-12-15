@@ -20,7 +20,7 @@ import {ShareDataServiceDataObject, ShareDataServiceTypes} from '../main-page/ma
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MinuteurComponent implements OnInit {
-
+  private readonly tapSound: HTMLAudioElement;
   numbers: string[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']; // Chiffres à afficher
   input: string[] = ['0', '0'];
 
@@ -30,6 +30,7 @@ export class MinuteurComponent implements OnInit {
   receivedObject?: Timer;
 
   constructor(private shareDataService: ShareDataService, private cdr: ChangeDetectorRef, private wsService: WebSocketService) {
+    this.tapSound = new Audio('assets/sounds/tap.mp3');
   }
 
   ngOnInit() {
@@ -46,6 +47,7 @@ export class MinuteurComponent implements OnInit {
   }
 
   onNumberClick(number: string): void {
+    this.tapSound.play().then();
     // Check if both inputs are already filled with non-zero values
     if (this.input[0] !== '0' && this.input[1] !== '0') {
       return; // Exit the function if inputs are filled
@@ -64,6 +66,7 @@ export class MinuteurComponent implements OnInit {
   }
 
   clearInput(): void {
+    this.tapSound.play().then();
     this.input = ['0', '0'];
   }
 

@@ -1,42 +1,43 @@
-<app-dashboard-header
-    [showStopGameButton]="true"
-    [nbEarnedStars]="nbEarnedStars"
-  />
-<div class="flex flex-col h-full gap-2 items-center place-content-between">
-  <div class="flex flex-row max-w-full top-row gap-x-2 justify-center items-center">
-    <app-thumbnail-profile-cuisinier 
-      *ngFor="let cook of cooks; let i = index"
-      [$playerName]="cook.name" 
-      [$playerAvatar]="cook.avatar"
-      [$playerColor]="cook.color"
-      (dragover)="allowDrop($event, i)"
-      (dragleave)="dropLeave($event, i)"
-      (drop)="onDrop($event, i, cook)"
-      [ngClass]="{'drag-over': isDraggedOver[i]}"
-      class="transition-transform transform hover:scale-105">
-    </app-thumbnail-profile-cuisinier>
-  </div>
-
-    <div 
-      class="wooden-table"
-      (dragover)="allowDropOnTable($event)"
-      (dragleave)="dropLeaveTable($event)"
-      (drop)="onDropOnTable($event)"
-      [style.width]="getTableWidth()">
-      <span class="table-text">Déposer sur la table</span>
+<div class="main-page">
+  <app-dashboard-header
+      [showStopGameButton]="true"
+      [nbEarnedStars]="nbEarnedStars"
+    />
+  <div class="flex flex-col h-full gap-2 items-center place-content-between">
+    <div class="flex flex-row max-w-full top-row gap-x-2 justify-center items-center">
+      <app-thumbnail-profile-cuisinier 
+        *ngFor="let cook of cooks; let i = index"
+        [$playerName]="cook.name" 
+        [$playerAvatar]="cook.avatar"
+        [$playerColor]="cook.color"
+        (dragover)="allowDrop($event, i)"
+        (dragleave)="dropLeave($event, i)"
+        (drop)="onDrop($event, i, cook)"
+        [ngClass]="{'drag-over': isDraggedOver[i]}"
+        class="transition-transform transform hover:scale-105">
+      </app-thumbnail-profile-cuisinier>
     </div>
-  <div class="flex flex-row w-full space-between items-start mid-row gap-2">
-    <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
-      <app-list-tasks></app-list-tasks>
+      <div 
+        class="wooden-table"
+        (dragover)="allowDropOnTable($event)"
+        (dragleave)="dropLeaveTable($event)"
+        (drop)="onDropOnTable($event)"
+        [style.width]="getTableWidth()">
+        <span class="table-text">Déposer sur la table</span>
+      </div>
+    <div class="flex flex-row w-full space-between items-start mid-row gap-2">
+      <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
+        <app-list-tasks></app-list-tasks>
+      </div>
+      <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
+        <app-shop></app-shop>
+        <app-minuteur></app-minuteur>
+      </div>
     </div>
-    <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
-      <app-shop></app-shop>
-      <app-minuteur></app-minuteur>
-    </div>
-  </div>
-  <div class="flex flex-row w-full space-between items-center bottom-row gap-4">
-    <div class="w-full">
-      <app-game-time-left [gameDuration]="250"></app-game-time-left>
+    <div class="flex flex-row w-full space-between items-center bottom-row gap-4">
+      <div class="w-full">
+        <app-game-time-left [gameDuration]="gameDuration"></app-game-time-left>
+      </div>
     </div>
   </div>
 </div>

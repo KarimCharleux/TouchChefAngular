@@ -1,3 +1,8 @@
+.main-page {
+  opacity: 0;
+  animation: showContent 0.5s ease-out 0.5s forwards;
+}
+
 .drag-over {
   transform: scale(1.2);
 }
@@ -35,5 +40,13 @@
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     pointer-events: none;
+  }
+}
+
+
+@keyframes showContent {
+  to {
+    opacity: 1;
+    pointer-events: auto;
   }
 }

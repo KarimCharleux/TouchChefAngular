@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MinuteurComponent } from '../minuteur/minuteur.component';
 import { ShopComponent } from '../shop/shop.component';
 import { GameTimeLeftComponent } from '../game-time-left/game-time-left.component';
@@ -13,6 +13,7 @@ import {
 } from '../../list-tasks/list-tasks.component';
 import { WebSocketService } from '../../websocket.service';
 import { DashboardHeaderComponent } from '../../dashboard/dashboard-header/dashboard-header.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -31,20 +32,53 @@ import { DashboardHeaderComponent } from '../../dashboard/dashboard-header/dashb
   styleUrl: './main-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainPageComponent {
+export class MainPageComponent implements OnInit, OnDestroy {
+  @ViewChild(GameTimeLeftComponent) clockComponent!: GameTimeLeftComponent;
+
   deviceService?: DeviceService = undefined;
   isDraggedOver: boolean[] = [false, false, false, false];
   nbEarnedStars: number = 0;
+  gameDuration: number = 250; // 250 seconds = 4 minutes and 10 seconds
+  private readonly successSound: HTMLAudioElement;
+  private readonly finishSound: HTMLAudioElement;
+  private readonly backgroundMusic: HTMLAudioElement;
 
   @Input() cooks: Cook[] = [];
 
   constructor(
+    private readonly router: Router,
     deviceService: DeviceService,
     private readonly shareDataService: ShareDataService,
     private readonly wsService: WebSocketService
   ) {
     this.deviceService = deviceService;
     this.cooks = this.deviceService.getCooks();
+
+    // Initialiser les sons
+    this.successSound = new Audio("assets/sounds/success.mp3");
+    this.finishSound = new Audio("assets/sounds/finish.mp3");
+    this.backgroundMusic = new Audio("assets/sounds/background-music.mp3");
+    
+    // Configurer la musique de fond
+    this.backgroundMusic.loop = true;
+    this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
+  }
+
+  ngOnInit() {
+    // Démarrer la musique de fond
+    this.backgroundMusic.play().then();
+
+    // Attendre 4s et envoyer un message a Unity
+    setTimeout(() => {
+      this.wsService.sendMessage({type: 'startGame'});
+      this.clockComponent.startTimer();
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    // Arrêter la musique quand on quitte le composant
+    this.backgroundMusic.pause();
+    this.backgroundMusic.currentTime = 0;
   }
 
   allowDrop(event: DragEvent, profileNumber: number) {
@@ -99,6 +133,30 @@ export class MainPageComponent {
       dataType: ShareDataServiceTypes.ASSIGNED_TASK,
     };
     this.shareDataService.sendData(shareDataServiceData);
+  }
+
+  onTimeEnd() {
+    // Arrêter la musique de fond avant de jouer le son de fin
+    this.backgroundMusic.pause();
+    
+    // Jouer le son de fin
+    this.finishSound.play().then();
+    
+    // Calculer le score final
+    const finalScore = {
+      nbBurgers: 1, // TODO get from burgers
+      totalTime: this.clockComponent.currentTime,
+      totalStars: this.nbEarnedStars
+    };
+    
+    // Naviguer vers la page de fin avec les données
+    this.router.navigate(['/finish'], { 
+      state: { score: finalScore }
+    }).then();
+  }
+
+  stopTimer() {
+    this.clockComponent.stopTimer();
   }
 
   getTableWidth(): string {
