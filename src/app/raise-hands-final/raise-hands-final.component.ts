@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {WebSocketService} from '../websocket.service';
 import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {
@@ -26,7 +26,9 @@ import {Subscription} from "rxjs";
 })
 export class RaiseHandsFinalComponent {
 
-    @Input() cooks: Cook[] = [];
+  @Output() allHandsRaised = new EventEmitter<void>();
+
+  @Input() cooks: Cook[] = [];
 
     raised: boolean[] = [false, false, false, false];
     private raisedSubscription: Subscription[] = [];

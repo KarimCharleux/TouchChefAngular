@@ -1,13 +1,17 @@
-<div class="flex flex-row max-w-full h-full max-h-full gap-x-2 justify-center items-center h-96">
+<div class="flex flex-col gap-16 justify-center items-center container-raise-hands">
+  <h2>Tous les cuisiniers doivent lever le bras !</h2>
+  <div class="flex flex-row max-w-full gap-x-2 justify-center items-center">
     <ng-container *ngFor="let cook of cooks; let i = index">
-        <app-thumbnail-profile-cuisinier
-                [$playerName]="cook.name"
-                [$playerAvatar]="cook.avatar"
-                [$playerColor]="cook.color"
-                [displayStats]="false"
-                class="transition-transform transform hover:-translate-y-4 hover:scale-105 hover:bg-opacity-20 duration-300 ease-in-out hover:shadow-lg"
-                [style.backgroundColor]="cook.color + '20'"
-                [ngClass]="{'floating-animation': !raised[i]}">
-        </app-thumbnail-profile-cuisinier>
+      <app-thumbnail-profile-cuisinier
+        [$playerName]="cook.name"
+        [$playerAvatar]="cook.avatar"
+        [$playerColor]="cook.color"
+        [displayStats]="false"
+        class="transition-transform transform hover:-translate-y-4 hover:scale-105 hover:bg-opacity-20 duration-300 ease-in-out hover:shadow-lg"
+        [style.backgroundColor]="cook.color + '20'"
+        [ngClass]="{'floating-animation': !raised[i]}">
+      </app-thumbnail-profile-cuisinier>
     </ng-container>
+  </div>
 </div>
+

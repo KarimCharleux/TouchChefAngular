@@ -4,7 +4,7 @@ import {ShopComponent} from '../shop/shop.component';
 import {GameTimeLeftComponent} from '../game-time-left/game-time-left.component';
 import {Cook, DeviceService} from '../../device.service';
 import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
-import {NgClass, NgFor} from '@angular/common';
+import {NgClass, NgFor, NgIf} from '@angular/common';
 import {ShareDataService} from '../../share-data.service';
 import {Timer} from '../minuteur/list-timers-item/list-timers-item.component';
 import {AssignedTask, ListTasksComponent,} from '../../list-tasks/list-tasks.component';
@@ -12,6 +12,7 @@ import {WebSocketService} from '../../websocket.service';
 import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboard-header.component';
 import {Router} from '@angular/router';
 import {filter, map, Observable} from 'rxjs';
+import {RaiseHandsFinalComponent} from '../../raise-hands-final/raise-hands-final.component';
 
 @Component({
   selector: 'app-main-page',
@@ -25,6 +26,8 @@ import {filter, map, Observable} from 'rxjs';
     NgFor,
     ListTasksComponent,
     DashboardHeaderComponent,
+    RaiseHandsFinalComponent,
+    NgIf,
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
@@ -42,6 +45,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   private readonly backgroundMusic: HTMLAudioElement;
   cooks: Cook[] = [];
   heartRates: number[] = [];
+  showRaiseHandsModal: boolean = false;
 
   private deviceService: DeviceService;
 
@@ -167,6 +171,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Jouer le son de fin
     this.finishSound.play().then();
 
+    this.showRaiseHandsModal = true;
+
     // Calculer le score final
     const finalScore = {
       nbBurgers: 1, // TODO get from burgers
@@ -175,9 +181,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
     };
 
     // Naviguer vers la page de fin avec les données
-    this.router.navigate(['/finish'], {
+    /*this.router.navigate(['/finish'], {
       state: {score: finalScore}
-    }).then();
+    }).then();*/
   }
 
   stopTimer() {

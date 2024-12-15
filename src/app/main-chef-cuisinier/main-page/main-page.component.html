@@ -38,8 +38,14 @@
     </div>
     <div class="flex flex-row w-full space-between items-center bottom-row">
       <div class="w-full">
-        <app-game-time-left [gameDuration]="gameDuration"></app-game-time-left>
+        <app-game-time-left [gameDuration]="2" (timerComplete)="onTimeEnd()"></app-game-time-left>
       </div>
     </div>
+  </div>
+  <div
+    *ngIf="showRaiseHandsModal"
+    class="fixed"
+  >
+    <app-raise-hands-final [cooks]="cooks" ></app-raise-hands-final>
   </div>
 </div>
