@@ -105,7 +105,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       const data = event.dataTransfer.getData('text/plain'); // Récupère les données transférées
       let splitData: string[] = data.split('/');
       if (splitData[0] === 'timer') {
-        // a timer has been asigned to a cook
         this.assignTimerToCook(splitData[1], cook);
       } else if (splitData[0] === 'task') {
         this.assignTaskToCook(splitData[1], cook, splitData[2], splitData[3], parseInt(splitData[4]), splitData[5]);
