@@ -63,6 +63,7 @@ export class ScanQrComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.deviceService.clearCooks();
     try {
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       this.hasPermission = true;
@@ -126,6 +127,7 @@ export class ScanQrComponent implements OnInit {
         type: 'addCook',
         name: this.cookName,
         avatar: this.selectedAvatar.toString(),
+        avatarColor: this.selectedColor
       });
 
       console.log('Message envoyé');
@@ -242,6 +244,48 @@ export class ScanQrComponent implements OnInit {
   selectColor(color: CookColor) {
     if (!color.isSelected) {
       this.selectedColor = color.value;
+    }
+  }
+
+  async addMockCooks() {
+    const remainingSlots = this.deviceService.getNbPlayers() - this.deviceService.getCooks().length;
+
+    if (remainingSlots <= 0) return;
+
+    const mockCooks = [
+      { name: 'Karim', deviceId: '1', avatar: '1', color: COOK_COLORS.RED },
+      { name: 'Anas', deviceId: '2', avatar: '2', color: COOK_COLORS.BLUE },
+      { name: 'Damien', deviceId: '3', avatar: '3', color: COOK_COLORS.GREEN },
+      { name: 'Saad', deviceId: '4', avatar: '4', color: COOK_COLORS.YELLOW }
+    ];
+
+    // Ajouter le nombre nécessaire de mocks
+    for (let i = 0; i < remainingSlots; i++) {
+      const mockCook = mockCooks[i];
+      const added = this.deviceService.addCook(mockCook);
+
+      if (added) {
+        const colorIndex = this.availableColors.findIndex(c => c.value === mockCook.color);
+        if (colorIndex !== -1) {
+          this.availableColors[colorIndex].isSelected = true;
+        }
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: `${mockCook.name} a été ajouté comme cuisinier!`,
+        });
+      }
+    }
+
+    // Vérifier si tous les cuisiniers sont ajoutés
+    if (this.deviceService.getCooks().length >= this.deviceService.getNbPlayers()) {
+      this.scannerEnabled = false;
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Info',
+        detail: 'Tous les cuisiniers ont été ajoutés!',
+      });
     }
   }
 }

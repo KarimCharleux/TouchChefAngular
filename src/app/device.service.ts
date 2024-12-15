@@ -26,13 +26,6 @@ export const COOK_COLORS = {
   YELLOW: '#ffd900'
 };
 
-const mockCooks: Cook[] = [
-  { name: 'Karim', deviceId: '1', avatar: '1', color: COOK_COLORS.RED },
-  { name: 'Anas', deviceId: '2', avatar: '2', color: COOK_COLORS.BLUE },
-  { name: 'Damien', deviceId: '3', avatar: '3', color: COOK_COLORS.GREEN },
-  { name: 'Saad', deviceId: '4', avatar: '4', color: COOK_COLORS.YELLOW }
-];
-
 @Injectable({
   providedIn: 'root'
 })
@@ -43,15 +36,32 @@ export class DeviceService {
   protected cooks = new BehaviorSubject<Cook[]>([]);
   cooks$ = this.cooks.asObservable();
 
+  constructor() {
+    // Charger les données du localStorage au démarrage
+    const savedCooks = localStorage.getItem('cooks');
+    const savedDevices = localStorage.getItem('scannedDevices');
+    const savedNbPlayers = localStorage.getItem('nbPlayers');
+
+    if (savedCooks) {
+      this.cooks.next(JSON.parse(savedCooks));
+    }
+    if (savedDevices) {
+      this.scannedDevices.next(JSON.parse(savedDevices));
+    }
+    if (savedNbPlayers) {
+      this.nbPlayers = parseInt(savedNbPlayers);
+    }
+  }
+
   addDevice(deviceId: string) {
     const currentDevices = this.scannedDevices.value;
-    // Vérifier si l'appareil existe déjà
     if (!currentDevices.some(device => device.id === deviceId)) {
       currentDevices.push({
         id: deviceId,
         timestamp: new Date()
       });
       this.scannedDevices.next(currentDevices);
+      localStorage.setItem('scannedDevices', JSON.stringify(currentDevices));
       return true;
     }
     return false;
@@ -63,10 +73,12 @@ export class DeviceService {
 
   clearDevices() {
     this.scannedDevices.next([]);
+    localStorage.removeItem('scannedDevices');
   }
 
   setNbPlayers(nb: number) {
     this.nbPlayers = nb;
+    localStorage.setItem('nbPlayers', nb.toString());
   }
 
   getNbPlayers(): number {
@@ -78,6 +90,7 @@ export class DeviceService {
     if (!currentCooks.some(c => c.deviceId === cook.deviceId)) {
       currentCooks.push(cook);
       this.cooks.next(currentCooks);
+      localStorage.setItem('cooks', JSON.stringify(currentCooks));
       return true;
     }
     return false;
@@ -90,5 +103,7 @@ export class DeviceService {
 
   clearCooks() {
     this.cooks.next([]);
+    localStorage.removeItem('cooks');
+    localStorage.removeItem('nbPlayers');
   }
 }

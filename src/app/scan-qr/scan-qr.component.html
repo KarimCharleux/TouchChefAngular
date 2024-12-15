@@ -77,6 +77,12 @@
     </div>
   </div>
 
+  <div *ngIf="scannerEnabled" class="mock-button-container">
+    <button class="button-mock" (click)="addMockCooks()">
+      Ajouter des mocks
+    </button>
+  </div>
+
   <p-dialog
     [(visible)]="showNameDialog"
     [modal]="true"

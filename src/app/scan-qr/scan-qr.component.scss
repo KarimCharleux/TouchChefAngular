@@ -126,7 +126,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding-top: 10rem;
 }
 
 .avatar-grid {
@@ -144,7 +144,7 @@
   border-radius: 1rem;
   border: 3px solid transparent;
   transition: all 0.2s ease;
-  
+
   &.selected {
     border-color: $primary-color;
     background-color: var(--selected-color);
@@ -198,7 +198,7 @@
 
 .color-selection {
   margin-bottom: 1rem;
-  
+
   .color-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -262,5 +262,27 @@
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
       }
     }
+  }
+}
+
+.mock-button-container {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 100;
+}
+
+.button-mock {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
   }
 }
