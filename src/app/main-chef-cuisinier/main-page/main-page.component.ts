@@ -1,19 +1,17 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MinuteurComponent } from '../minuteur/minuteur.component';
-import { ShopComponent } from '../shop/shop.component';
-import { GameTimeLeftComponent } from '../game-time-left/game-time-left.component';
-import { Cook, DeviceService } from '../../device.service';
-import { ThumbnailProfileCuisinierComponent } from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
-import { NgClass, NgFor } from '@angular/common';
-import { ShareDataService } from '../../share-data.service';
-import { Timer } from '../minuteur/list-timers-item/list-timers-item.component';
-import {
-  AssignedTask,
-  ListTasksComponent,
-} from '../../list-tasks/list-tasks.component';
-import { WebSocketService } from '../../websocket.service';
-import { DashboardHeaderComponent } from '../../dashboard/dashboard-header/dashboard-header.component';
-import { Router } from '@angular/router';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MinuteurComponent} from '../minuteur/minuteur.component';
+import {ShopComponent} from '../shop/shop.component';
+import {GameTimeLeftComponent} from '../game-time-left/game-time-left.component';
+import {Cook, DeviceService} from '../../device.service';
+import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
+import {NgClass, NgFor} from '@angular/common';
+import {ShareDataService} from '../../share-data.service';
+import {Timer} from '../minuteur/list-timers-item/list-timers-item.component';
+import {AssignedTask, ListTasksComponent,} from '../../list-tasks/list-tasks.component';
+import {WebSocketService} from '../../websocket.service';
+import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboard-header.component';
+import {Router} from '@angular/router';
+import {filter, map, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
@@ -36,7 +34,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
   @ViewChild(GameTimeLeftComponent) clockComponent!: GameTimeLeftComponent;
 
 
-  isDraggedOver: boolean[] = [false, false, false, false];nbEarnedStars: number = 0;
+  isDraggedOver: boolean[] = [false, false, false, false];
+  nbEarnedStars: number = 0;
   gameDuration: number = 250; // 250 seconds = 4 minutes and 10 seconds
   private readonly successSound: HTMLAudioElement;
   private readonly finishSound: HTMLAudioElement;
@@ -115,7 +114,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   sendTimerOfCookToTimersList(timerTimeInSeconds: number, cook: Cook) {
-    const timer: Timer = { timerDuration: timerTimeInSeconds, cook: cook };
+    const timer: Timer = {timerDuration: timerTimeInSeconds, cook: cook};
     let shareDataServiceData: ShareDataServiceDataObject = {
       object: timer,
       dataType: ShareDataServiceTypes.ASSIGNED_TIMER,
@@ -128,7 +127,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   sendCookToAssignedCookOfTask(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string) {
-    const assignedTask: AssignedTask = { taskName: taskName, cook: cook, taskId: taskId, taskIcons: taskIcons, quantity: quantity, workStation: workStation };
+    const assignedTask: AssignedTask = {
+      taskName: taskName,
+      cook: cook,
+      taskId: taskId,
+      taskIcons: taskIcons,
+      quantity: quantity,
+      workStation: workStation
+    };
     let shareDataServiceData: ShareDataServiceDataObject = {
       object: assignedTask,
       dataType: ShareDataServiceTypes.ASSIGNED_TASK,
@@ -147,7 +153,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  // TODO nice to have : not use shareDataService anymore for this but @Input with a list insteadonTimeEnd() {
+  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
+
+  onTimeEnd() {
     // Arrêter la musique de fond avant de jouer le son de fin
     this.backgroundMusic.pause();
 
@@ -163,7 +171,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     // Naviguer vers la page de fin avec les données
     this.router.navigate(['/finish'], {
-      state: { score: finalScore }
+      state: {score: finalScore}
     }).then();
   }
 
