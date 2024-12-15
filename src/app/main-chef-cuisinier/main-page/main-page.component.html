@@ -46,6 +46,6 @@
     *ngIf="showRaiseHandsModal"
     class="fixed"
   >
-    <app-raise-hands-final [cooks]="cooks" ></app-raise-hands-final>
+    <app-raise-hands-final [cooks]="cooks" (allHandsRaised)="unableModale()"></app-raise-hands-final>
   </div>
 </div>

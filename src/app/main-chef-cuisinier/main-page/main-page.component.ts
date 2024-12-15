@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MinuteurComponent} from '../minuteur/minuteur.component';
 import {ShopComponent} from '../shop/shop.component';
 import {GameTimeLeftComponent} from '../game-time-left/game-time-left.component';
@@ -53,7 +53,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     deviceService: DeviceService,
     private readonly shareDataService: ShareDataService,
-    private readonly wsService: WebSocketService
+    private readonly wsService: WebSocketService,
+    private cdr: ChangeDetectorRef
   ) {
     this.deviceService = deviceService;
     this.cooks = this.deviceService.getCooks();
@@ -188,6 +189,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   stopTimer() {
     this.clockComponent.stopTimer();
+  }
+
+  unableModale() {
+    console.log("bien reçu ici !");
+    this.showRaiseHandsModal = false;
+    this.cdr.detectChanges();
+    this.router.navigate(['/finish']);
   }
 
   getTableWidth(): string {
