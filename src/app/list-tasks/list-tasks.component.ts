@@ -156,12 +156,7 @@ export class ListTasksComponent implements OnInit, OnDestroy {
             type: string,
             from: string,
             to: string,
-            progressData: {
-              taskName: string,
-              currentProgress: number,
-              targetProgress: number,
-              playerId: string
-            }
+            progressData: ProgressData
           };
           if (taskProgressMessage.type === "taskProgress") {
             const progressData: ProgressData = taskProgressMessage.progressData;
