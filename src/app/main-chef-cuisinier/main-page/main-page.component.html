@@ -5,11 +5,12 @@
     />
   <div class="flex flex-col h-full gap-2 items-center place-content-between">
     <div class="flex flex-row max-w-full top-row gap-x-2 justify-center items-center">
-      <app-thumbnail-profile-cuisinier 
+      <app-thumbnail-profile-cuisinier
         *ngFor="let cook of cooks; let i = index"
-        [$playerName]="cook.name" 
+        [$playerName]="cook.name"
         [$playerAvatar]="cook.avatar"
         [$playerColor]="cook.color"
+        [$playerHeartRate]="heartRates[i]"
         (dragover)="allowDrop($event, i)"
         (dragleave)="dropLeave($event, i)"
         (drop)="onDrop($event, i, cook)"
@@ -17,7 +18,7 @@
         class="transition-transform transform hover:scale-105">
       </app-thumbnail-profile-cuisinier>
     </div>
-      <div 
+      <div
         class="wooden-table"
         (dragover)="allowDropOnTable($event)"
         (dragleave)="dropLeaveTable($event)"
