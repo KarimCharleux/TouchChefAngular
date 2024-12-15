@@ -66,7 +66,7 @@ export class ListTasksComponent {
 
   onDragStart(event: DragEvent, task: Task) {
     if (event.dataTransfer) {
-      const inputData: string = "task/" + task.name;
+      const inputData: string = "task/" + task.name + "/" + task.id + "/" + task.icons + "/" + task.quantity + "/" + task.workStation;
       event.dataTransfer.setData('text/plain', inputData); // Ajoute les données dans le DataTransfer
     }
   }
@@ -129,5 +129,9 @@ export class ListTasksComponent {
 
 export interface AssignedTask {
   taskName: string;
+  taskId: string;
+  taskIcons: string;
   cook: Cook;
+  quantity: number;
+  workStation?: string;
 }

@@ -102,7 +102,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
         // a timer has been asigned to a cook
         this.assignTimerToCook(splitData[1], cook);
       } else if (splitData[0] === 'task') {
-        this.assignTaskToCook(splitData[1], cook);
+        this.assignTaskToCook(splitData[1], cook, splitData[2], splitData[3], parseInt(splitData[4]), splitData[5]);
       }
     }
   }
@@ -122,12 +122,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.shareDataService.sendData(shareDataServiceData);
   }
 
-  assignTaskToCook(taskName: string, cook: Cook) {
-    this.sendCookToAssignedCookOfTask(taskName, cook);
+  assignTaskToCook(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string) {
+    this.sendCookToAssignedCookOfTask(taskName, cook, taskId, taskIcons, quantity, workStation);
   }
 
-  sendCookToAssignedCookOfTask(taskName: string, cook: Cook) {
-    const assignedTask: AssignedTask = { taskName: taskName, cook: cook };
+  sendCookToAssignedCookOfTask(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string) {
+    const assignedTask: AssignedTask = { taskName: taskName, cook: cook, taskId: taskId, taskIcons: taskIcons, quantity: quantity, workStation: workStation };
     let shareDataServiceData: ShareDataServiceDataObject = {
       object: assignedTask,
       dataType: ShareDataServiceTypes.ASSIGNED_TASK,
@@ -183,12 +183,15 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     if (event.dataTransfer) {
       const data = event.dataTransfer.getData('text/plain');
-      const [type, taskName] = data.split('/');
+      console.log('data', data);
+      const [type, taskName, taskId, taskIcons] = data.split('/');
 
       if (type === 'task') {
         this.wsService.sendMessage({
           type: 'table_task',
           task: taskName,
+          taskId: taskId,
+          taskIcons: taskIcons,
           from: 'angular',
           to: 'table',
         });

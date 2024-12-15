@@ -12,8 +12,11 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: $white-color;
-    margin-bottom: 1rem;
     text-align: center;
+
+    .plate {
+      color: $primary-color;
+    }
   }
 }
 
@@ -173,7 +176,7 @@
 }
 
 .scrollable-list {
-  height: 48vh;
+  height: 47vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

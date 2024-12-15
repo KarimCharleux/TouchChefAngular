@@ -11,12 +11,15 @@ export interface SubTask {
 }
 
 export interface Task {
+  id: string;
   name: string;
   icons: string;
   subTasks: SubTask[];
   nbCooksNeeded: number;
   assignedCooks?: Cook[];
   duration?: number; // In seconds
+  workStation?: 'evier' | 'planche' | 'grill';
+  quantity: number;
 }
 
 export interface Burger {
