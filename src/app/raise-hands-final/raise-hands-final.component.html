@@ -1,10 +1,12 @@
-<div class="container">
-  <h1>Burger Terminé</h1>
-  <div class="players">
-    <div *ngFor="let player of players; let i = index"
-         class="player"
-         [class.animated]="player.raised">
-      <div class="player-number">{{ i + 1 }}</div>
-    </div>
-  </div>
+<div class="flex flex-row max-w-full h-full max-h-full gap-x-2 justify-center items-center">
+    <ng-container *ngFor="let cook of cooks">
+        <app-thumbnail-profile-cuisinier
+                [$playerName]="cook.name"
+                [$playerAvatar]="cook.avatar"
+                [$playerColor]="cook.color"
+                [displayStats]="false"
+                class="transition-transform transform floating-animation hover:-translate-y-4 hover:scale-105 hover:bg-opacity-20 duration-300 ease-in-out hover:shadow-lg"
+                [style.backgroundColor]="cook.color + '20'">
+        </app-thumbnail-profile-cuisinier>
+    </ng-container>
 </div>
