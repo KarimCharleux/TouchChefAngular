@@ -1,0 +1,10 @@
+<div class="container">
+  <h1>Burger Terminé</h1>
+  <div class="players">
+    <div *ngFor="let player of players; let i = index"
+         class="player"
+         [class.animated]="player.raised">
+      <div class="player-number">{{ i + 1 }}</div>
+    </div>
+  </div>
+</div>

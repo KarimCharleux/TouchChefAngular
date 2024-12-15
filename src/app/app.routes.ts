@@ -30,7 +30,7 @@ export const routes: Routes = [
   },
   {
     path: 'finish',
-    component: FinishComponent,
+    component: RaiseHandsFinalComponent
   },
   {
     path: 'countdown',
