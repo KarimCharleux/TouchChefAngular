@@ -84,8 +84,8 @@ export class DeviceService {
   }
 
   getCooks(): Cook[] {
-    return this.cooks.value;
-    //return mockCooks;
+    //return this.cooks.value;
+    return mockCooks;
   }
 
   clearCooks() {
