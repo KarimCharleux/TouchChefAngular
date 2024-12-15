@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnDestroy} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  EventEmitter, Output
+} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 
 @Component({
@@ -14,6 +22,7 @@ import {NgOptimizedImage} from '@angular/common';
 export class GameTimeLeftComponent implements OnInit, OnDestroy {
 
   @Input() gameDuration: number = 250;
+  @Output() timerComplete = new EventEmitter<void>();
 
   minutes: string = '00';
   seconds: string = '00';
@@ -55,7 +64,7 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
       this.currentTime--;
       this.updateDisplay();
       this.updateProgressBarColor();
-      
+
       if (this.currentTime <= 0) {
         clearInterval(this.timer);
         this.onTimerComplete();
@@ -66,7 +75,7 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
           this.timerSoundPlaying = true;
         });
       }
-      
+
       this.cdr.detectChanges();
     }, 1000);
   }
@@ -76,12 +85,12 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
     const secs = this.currentTime % 60;
     this.minutes = mins.toString().padStart(2, '0');
     this.seconds = secs.toString().padStart(2, '0');
-    this.progressWidth = `${(this.currentTime / this.gameDuration) * 100}%`;  
+    this.progressWidth = `${(this.currentTime / this.gameDuration) * 100}%`;
   }
 
   private updateProgressBarColor() {
     const timePercentage = (this.currentTime / this.gameDuration) * 100;
-    
+
     if (timePercentage <= 20) {
       this.progressBarColor = '#FF5252';
       this.isTimeRunningOut = true;
@@ -95,7 +104,7 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
   }
 
   onTimerComplete() {
-    // Émettre un événement si nécessaire
+    this.timerComplete.emit()
   }
 
 }

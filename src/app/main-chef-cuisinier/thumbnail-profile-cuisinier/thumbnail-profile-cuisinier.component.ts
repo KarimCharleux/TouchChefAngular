@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {NgOptimizedImage} from '@angular/common';
+import {NgIf, NgOptimizedImage} from '@angular/common';
 import {PlayerDataValueComponent} from './player-data-value/player-data-value.component';
 import {HostBinding} from '@angular/core';
 
@@ -8,7 +8,8 @@ import {HostBinding} from '@angular/core';
   standalone: true,
   imports: [
     NgOptimizedImage,
-    PlayerDataValueComponent
+    PlayerDataValueComponent,
+    NgIf
   ],
   templateUrl: './thumbnail-profile-cuisinier.component.html',
   styleUrl: './thumbnail-profile-cuisinier.component.scss',
@@ -25,5 +26,6 @@ export class ThumbnailProfileCuisinierComponent {
   @Input() $playerHeartRate: number = 60;
   @Input() $playerActivity: number = 88;
   @Input() $playerColor: string = "#ffffff";
+  @Input() displayStats: boolean = true;
 
 }

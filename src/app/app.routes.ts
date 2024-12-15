@@ -6,6 +6,7 @@ import { ScanQrComponent } from './scan-qr/scan-qr.component';
 import { MainPageComponent } from './main-chef-cuisinier/main-page/main-page.component';
 import { HomeMenuComponent } from './home/home-menu.component';
 import { CountdownComponent } from './dashboard/countdown/countdown.component';
+import {RaiseHandsFinalComponent} from './raise-hands-final/raise-hands-final.component';
 
 export const routes: Routes = [
   {
@@ -30,7 +31,7 @@ export const routes: Routes = [
   },
   {
     path: 'finish',
-    component: FinishComponent,
+    component: FinishComponent
   },
   {
     path: 'countdown',
