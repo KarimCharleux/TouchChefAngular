@@ -6,7 +6,7 @@ root {
 
 .shop-container {
   background: $light-gray-color;
-  width: 46vw;
+  width: 48vw;
   border-radius: 20px;
   padding: 1rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -31,7 +31,7 @@ root {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  max-height: 200px;
+  max-height: 132px;
   overflow-y: auto;
   padding-right: 0.5rem;
 }
@@ -39,11 +39,11 @@ root {
 .product-card {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;

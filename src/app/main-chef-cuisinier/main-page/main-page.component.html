@@ -25,16 +25,16 @@
         [style.width]="getTableWidth()">
         <span class="table-text">Déposer sur la table</span>
       </div>
-    <div class="flex flex-row w-full space-between items-start mid-row gap-2">
-      <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
+    <div class="flex flex-row w-full space-between items-start mid-row">
+      <div class="flex flex-col flex-1 w-1/2 justify-center items-center gap-3">
         <app-list-tasks></app-list-tasks>
       </div>
-      <div class="flex flex-col flex-1 w-full justify-center items-center gap-3">
+      <div class="flex flex-col flex-1 w-1/2 justify-center items-center gap-3">
         <app-shop></app-shop>
         <app-minuteur></app-minuteur>
       </div>
     </div>
-    <div class="flex flex-row w-full space-between items-center bottom-row gap-4">
+    <div class="flex flex-row w-full space-between items-center bottom-row">
       <div class="w-full">
         <app-game-time-left [gameDuration]="gameDuration"></app-game-time-left>
       </div>

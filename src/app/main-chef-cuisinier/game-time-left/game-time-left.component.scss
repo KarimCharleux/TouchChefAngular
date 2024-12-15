@@ -12,7 +12,10 @@
     width: 90%;
     border-radius: $border-radius-high $border-radius-high 0 0;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-    padding: 0.5rem;
+    padding: 0.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -51,11 +54,6 @@
   }
 }
 
-.progress-section {
-  width: 100%;
-  padding: 0 2rem;
-}
-
 @keyframes blink {
   50% {
     opacity: 0.3;
@@ -83,9 +81,9 @@
 
 .progress-bar {
   position: relative;
-  width: 100%;
+  width: 450px; 
+  height: 24px;
   border-radius: 15px;
-  padding: 0.5rem;
 }
 
 .progress-track {

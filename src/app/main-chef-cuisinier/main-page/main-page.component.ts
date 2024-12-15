@@ -161,7 +161,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   getTableWidth(): string {
     const profileWidth = 180; // Largeur d'un profil en px
-    const gap = 25; // Gap entre les profils en px
+    const gap = 12; // Gap entre les profils en px
     const totalWidth =
       this.cooks.length * profileWidth + (this.cooks.length - 1) * gap;
     return `${totalWidth}px`;

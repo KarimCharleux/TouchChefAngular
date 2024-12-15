@@ -1,18 +1,18 @@
 <div class="footer">
   <div class="footer__container">
     <div class="timer-section">
+      <div class="timer-icon" [class.warning]="isTimeRunningOut">
+        <img ngSrc="/assets/chronometer.png" width="40" height="40" alt="chrono" />
+      </div>
       <div class="timer-display">
         <span class="minutes">{{ minutes }}</span>
         <span class="separator">:</span>
         <span class="seconds">{{ seconds }}</span>
       </div>
-      <div class="timer-icon" [class.warning]="isTimeRunningOut">
-        <img ngSrc="/assets/chronometer.png" width="40" height="40" alt="chrono" />
-      </div>
     </div>
     <div class="progress-section">
       <div class="timer-container">
-        <div class="progress-bar" style="width: 100%; height: 24px;">
+        <div class="progress-bar">
           <div class="progress-track">
             <div class="progress-fill"
                  [class.warning]="currentTime <= (gameDuration * 0.2)"

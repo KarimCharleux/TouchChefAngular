@@ -4,3 +4,26 @@
     font-weight: bold;
     font-size: 1.5em;
 }
+
+.flex {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    z-index: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  svg {
+    position: relative;
+    z-index: 1;
+  }
+}
