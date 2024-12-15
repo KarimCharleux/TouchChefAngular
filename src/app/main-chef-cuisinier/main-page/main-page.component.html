@@ -1,9 +1,9 @@
 <div class="main-page">
   <app-dashboard-header
-      [showStopGameButton]="true"
-      [nbEarnedStars]="nbEarnedStars"
-      class="no-select"
-    />
+    [showStopGameButton]="true"
+    [nbEarnedStars]="nbEarnedStars"
+    class="no-select"
+  />
   <div class="flex flex-col h-full gap-2 items-center place-content-between">
     <div class="flex flex-row max-w-full top-row gap-x-2 justify-center items-center">
       <app-thumbnail-profile-cuisinier
@@ -19,14 +19,14 @@
         class="transition-transform transform hover:scale-105">
       </app-thumbnail-profile-cuisinier>
     </div>
-      <div
-        class="wooden-table"
-        (dragover)="allowDropOnTable($event)"
-        (dragleave)="dropLeaveTable($event)"
-        (drop)="onDropOnTable($event)"
-        [style.width]="getTableWidth()">
-        <span class="table-text">Déposer sur la table</span>
-      </div>
+    <div
+      class="wooden-table"
+      (dragover)="allowDropOnTable($event)"
+      (dragleave)="dropLeaveTable($event)"
+      (drop)="onDropOnTable($event)"
+      [style.width]="getTableWidth()">
+      <span class="table-text">Déposer sur la table</span>
+    </div>
     <div class="flex flex-row w-full space-between items-start mid-row">
       <div class="flex flex-col flex-1 w-1/2 justify-center items-center gap-3">
         <app-list-tasks></app-list-tasks>
@@ -38,7 +38,7 @@
     </div>
     <div class="flex flex-row w-full space-between items-center bottom-row">
       <div class="w-full">
-        <app-game-time-left [gameDuration]="2" (timerComplete)="onTimeEnd()"></app-game-time-left>
+        <app-game-time-left [gameDuration]="gameDuration" (timerComplete)="onTimeEnd()"></app-game-time-left>
       </div>
     </div>
   </div>

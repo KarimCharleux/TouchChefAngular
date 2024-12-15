@@ -195,7 +195,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
     console.log("bien reçu ici !");
     this.showRaiseHandsModal = false;
     this.cdr.detectChanges();
-    this.router.navigate(['/finish']);
+
+    const finalScore = {
+      nbBurgers: 1, // TODO get from burgers
+      totalTime: this.gameDuration - this.clockComponent.currentTime,
+      totalStars: this.nbEarnedStars
+    };
+
+    // Naviguer vers la page de fin avec les données
+    this.router.navigate(['/finish'], {
+      state: {score: finalScore}
+    }).then();
   }
 
   getTableWidth(): string {
