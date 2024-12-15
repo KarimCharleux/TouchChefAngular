@@ -73,6 +73,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
       this.wsService.sendMessage({type: 'startGame'});
       this.clockComponent.startTimer();
     }, 1000);
+
+    this.cooks.forEach((cook, index) => {
+      this.getBPMOfCook(cook.deviceId).subscribe(bpm => {
+        this.heartRates[index] = bpm;
+      });
+    });
   }
 
   ngOnDestroy() {
