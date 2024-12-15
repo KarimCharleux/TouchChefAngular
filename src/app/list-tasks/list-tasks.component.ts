@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {Task} from '../dashboard/burger.model';
@@ -7,6 +7,7 @@ import {WebSocketService} from '../websocket.service';
 import {Cook} from '../device.service';
 import {ShareDataService} from '../share-data.service';
 import {ShareDataServiceDataObject} from '../main-chef-cuisinier/main-page/main-page.component';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-list-tasks',
@@ -15,9 +16,11 @@ import {ShareDataServiceDataObject} from '../main-chef-cuisinier/main-page/main-
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss']
 })
-export class ListTasksComponent {
+export class ListTasksComponent implements OnInit, OnDestroy {
   @Input() tasks: Task[] = [];
   @Output() progressChange = new EventEmitter<number>();
+
+  private progressSubscription: Subscription | null = null;
 
   checkedTasks: Set<number> = new Set();
   showDialog: boolean = false;
@@ -42,6 +45,10 @@ export class ListTasksComponent {
         }
       }
     });
+  }
+
+  ngOnInit() {
+    this.setupTaskProgressTracking();
   }
 
   toggleCheck(index: number, event: Event) {
@@ -103,9 +110,16 @@ export class ListTasksComponent {
         matchingTask.assignedCooks = [];
         matchingTask.assignedCooks[0] = assignedTask.cook;
       }
-      this.sendTaskToRightWatch(assignedTask);
+      this.manageTask(assignedTask);
       this.cdr.detectChanges();
     }
+  }
+
+
+  async manageTask(assignedTask: AssignedTask) {
+
+    this.sendTaskToRightWatch(assignedTask);
+
   }
 
   async sendTaskToRightWatch(assignedTask: AssignedTask) {
@@ -125,9 +139,65 @@ export class ListTasksComponent {
     const progress = duration / 60; // Calcul du pourcentage par rapport à 60 secondes
     return circumference * (1 - progress);
   }
+
+  setupTaskProgressTracking() {
+    // Pour chaque tâche, configurez le suivi de progression
+    this.tasks.forEach(task => {
+      //if (task.assignedCooks && task.assignedCooks.length > 0) {
+      //const playerID = task.assignedCooks[0].deviceId;
+      //const taskName = task.name;
+
+      let msg: string = "";
+
+      this.progressSubscription = this.wsService
+        .waitMessage(msg)
+        .subscribe(message => {
+          const taskProgressMessage = message as {
+            type: string,
+            from: string,
+            to: string,
+            progressData: {
+              taskName: string,
+              currentProgress: number,
+              targetProgress: number,
+              playerId: string
+            }
+          };
+          if (taskProgressMessage.type === "taskProgress") {
+            const progressData: ProgressData = taskProgressMessage.progressData;
+            this.updateTaskProgress(progressData);
+          }
+        });
+      // }
+    });
+  }
+
+  updateTaskProgress(progressData: ProgressData) {
+    // Logique pour mettre à jour la progression de la tâche
+    if (progressData.currentProgress === progressData.targetProgress) {
+      // Tâche terminée
+      const index = this.tasks.findIndex(t => t.name === progressData.taskName);
+      this.checkedTasks.add(index);
+      this.cdr.detectChanges();
+    }
+  }
+
+  ngOnDestroy() {
+    // Nettoyez l'abonnement lors de la destruction du composant
+    if (this.progressSubscription) {
+      this.progressSubscription.unsubscribe();
+    }
+  }
 }
 
 export interface AssignedTask {
   taskName: string;
   cook: Cook;
+}
+
+export interface ProgressData {
+  taskName: string;
+  playerId: string;
+  currentProgress: number;
+  targetProgress: number;
 }
