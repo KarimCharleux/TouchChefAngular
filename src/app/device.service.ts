@@ -37,7 +37,7 @@ const mockCooks: Cook[] = [
   providedIn: 'root'
 })
 export class DeviceService {
-  private nbPlayers: number = 4;
+  private nbPlayers: number = 2;
   protected scannedDevices = new BehaviorSubject<ScannedDevice[]>([]);
   scannedDevices$ = this.scannedDevices.asObservable();
   protected cooks = new BehaviorSubject<Cook[]>([]);
