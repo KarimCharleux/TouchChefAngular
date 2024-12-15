@@ -173,7 +173,18 @@ export class ListTasksComponent implements OnInit, OnDestroy {
       // Tâche terminée
       const index = this.tasks.findIndex(t => t.name === progressData.taskName);
       this.checkedTasks.add(index);
+      this.unactiveTaskOnTable(this.tasks[index]);
       this.cdr.detectChanges();
+    }
+  }
+
+  unactiveTaskOnTable(task: Task) {
+    if (task.assignedCooks) {
+      this.wsService.sendMessage({
+        from: task.assignedCooks[0].deviceId,
+        to: "table",
+        type: "unactiveTask"
+      })
     }
   }
 
