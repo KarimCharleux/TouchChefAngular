@@ -5,8 +5,7 @@
     "ng": "ng",
     "start": "ng serve --configuration=development",
     "start:network": "ng serve --host 0.0.0.0 --disable-host-check",
-    "build": "ng build --configuration=development",
-    "build:production": "ng build --configuration=production",
+    "build": "ng build --configuration=production",
     "websocket": "node websocket-server.js",
     "ngrok": "ngrok http 4200"
   },
