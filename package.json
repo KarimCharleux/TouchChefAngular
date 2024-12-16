@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
-    "start:network": "ng serve --host 0.0.0.0 --disable-host-check",
+    "start:network": "ng serve --host 0.0.0.0 --disable-host-check --ssl true",
     "build": "ng build --configuration=production",
     "websocket": "node websocket-server.js",
     "ngrok": "ngrok http 4200"
