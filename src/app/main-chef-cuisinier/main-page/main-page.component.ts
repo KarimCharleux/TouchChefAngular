@@ -273,8 +273,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   hasCookTasks(cook: Cook): boolean {
     // Vérifier si le cuisinier a des tâches actives (non complétées)
     return this.assignedTasks.some(task => 
-      task.cook.deviceId === cook.deviceId && 
-      !task.completed // Ajouter cette condition
+      task.cook.deviceId === cook.deviceId
     );
   }
 }
@@ -286,5 +285,6 @@ export interface ShareDataServiceDataObject {
 
 export enum ShareDataServiceTypes {
   ASSIGNED_TIMER,
-  ASSIGNED_TASK
+  ASSIGNED_TASK,
+  TASK_COMPLETED
 }
