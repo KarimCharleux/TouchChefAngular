@@ -1,10 +1,12 @@
-import {Injectable} from '@angular/core';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import {Observable, Subject} from 'rxjs';
-import {environment} from '../environments/environment';
+import { Injectable } from '@angular/core';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Observable, Subject } from 'rxjs';
+import { environment } from '../environments/environment';
+import { Task } from './dashboard/burger.model';
+import { Cook } from './device.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebSocketService {
   private readonly socket$: WebSocketSubject<any>;
@@ -17,7 +19,7 @@ export class WebSocketService {
     this.socket$.subscribe({
       next: (message) => this.messagesSubject.next(message),
       error: (error) => console.error('WebSocket error:', error),
-      complete: () => console.log('WebSocket connection closed')
+      complete: () => console.log('WebSocket connection closed'),
     });
   }
 
@@ -37,5 +39,22 @@ export class WebSocketService {
 
   closeConnection(): void {
     this.socket$.complete();
+  }
+
+  sendTask(task: Task, cook: Cook): void {
+    this.sendMessage({
+      from: 'angular',
+      to: cook.deviceId,
+      type: 'addTask',
+      assignedTask: {
+        taskId: task.id,
+        taskName: task.name,
+        taskIcons: task.icons,
+        cook: cook,
+        quantity: task.quantity,
+        workStation: task.workStation,
+        duration: task.duration
+      }
+    });
   }
 }

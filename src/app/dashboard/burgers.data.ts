@@ -13,7 +13,7 @@ export const BURGERS: Burger[] = [
       {name: 'Fromage', imageUrl: 'assets/burger/cheese.png'},
       {name: 'Bas pain burger', imageUrl: 'assets/burger/bread-bottom.png'}
     ],
-    steps: [
+    tasks: [
       {
         id: '1_1',
         name: 'Préparer la viande',
@@ -25,7 +25,9 @@ export const BURGERS: Burger[] = [
         workStation: 'planche',
         nbCooksNeeded: 1,
         icons: "🔪🥩",
-        quantity: 1
+        quantity: 1,
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_2',
@@ -40,7 +42,9 @@ export const BURGERS: Burger[] = [
         duration: 31,
         icons: "🔥🥩",
         quantity: 1,
-        workStation: 'grill'
+        workStation: 'grill',
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_3',
@@ -53,7 +57,9 @@ export const BURGERS: Burger[] = [
         nbCooksNeeded: 1,
         icons: "💦🥬",
         quantity: 1,
-        workStation: 'evier'
+        workStation: 'evier',
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_4',
@@ -66,7 +72,9 @@ export const BURGERS: Burger[] = [
         nbCooksNeeded: 1,
         icons: "🔪🥬",
         quantity: 1,
-        workStation: 'planche'
+        workStation: 'planche',
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_5',
@@ -79,7 +87,9 @@ export const BURGERS: Burger[] = [
         nbCooksNeeded: 1,
         icons: "🔪🍅",
         quantity: 1,
-        workStation: 'planche'
+        workStation: 'planche',
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_6',
@@ -92,7 +102,9 @@ export const BURGERS: Burger[] = [
         nbCooksNeeded: 1,
         icons: "🔪🧀",
         quantity: 1,
-        workStation: 'planche'
+        workStation: 'planche',
+        isCompleted: false,
+        assignedCooks: []
       },
       {
         id: '1_7',
@@ -103,6 +115,20 @@ export const BURGERS: Burger[] = [
         nbCooksNeeded: 2,
         icons: "🔥",
         quantity: 1,
+        isCompleted: false,
+        assignedCooks: []
+      },
+      {
+        id: '1_8',
+        name: '(Exemple) Ouvrir le tamere',
+        subTasks: [
+          {order: 1, description: 'Cette étape est un exemple pour montrer les 2 chefs qui sont nécessaires pour cette étape'}
+        ],
+        nbCooksNeeded: 2,
+        icons: "🔥",
+        quantity: 1,
+        isCompleted: false,
+        assignedCooks: []
       }
     ]
   }

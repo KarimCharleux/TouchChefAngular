@@ -1,21 +1,21 @@
 <div class="list-tasks-container">
-  <h4 class="list-tasks-title">Liste des tâches pour le <br><span class="plate">Classic Burger 🍔</span></h4>
+  <h4 class="list-tasks-title">Liste des tâches pour le <br><span class="plate">Classic Burger 🍔</span> <span class="progress" *ngIf="progress > 0">({{ progress }}%)</span></h4>
   <div class="scrollable-list">
-    <div *ngFor="let task of tasks; let i = index" 
+    <div *ngFor="let task of taskService.getCurrentTasks(); let i = index" 
          class="task-item"
-         [class.completed]="checkedTasks.has(i)"
-         [style.background]="task.assignedCooks && task.assignedCooks[0].color + '10'"
-         [draggable]="!checkedTasks.has(i)"
+         [class.completed]="task.isCompleted"
+         [style.background]="task.assignedCooks[0] && task.assignedCooks[0].color + '10'"
+         [draggable]="!task.isCompleted"
          (click)="showTaskDetails(task)"
          (keydown)="showTaskDetails(task)"
          (dragstart)="onDragStart($event, task)">
       
       <div class="task-header">
         <div class="checkbox" 
-             [class.checked]="checkedTasks.has(i)"
+             [class.checked]="task.isCompleted"
              (click)="toggleCheck(i, $event)"
              (keydown)="toggleCheck(i, $event)">
-          <i *ngIf="checkedTasks.has(i)" class="pi pi-check" style="color: white"></i>
+          <i *ngIf="task.isCompleted" class="pi pi-check" style="color: white"></i>
         </div>
         
         <h3 class="task-title">{{ task.name }}</h3>
@@ -74,6 +74,25 @@
            class="subtask-item">
         <div class="subtask-number">{{ i + 1 }}</div>
         <p class="subtask-description">{{ subtask.description }}</p>
+      </div>
+    </div>
+
+    <div class="assigned-cooks-container" *ngIf="selectedTask?.assignedCooks?.length">
+      <h3>Cuisiniers assignés :</h3>
+      <div class="assigned-cooks-list">
+        <div *ngFor="let cook of selectedTask?.assignedCooks" 
+             class="assigned-cook-item"
+             [style.border-color]="cook.color">
+          <img [src]="'/assets/cooks/' + cook.avatar + '.png'" 
+               [alt]="cook.name"
+               class="cook-avatar">
+          <span class="cook-name" [style.color]="cook.color">{{ cook.name }}</span>
+          <button class="remove-cook-btn" 
+                  (click)="unassignCook(cook)"
+                  [style.background-color]="cook.color">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
       </div>
     </div>
     

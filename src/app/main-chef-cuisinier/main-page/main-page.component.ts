@@ -7,12 +7,13 @@ import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier
 import {NgClass, NgFor, NgIf} from '@angular/common';
 import {ShareDataService} from '../../share-data.service';
 import {Timer} from '../minuteur/list-timers-item/list-timers-item.component';
-import {AssignedTask, ListTasksComponent,} from '../../list-tasks/list-tasks.component';
+import {ListTasksComponent} from '../../list-tasks/list-tasks.component';
 import {WebSocketService} from '../../websocket.service';
 import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboard-header.component';
 import {Router} from '@angular/router';
 import {filter, map, Observable} from 'rxjs';
 import {RaiseHandsFinalComponent} from '../../raise-hands-final/raise-hands-final.component';
+import {TaskService, AssignedTask} from '../../task.service';
 
 @Component({
   selector: 'app-main-page',
@@ -47,19 +48,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
   heartRates: number[] = [];
   showRaiseHandsModal: boolean = false;
 
-  private deviceService: DeviceService;
-
-  // Ajoutez cette propriété pour suivre les tâches assignées
-  private assignedTasks: AssignedTask[] = [];
-
   constructor(
     private readonly router: Router,
-    deviceService: DeviceService,
-    private readonly shareDataService: ShareDataService,
-    private readonly wsService: WebSocketService,
+    private deviceService: DeviceService,
+    private taskService: TaskService,
+    private shareDataService: ShareDataService,
+    private wsService: WebSocketService,
     private cdr: ChangeDetectorRef
   ) {
-    this.deviceService = deviceService;
     this.cooks = this.deviceService.getCooks();
 
     // Initialiser les sons
@@ -70,21 +66,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Configurer la musique de fond
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
-
-    // S'abonner aux changements de tâches assignées
-    this.shareDataService.data$.subscribe((data: ShareDataServiceDataObject) => {
-      if (data.dataType === ShareDataServiceTypes.ASSIGNED_TASK) {
-        const task = data.object as AssignedTask;
-        this.assignedTasks.push(task);
-      }
-      // Supprimer la tâche quand elle est terminée
-      if (data.dataType === ShareDataServiceTypes.TASK_COMPLETED) {
-        const completedTask = data.object as AssignedTask;
-        this.assignedTasks = this.assignedTasks.filter(
-          task => task.taskId !== completedTask.taskId
-        );
-      }
-    });
   }
 
   ngOnInit() {
@@ -126,13 +107,23 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.isDraggedOver[profileNumber] = false;
 
     if (event.dataTransfer) {
-      const data = event.dataTransfer.getData('text/plain'); // Récupère les données transférées
+      const data = event.dataTransfer.getData('text/plain'); // Récupère les données transférées par le drag and drop
       let splitData: string[] = data.split('/');
       if (splitData[0] === 'timer') {
-        this.assignTimerToCook(splitData[1], cook);
+        this.assignTimerToCook(splitData[1], cook); // Get the timerData from the data
       } else if (splitData[0] === 'task') {
-        this.assignTaskToCook(splitData[1], cook, splitData[2], splitData[3], parseInt(splitData[4]), splitData[5], parseInt(splitData[6]));
+        this.assignTaskToCook(splitData[1], cook); // Get the taskId from the data
       }
+    }
+  }
+
+  assignTaskToCook(taskId: string, cook: Cook) {
+    // Vérifie si la tâche existe dans la liste des tâches courantes
+    const task = this.taskService.getCurrentTasks().find(t => t.id === taskId);
+    if (task) {
+      this.taskService.assignTask(taskId, cook); // Assigne la tâche à un cuisinier
+    } else {
+      console.error("Impossible d'assigner la tâche à " + cook.deviceId + " car la tâche n'existe pas. TaskId : " + taskId);
     }
   }
 
@@ -147,27 +138,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     let shareDataServiceData: ShareDataServiceDataObject = {
       object: timer,
       dataType: ShareDataServiceTypes.ASSIGNED_TIMER,
-    };
-    this.shareDataService.sendData(shareDataServiceData);
-  }
-
-  assignTaskToCook(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string, duration?: number) {
-    this.sendCookToAssignedCookOfTask(taskName, cook, taskId, taskIcons, quantity, workStation, duration);
-  }
-
-  sendCookToAssignedCookOfTask(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string, duration?: number) {
-    const assignedTask: AssignedTask = {
-      taskName: taskName,
-      cook: cook,
-      taskId: taskId,
-      taskIcons: taskIcons,
-      quantity: quantity,
-      workStation: workStation,
-      duration: duration
-    };
-    let shareDataServiceData: ShareDataServiceDataObject = {
-      object: assignedTask,
-      dataType: ShareDataServiceTypes.ASSIGNED_TASK,
     };
     this.shareDataService.sendData(shareDataServiceData);
   }
@@ -271,10 +241,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
 
   hasCookTasks(cook: Cook): boolean {
-    // Vérifier si le cuisinier a des tâches actives (non complétées)
-    return this.assignedTasks.some(task => 
-      task.cook.deviceId === cook.deviceId
-    );
+    return this.taskService.numberOfCookTasks(cook) > 0;
   }
 }
 

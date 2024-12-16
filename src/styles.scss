@@ -13,12 +13,12 @@ body {
   font-style: normal;
   font-variation-settings: "wdth" 100;
   background-color: #eaeaea;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 img {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
   pointer-events: none;
 }
 
@@ -27,7 +27,6 @@ h1 {
   font-style: normal;
   font-size: 14rem;
   line-height: normal;
-  user-select: none;
   text-shadow: 0 0 10px #ffc800;
 
   &:hover {
@@ -39,7 +38,6 @@ h2 {
   font-weight: 900;
   font-size: 2.5rem;
   line-height: normal;
-  user-select: none;
 
   &:hover {
     cursor: default;

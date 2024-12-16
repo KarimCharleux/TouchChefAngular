@@ -16,10 +16,11 @@ export interface Task {
   icons: string;
   subTasks: SubTask[];
   nbCooksNeeded: number;
-  assignedCooks?: Cook[];
+  assignedCooks: Cook[];
   duration?: number; // In seconds
   workStation?: 'evier' | 'planche' | 'grill';
-  quantity: number;
+  quantity: number; // Le nombre de fois que la tâche doit être faite
+  isCompleted: boolean;
 }
 
 export interface Burger {
@@ -27,5 +28,5 @@ export interface Burger {
   name: string;
   imageUrl: string;
   ingredients: Ingredient[];
-  steps: Task[];
+  tasks: Task[];
 }
