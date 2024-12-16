@@ -50,12 +50,12 @@ export class RaiseHandsFinalComponent {
           const raisedMessage = message as {
             type: string,
             from: string,
-            deviceId: string,
-            raised: boolean
+            to: string
+            timestamp: number,
           };
 
-          if (raisedMessage.type === "playerRaised" && raisedMessage.deviceId === cook.deviceId) {
-            this.raised[index] = raisedMessage.raised;
+          if (raisedMessage.type === "handRaise" && raisedMessage.from === cook.deviceId) {
+            this.raised[index] = true;
             this.cdr.detectChanges();
             this.checkAllRaised();
           }
@@ -67,6 +67,11 @@ export class RaiseHandsFinalComponent {
     if (this.raised.every(status => status === true)) {
       this.allHandsRaised.emit();
     }
+  }
+
+  raiseByClick(index: number) {
+    this.raised[index] = true;
+    this.checkAllRaised();
   }
 
   ngOnDestroy() {
