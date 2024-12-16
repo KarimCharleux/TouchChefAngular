@@ -133,7 +133,7 @@ export class ScanQrComponent implements OnInit {
         new Promise((resolve, reject) => {
           const subscription = this.wsService.messages$.subscribe(message => {
             try {
-              console.log(message);
+              console.log(message.type);
               if (message.type === 'confirmation' && 
                 message.to === 'angular' && 
                 message.from === this.currentDeviceId) {

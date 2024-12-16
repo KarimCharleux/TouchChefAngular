@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import {Observable, Subject} from 'rxjs';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class WebSocketService {
   public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
-    this.socket$ = webSocket('ws://websocket.chhilif.com/ws');
+    this.socket$ = webSocket(environment.wsUrl);
 
     this.socket$.subscribe({
       next: (message) => this.messagesSubject.next(message),
