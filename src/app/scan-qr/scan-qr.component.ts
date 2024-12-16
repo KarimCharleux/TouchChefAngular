@@ -11,7 +11,6 @@ import {FormsModule} from '@angular/forms';
 import {Cook, COOK_COLORS, CookColor, DeviceService} from '../device.service';
 import {Router} from '@angular/router';
 import {WebSocketService} from '../websocket.service';
-import {firstValueFrom} from 'rxjs';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 
 
@@ -130,13 +129,30 @@ export class ScanQrComponent implements OnInit {
         avatarColor: this.selectedColor
       });
 
-      console.log('Message envoyé');
-
-
       const response = await Promise.race([
-        firstValueFrom(this.wsService.waitMessage('{"type":"confirmation","to":"angular","from":"' + this.currentDeviceId + '"}')),
+        new Promise((resolve, reject) => {
+          const subscription = this.wsService.messages$.subscribe(message => {
+            try {
+              const parsedMessage = JSON.parse(message);
+              if (parsedMessage.type === 'confirmation' && 
+                  parsedMessage.to === 'angular' && 
+                  parsedMessage.from === this.currentDeviceId) {
+                subscription.unsubscribe();
+                resolve(message);
+              }
+            } catch (e) {
+              console.error('Erreur de parsing du message:', e);
+            }
+          });
+
+          setTimeout(() => {
+            subscription.unsubscribe();
+            reject('timeout');
+          }, 10000);
+        }),
+        
         new Promise((_, reject) =>
-          setTimeout(() => reject('timeout'), 1000)
+          setTimeout(() => reject('timeout'), 10000)
         )
       ]);
 
