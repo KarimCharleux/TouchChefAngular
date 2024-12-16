@@ -82,6 +82,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.cooks.forEach((cook, index) => {
       this.getBPMOfCook(cook.deviceId).subscribe(bpm => {
         this.heartRates[index] = bpm;
+        this.cdr.detectChanges();
       });
     });
   }
@@ -158,7 +159,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
         filter(message =>
           message.from === deviceId && message.to === "angular" && message.type === "heartrate"
         ),
-        map((message: { from: number; to: string; type: string; bpm: number }) => message.bpm)
+        map((message: { from: number; to: string; type: string; bpm: number, timestamp: number }) => message.bpm)
       );
   }
 
