@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/touch-chef-angular/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
