@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    wsUrl: 'wss://websocket.chhilif.com/ws'
+    wsUrl: 'ws://websocket.chhilif.com/ws'
   };
