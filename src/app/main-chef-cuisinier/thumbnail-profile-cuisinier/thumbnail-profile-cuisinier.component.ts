@@ -27,5 +27,6 @@ export class ThumbnailProfileCuisinierComponent {
   @Input() $playerActivity: number = 88;
   @Input() $playerColor: string = "#ffffff";
   @Input() displayStats: boolean = true;
+  @Input() hasTask: boolean = false;
 
 }

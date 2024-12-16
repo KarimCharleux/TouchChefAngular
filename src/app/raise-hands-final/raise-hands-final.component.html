@@ -10,7 +10,8 @@
         class="transition-transform transform hover:-translate-y-4 hover:scale-105 hover:bg-opacity-20 duration-300 ease-in-out hover:shadow-lg"
         [style.backgroundColor]="cook.color + '20'"
         [ngClass]="{'floating-animation': !raised[i]}"
-        (click)="raiseByClick(i)">
+        (click)="raiseByClick(i)"
+        (keydown)="raiseByClick(i)">
       </app-thumbnail-profile-cuisinier>
     </ng-container>
   </div>

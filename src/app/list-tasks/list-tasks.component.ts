@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
@@ -11,7 +11,7 @@ import {ShareDataServiceDataObject} from '../main-chef-cuisinier/main-page/main-
 @Component({
   selector: 'app-list-tasks',
   standalone: true,
-  imports: [NgForOf, NgIf, NgOptimizedImage, DialogModule],
+  imports: [NgForOf, NgIf, DialogModule],
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss']
 })
@@ -66,7 +66,7 @@ export class ListTasksComponent {
 
   onDragStart(event: DragEvent, task: Task) {
     if (event.dataTransfer) {
-      const inputData: string = "task/" + task.name + "/" + task.id + "/" + task.icons + "/" + task.quantity + "/" + task.workStation;
+      const inputData: string = "task/" + task.name + "/" + task.id + "/" + task.icons + "/" + task.quantity + "/" + task.workStation + "/" + task.duration;
       event.dataTransfer.setData('text/plain', inputData); // Ajoute les données dans le DataTransfer
     }
   }
@@ -134,4 +134,5 @@ export interface AssignedTask {
   cook: Cook;
   quantity: number;
   workStation?: string;
+  duration?: number;
 }

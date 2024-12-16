@@ -12,9 +12,6 @@ export class WebSocketService {
   public messages$ = this.messagesSubject.asObservable();
 
   constructor() {
-    console.log(environment.wsUrl);
-    console.log(environment.production);
-    
     this.socket$ = webSocket(environment.wsUrl);
 
     this.socket$.subscribe({

@@ -49,6 +49,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   private deviceService: DeviceService;
 
+  // Ajoutez cette propriété pour suivre les tâches assignées
+  private assignedTasks: AssignedTask[] = [];
+
   constructor(
     private readonly router: Router,
     deviceService: DeviceService,
@@ -67,6 +70,21 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Configurer la musique de fond
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
+
+    // S'abonner aux changements de tâches assignées
+    this.shareDataService.data$.subscribe((data: ShareDataServiceDataObject) => {
+      if (data.dataType === ShareDataServiceTypes.ASSIGNED_TASK) {
+        const task = data.object as AssignedTask;
+        this.assignedTasks.push(task);
+      }
+      // Supprimer la tâche quand elle est terminée
+      if (data.dataType === ShareDataServiceTypes.TASK_COMPLETED) {
+        const completedTask = data.object as AssignedTask;
+        this.assignedTasks = this.assignedTasks.filter(
+          task => task.taskId !== completedTask.taskId
+        );
+      }
+    });
   }
 
   ngOnInit() {
@@ -113,7 +131,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
       if (splitData[0] === 'timer') {
         this.assignTimerToCook(splitData[1], cook);
       } else if (splitData[0] === 'task') {
-        this.assignTaskToCook(splitData[1], cook, splitData[2], splitData[3], parseInt(splitData[4]), splitData[5]);
+        this.assignTaskToCook(splitData[1], cook, splitData[2], splitData[3], parseInt(splitData[4]), splitData[5], parseInt(splitData[6]));
       }
     }
   }
@@ -133,18 +151,19 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.shareDataService.sendData(shareDataServiceData);
   }
 
-  assignTaskToCook(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string) {
-    this.sendCookToAssignedCookOfTask(taskName, cook, taskId, taskIcons, quantity, workStation);
+  assignTaskToCook(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string, duration?: number) {
+    this.sendCookToAssignedCookOfTask(taskName, cook, taskId, taskIcons, quantity, workStation, duration);
   }
 
-  sendCookToAssignedCookOfTask(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string) {
+  sendCookToAssignedCookOfTask(taskName: string, cook: Cook, taskId: string, taskIcons: string, quantity: number, workStation?: string, duration?: number) {
     const assignedTask: AssignedTask = {
       taskName: taskName,
       cook: cook,
       taskId: taskId,
       taskIcons: taskIcons,
       quantity: quantity,
-      workStation: workStation
+      workStation: workStation,
+      duration: duration
     };
     let shareDataServiceData: ShareDataServiceDataObject = {
       object: assignedTask,
@@ -250,6 +269,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
+
+  hasCookTasks(cook: Cook): boolean {
+    // Vérifier si le cuisinier a des tâches actives (non complétées)
+    return this.assignedTasks.some(task => 
+      task.cook.deviceId === cook.deviceId && 
+      !task.completed // Ajouter cette condition
+    );
+  }
 }
 
 export interface ShareDataServiceDataObject {

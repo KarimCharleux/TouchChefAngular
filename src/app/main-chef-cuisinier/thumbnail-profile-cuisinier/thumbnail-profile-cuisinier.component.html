@@ -23,6 +23,11 @@
         </app-player-data-value>
       </div>
     </div>
+    <div class="sleeping-animation" *ngIf="!hasTask">
+      <span class="z">Z</span>
+      <span class="z">Z</span>
+      <span class="z">Z</span>
+    </div>
     <img
       [ngSrc]="'/assets/cooks/'+ $playerAvatar + '.png'"
       [alt]="$playerName"
