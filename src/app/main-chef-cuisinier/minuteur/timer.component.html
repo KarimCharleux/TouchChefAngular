@@ -23,12 +23,20 @@
   </div>
 
   <div class="active-timers">
-    <app-list-timers-item
-      *ngFor="let timerItem of timers"
-      [totalTime]="timerItem.timer.timerDuration"
-      [cookColor]="timerItem.timer.cook.color"
-      (timerComplete)="onTimerComplete(timerItem.id)"
-      [avatar]="timerItem.timer.cook.avatar">
-    </app-list-timers-item>
+    @for (timer of timerService.getTimers(); track timer) {
+      <div class="flex flex-col items-center justify-center gap-2">
+        <app-bar-timer 
+          width="200px" 
+          height="32px" 
+          [totalTime]="timer.duration" 
+          [barColor]="timer.cook.color"
+          [isStarted]="timer.isStarted"
+          (timerComplete)="onTimerComplete(timer.id)">
+        </app-bar-timer>
+        <div class="cook-avatar" [style.background-color]="timer.cook.color">
+          <img [ngSrc]="'assets/cooks/' + timer.cook.avatar + '.png'" alt="cook" height="42" width="42"/>
+        </div>
+      </div>
+    }
   </div>
 </div>

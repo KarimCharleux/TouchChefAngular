@@ -45,7 +45,7 @@ export class RaiseHandsFinalComponent {
 
     this.raisedSubscription = this.cooks.map((cook, index) => {
       return this.wsService
-        .waitMessage("")
+        .waitMessage()
         .subscribe(message => {
           const raisedMessage = message as {
             type: string,

@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Output, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {Task} from '../dashboard/burger.model';
-import {WebSocketService} from '../websocket.service';
 import {TaskService} from '../task.service';
 import {Cook} from '../device.service';
 
@@ -13,7 +12,7 @@ import {Cook} from '../device.service';
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss']
 })
-export class ListTasksComponent implements OnInit {
+export class ListTasksComponent {
 
   showDialog: boolean = false;
   selectedTask: Task | null = null;
@@ -24,9 +23,6 @@ export class ListTasksComponent implements OnInit {
     protected taskService: TaskService,
   ) {
     this.tapSound = new Audio("assets/sounds/confirm.mp3");
-  }
-
-  ngOnInit() {
   }
 
   toggleCheck(index: number, event: Event) {

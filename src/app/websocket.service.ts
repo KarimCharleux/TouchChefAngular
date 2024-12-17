@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Task } from './dashboard/burger.model';
 import { Cook } from './device.service';
+import { Timer } from './timer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class WebSocketService {
     });
   }
 
-  waitMessage(message: string): Observable<any> {
+  waitMessage(): Observable<any> {
     return this.messages$;
   }
 
@@ -56,5 +57,19 @@ export class WebSocketService {
         duration: task.duration
       }
     });
+  }
+
+  sendTimer(timer: Timer): void {
+    if (timer.cook) {
+      this.sendMessage({
+        from: 'angular',
+        to: timer.cook.deviceId,
+        type: 'addTimer',
+        timer: {
+          timerId: timer.id.toString(),
+          timerDuration: timer.duration.toString()
+        }
+      });
+    }
   }
 }

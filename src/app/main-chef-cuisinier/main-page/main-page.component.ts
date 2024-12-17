@@ -1,12 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MinuteurComponent} from '../minuteur/minuteur.component';
+import {TimerComponent} from '../minuteur/timer.component';
 import {ShopComponent} from '../shop/shop.component';
 import {GameTimeLeftComponent} from '../game-time-left/game-time-left.component';
 import {Cook, DeviceService} from '../../device.service';
 import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
 import {NgClass, NgFor, NgIf} from '@angular/common';
-import {ShareDataService} from '../../share-data.service';
-import {Timer} from '../minuteur/list-timers-item/list-timers-item.component';
 import {ListTasksComponent} from '../../list-tasks/list-tasks.component';
 import {WebSocketService} from '../../websocket.service';
 import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboard-header.component';
@@ -14,12 +12,13 @@ import {Router} from '@angular/router';
 import {filter, map, Observable} from 'rxjs';
 import {RaiseHandsFinalComponent} from '../../raise-hands-final/raise-hands-final.component';
 import {TaskService, AssignedTask} from '../../task.service';
+import {TimerService} from '../../timer.service';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
   imports: [
-    MinuteurComponent,
+    TimerComponent,
     ShopComponent,
     GameTimeLeftComponent,
     ThumbnailProfileCuisinierComponent,
@@ -52,9 +51,9 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private deviceService: DeviceService,
     private taskService: TaskService,
-    private shareDataService: ShareDataService,
     private wsService: WebSocketService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private timerService: TimerService
   ) {
     this.cooks = this.deviceService.getCooks();
 
@@ -107,12 +106,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.isDraggedOver[profileNumber] = false;
 
     if (event.dataTransfer) {
-      const data = event.dataTransfer.getData('text/plain'); // Récupère les données transférées par le drag and drop
-      let splitData: string[] = data.split('/');
-      if (splitData[0] === 'timer') {
-        this.assignTimerToCook(splitData[1], cook); // Get the timerData from the data
-      } else if (splitData[0] === 'task') {
-        this.assignTaskToCook(splitData[1], cook); // Get the taskId from the data
+      const data = event.dataTransfer.getData('text/plain');
+      const [type, field] = data.split('/');
+      
+      if (type === 'timer') {
+        this.assignTimerToCook(field, cook); // Get duration timer
+      } else if (type === 'task') {
+        this.assignTaskToCook(field, cook); // Get taskId
       }
     }
   }
@@ -127,23 +127,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  assignTimerToCook(timerData: string, cook: Cook) {
-    const seconds = timerData.substring(0, 2);
-    const timerTimeInSeconds = parseInt(seconds);
-    this.sendTimerOfCookToTimersList(timerTimeInSeconds, cook);
-  }
-
-  sendTimerOfCookToTimersList(timerTimeInSeconds: number, cook: Cook) {
-    const timer: Timer = {timerDuration: timerTimeInSeconds, cook: cook};
-    let shareDataServiceData: ShareDataServiceDataObject = {
-      object: timer,
-      dataType: ShareDataServiceTypes.ASSIGNED_TIMER,
-    };
-    this.shareDataService.sendData(shareDataServiceData);
+  assignTimerToCook(timerDuration: string, cook: Cook) {
+    const duration = parseInt(timerDuration);
+    this.timerService.assignTimerToCook(duration, cook);
   }
 
   getBPMOfCook(deviceId: string): Observable<number> {
-    return this.wsService.waitMessage("")
+    return this.wsService.waitMessage()
       .pipe(
         filter(message =>
           message.from === deviceId && message.to === "angular" && message.type === "heartrate"
@@ -151,9 +141,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
         map((message: { from: number; to: string; type: string; bpm: number, timestamp: number }) => message.bpm)
       );
   }
-
-
-  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
 
   onTimeEnd() {
     // Arrêter la musique de fond avant de jouer le son de fin
@@ -238,20 +225,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO nice to have : not use shareDataService anymore for this but @Input with a list instead
-
   hasCookTasks(cook: Cook): boolean {
     return this.taskService.numberOfCookTasks(cook) > 0;
   }
-}
-
-export interface ShareDataServiceDataObject {
-  object: AssignedTask | Timer;
-  dataType: ShareDataServiceTypes;
-}
-
-export enum ShareDataServiceTypes {
-  ASSIGNED_TIMER,
-  ASSIGNED_TASK,
-  TASK_COMPLETED
 }

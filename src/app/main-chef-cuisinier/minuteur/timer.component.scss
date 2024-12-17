@@ -1,5 +1,17 @@
 @import '../../../variables';
 
+.cook-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .minuteur-container {
   width: 48vw;
   background: $light-gray-color;
