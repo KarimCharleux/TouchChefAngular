@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
-import {Task} from '../dashboard/burger.model';
+import {Task} from '../../dashboard/burger.model';
 import {TaskService} from '../task.service';
-import {Cook} from '../device.service';
+import {Cook} from '../../device.service';
+import {DataTransferTypeEnum} from '../../enums/dataTransferTypeEnum';
 
 @Component({
   selector: 'app-list-tasks',
@@ -28,10 +29,10 @@ export class ListTasksComponent {
   toggleCheck(index: number, event: Event) {
     this.tapSound.play().then();
     event.stopPropagation();
-    
+
     const task = this.taskService.getCurrentTasks()[index];
     if (task.isCompleted) {
-      this.taskService.unCompleteTask(task.id);
+      this.taskService.uncompleteTask(task.id);
     } else {
       this.taskService.completeTask(task.id);
     }
@@ -48,7 +49,7 @@ export class ListTasksComponent {
 
   onDragStart(event: DragEvent, task: Task) {
     if (event.dataTransfer) {
-      event.dataTransfer.setData('text/plain', "task/" + task.id);
+      event.dataTransfer.setData('text/plain', DataTransferTypeEnum.TASK + "/" + task.id);
     }
   }
 

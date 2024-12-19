@@ -1,18 +1,18 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {TimerComponent} from '../minuteur/timer.component';
+import {TimerComponent} from '../../timer/timer.component';
 import {ShopComponent} from '../shop/shop.component';
 import {GameTimeLeftComponent} from '../game-time-left/game-time-left.component';
 import {Cook, DeviceService} from '../../device.service';
 import {ThumbnailProfileCuisinierComponent} from '../thumbnail-profile-cuisinier/thumbnail-profile-cuisinier.component';
 import {NgClass, NgFor, NgIf} from '@angular/common';
-import {ListTasksComponent} from '../../list-tasks/list-tasks.component';
-import {WebSocketService} from '../../websocket.service';
+import {ListTasksComponent} from '../../task/list-tasks/list-tasks.component';
 import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboard-header.component';
 import {Router} from '@angular/router';
-import {filter, map, Observable} from 'rxjs';
 import {RaiseHandsFinalComponent} from '../../raise-hands-final/raise-hands-final.component';
-import {TaskService, AssignedTask} from '../../task.service';
-import {TimerService} from '../../timer.service';
+import {TaskService} from '../../task/task.service';
+import {TimerService} from '../../timer/timer.service';
+import {DataTransferType} from '../../enums/dataTransferTypeEnum';
+import {MainPageWebSocketService} from './main-page-websocket.service';
 
 @Component({
   selector: 'app-main-page',
@@ -51,7 +51,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private deviceService: DeviceService,
     private taskService: TaskService,
-    private wsService: WebSocketService,
+    private mainPageWsService: MainPageWebSocketService,
     private cdr: ChangeDetectorRef,
     private timerService: TimerService
   ) {
@@ -73,12 +73,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     // Attendre 4s et envoyer un message a Unity
     setTimeout(() => {
-      this.wsService.sendMessage({type: 'startGame'});
+      this.mainPageWsService.sendMessageStartGame();
       this.clockComponent.startTimer();
     }, 1000);
 
     this.cooks.forEach((cook, index) => {
-      this.getBPMOfCook(cook.deviceId).subscribe(bpm => {
+      this.mainPageWsService.getBPMOfCook(cook.deviceId).subscribe(bpm => {
         this.heartRates[index] = bpm;
         this.cdr.detectChanges();
       });
@@ -108,10 +108,10 @@ export class MainPageComponent implements OnInit, OnDestroy {
     if (event.dataTransfer) {
       const data = event.dataTransfer.getData('text/plain');
       const [type, field] = data.split('/');
-      
-      if (type === 'timer') {
+
+      if (DataTransferType.isTimer(type)) {
         this.assignTimerToCook(field, cook); // Get duration timer
-      } else if (type === 'task') {
+      } else if (DataTransferType.isTask(type)) {
         this.assignTaskToCook(field, cook); // Get taskId
       }
     }
@@ -132,16 +132,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.timerService.assignTimerToCook(duration, cook);
   }
 
-  getBPMOfCook(deviceId: string): Observable<number> {
-    return this.wsService.waitMessage()
-      .pipe(
-        filter(message =>
-          message.from === deviceId && message.to === "angular" && message.type === "heartrate"
-        ),
-        map((message: { from: number; to: string; type: string; bpm: number, timestamp: number }) => message.bpm)
-      );
-  }
-
   onTimeEnd() {
     // Arrêter la musique de fond avant de jouer le son de fin
     this.backgroundMusic.pause();
@@ -157,11 +147,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       totalTime: this.clockComponent.currentTime,
       totalStars: this.nbEarnedStars
     };
-
-    // Naviguer vers la page de fin avec les données
-    /*this.router.navigate(['/finish'], {
-      state: {score: finalScore}
-    }).then();*/
   }
 
   stopTimer() {
@@ -169,7 +154,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   unableModale() {
-    console.log("bien reçu ici !");
     this.showRaiseHandsModal = false;
     this.cdr.detectChanges();
 
@@ -209,18 +193,10 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     if (event.dataTransfer) {
       const data = event.dataTransfer.getData('text/plain');
-      console.log('data', data);
       const [type, taskName, taskId, taskIcons] = data.split('/');
 
-      if (type === 'task') {
-        this.wsService.sendMessage({
-          type: 'table_task',
-          task: taskName,
-          taskId: taskId,
-          taskIcons: taskIcons,
-          from: 'angular',
-          to: 'table',
-        });
+      if (DataTransferType.isTask(type)) {
+        this.mainPageWsService.sendTaskToTable(taskId, taskName, taskIcons);
       }
     }
   }

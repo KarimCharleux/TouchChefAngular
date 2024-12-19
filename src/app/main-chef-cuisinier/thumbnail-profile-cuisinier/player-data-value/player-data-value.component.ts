@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import { KnobModule } from 'primeng/knob';
+import {KnobModule} from 'primeng/knob';
 import {FormsModule} from '@angular/forms';
 import {NgIf, NgStyle} from '@angular/common';
 
@@ -39,12 +39,12 @@ export class PlayerDataValueComponent {
   private hexToRGBA(hex: string, opacity: number): string {
     // Enlever le # si présent
     hex = hex.replace('#', '');
-    
+
     // Convertir en RGB
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
-    
+
     // Retourner la couleur RGBA
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }

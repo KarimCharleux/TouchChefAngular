@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {NgIf} from '@angular/common';
 
 interface Score {
   nbBurgers: number;
@@ -24,12 +24,11 @@ export class FinishComponent implements OnInit {
   ngOnInit() {
     if (history.state && history.state.score) {
       this.score = history.state.score;
-      console.log('Score loaded:', this.score);
     } else {
       console.log('No score found in state');
     }
   }
-  
+
   backToMenu() {
     this.router.navigate(['/']).then();
   }
@@ -39,4 +38,4 @@ export class FinishComponent implements OnInit {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
-} 
+}

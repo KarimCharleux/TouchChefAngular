@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostBinding, Input} from '@angular/core';
 import {NgIf, NgOptimizedImage} from '@angular/common';
 import {PlayerDataValueComponent} from './player-data-value/player-data-value.component';
-import {HostBinding} from '@angular/core';
 
 @Component({
   selector: 'app-thumbnail-profile-cuisinier',

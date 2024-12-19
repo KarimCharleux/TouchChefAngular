@@ -1,5 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-import {WebSocketService} from '../websocket.service';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {
   ThumbnailProfileCuisinierComponent
@@ -9,6 +16,7 @@ import {
   PlayerDataValueComponent
 } from "../main-chef-cuisinier/thumbnail-profile-cuisinier/player-data-value/player-data-value.component";
 import {Subscription} from "rxjs";
+import {RaiseHandsFinalWebSocketService} from './raise-hands-final-websocket.service';
 
 @Component({
   selector: 'app-raise-hands-final',
@@ -24,7 +32,7 @@ import {Subscription} from "rxjs";
   styleUrl: './raise-hands-final.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RaiseHandsFinalComponent {
+export class RaiseHandsFinalComponent implements OnDestroy {
 
   @Output() allHandsRaised = new EventEmitter<void>();
 
@@ -33,7 +41,7 @@ export class RaiseHandsFinalComponent {
   raised: boolean[] = [];
   private raisedSubscription: Subscription[] = [];
 
-  constructor(private wsService: WebSocketService, private deviceService: DeviceService, private cdr: ChangeDetectorRef) {
+  constructor(private raiseHandsWsService: RaiseHandsFinalWebSocketService, private deviceService: DeviceService, private cdr: ChangeDetectorRef) {
     this.cooks = this.deviceService.getCooks();
     this.setupRaisedTracking(this.cooks.length);
   }
@@ -44,27 +52,18 @@ export class RaiseHandsFinalComponent {
     }
 
     this.raisedSubscription = this.cooks.map((cook, index) => {
-      return this.wsService
-        .waitMessage()
-        .subscribe(message => {
-          const raisedMessage = message as {
-            type: string,
-            from: string,
-            to: string
-            timestamp: number,
-          };
-
-          if (raisedMessage.type === "handRaise" && raisedMessage.from === cook.deviceId) {
-            this.raised[index] = true;
-            this.cdr.detectChanges();
-            this.checkAllRaised();
-          }
+      return this.raiseHandsWsService
+        .listenToHandRaise(cook)
+        .subscribe(() => {
+          this.raised[index] = true;
+          this.cdr.detectChanges();
+          this.checkAllRaised();
         });
     });
   }
 
   checkAllRaised() {
-    if (this.raised.every(status => status === true)) {
+    if (this.raised.every(status => status)) {
       this.allHandsRaised.emit();
     }
   }
@@ -75,8 +74,7 @@ export class RaiseHandsFinalComponent {
   }
 
   ngOnDestroy() {
-    // N'oubliez pas de vous désabonner pour éviter les fuites de mémoire
-    //this.raisedSubscription.for(sub => sub.unsubscribe());
+    this.raisedSubscription?.forEach(sub => sub?.unsubscribe());
   }
 
 

@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges, OnDestroy,
   OnInit,
   Output,
   SimpleChanges
@@ -20,7 +20,7 @@ import {NgClass} from '@angular/common';
   styleUrl: './bar-timer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BarTimerComponent implements OnInit {
+export class BarTimerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() width: string = '100%'; // Largeur par défaut
   @Input() height: string = '24px'; // Hauteur par défaut
   @Input() totalTime: number = 60; // Temps total en secondes
@@ -70,7 +70,7 @@ export class BarTimerComponent implements OnInit {
   updateProgress() {
     this.progressWidth = `${(this.currentTime / this.totalTime) * 100}%`;
 
-    this.cdr.detectChanges(); // Force la mise à jour de la vue
+    this.cdr.detectChanges();
   }
 
 }

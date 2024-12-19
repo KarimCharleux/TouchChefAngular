@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
-import { StarsComponent } from '../../stars/stars.component';
+import {Component, Input} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {Router} from '@angular/router';
+import {StarsComponent} from '../../stars/stars.component';
 
 @Component({
   selector: 'app-dashboard-header',

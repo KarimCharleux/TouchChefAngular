@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../../../variables';
 
 .list-tasks-container {
   padding: 1rem .5rem;
@@ -33,7 +33,7 @@
   transition: all 0.3s ease;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 -2px 4px rgba(0, 0, 0, 0.05);
-  
+
   &.completed {
     opacity: 0.7;
     order: 1;
@@ -119,15 +119,15 @@
 
       svg {
         transform: rotate(-90deg);
-        
+
         circle {
           fill: none;
           stroke-width: 4;
-          
+
           &.bg {
             stroke: #f0f0f0;
           }
-          
+
           &.progress {
             stroke: #2196F3;
             stroke-linecap: round;
@@ -201,7 +201,7 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.4);
   }
@@ -209,12 +209,12 @@
 
 ::ng-deep .task-dialog {
   font-family: "Bricolage Grotesque", sans-serif;
-  
+
   .p-dialog-header {
     background: #f8f9fa;
     padding: 2rem;
     border-bottom: 1px solid #e9ecef;
-    
+
     .p-dialog-title {
       font-size: 1.75rem;
       font-weight: 700;

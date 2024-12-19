@@ -2,10 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
-  OnInit,
   OnDestroy,
-  EventEmitter, Output
+  OnInit,
+  Output
 } from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 

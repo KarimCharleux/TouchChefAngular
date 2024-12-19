@@ -5,7 +5,7 @@ import {MessageService} from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import {Router} from '@angular/router';
 import {DeviceService} from '../device.service';
-import { WebSocketService } from '../websocket.service';
+import {WebSocketService} from '../websocket.service';
 
 @Component({
   selector: 'app-home-menu',
