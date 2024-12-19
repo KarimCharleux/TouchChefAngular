@@ -1,4 +1,4 @@
-@import '../../../variables';
+@import '../../variables';
 
 .cook-avatar {
   width: 42px;
@@ -42,7 +42,7 @@
   padding: 0.1rem 1.2rem;
   border-radius: 10px;
   cursor: grab;
-  
+
   &:active {
     cursor: grabbing;
   }
@@ -74,12 +74,12 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: #c0392b;
     transform: scale(1.05);
   }
-  
+
   i {
     color: $white-color;
     font-size: 1.5rem;
@@ -103,12 +103,12 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
   }
-  
+
   &.zero-button {
     grid-column: 2;
   }
@@ -125,20 +125,20 @@
   max-height: 300px;
   overflow-y: auto;
   flex: 1;
-  
+
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.3);
     }

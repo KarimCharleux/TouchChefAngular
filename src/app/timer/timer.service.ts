@@ -1,7 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Cook } from './device.service';
-import { WebSocketService } from './websocket.service';
-import { BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Cook} from '../device.service';
+import {WebSocketService} from '../websocket.service';
+import {BehaviorSubject} from 'rxjs';
+import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
+import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
+import {TimerWebSocketService} from './timer-websocket.service';
+
 
 export interface Timer {
   id: number;
@@ -18,12 +22,8 @@ export class TimerService {
   timers$ = this.timers.asObservable();
   private currentId = 0;
 
-  constructor(private readonly wsService: WebSocketService) {
-    this.wsService.waitMessage().subscribe(message => {
-      if (message.type === 'start_timer' && message.to === 'angular') {
-        this.startTimer(parseInt(message.timerId), message.from);
-      }
-    });
+  constructor(private readonly wsService: WebSocketService, private readonly timerWsService: TimerWebSocketService) {
+    this.timerWsService.waitTimerMessage(this.startTimer);
   }
 
   getTimers(): Timer[] {
@@ -38,7 +38,7 @@ export class TimerService {
       isStarted: false
     };
     this.timers.next([...this.timers.value, timer]);
-    this.wsService.sendTimer(timer);
+    this.timerWsService.sendTimer(timer);
   }
 
   startTimer(timerId: number, deviceId: string): void {
@@ -47,7 +47,6 @@ export class TimerService {
       timer.isStarted = true;
       this.timers.next(this.timers.value);
       console.log("Démarrage du timer de " + timer.duration + "s pour " + timer.cook.name);
-      
     }
   }
 
@@ -55,4 +54,4 @@ export class TimerService {
     const updatedTimers = this.timers.value.filter(t => t.id !== id);
     this.timers.next(updatedTimers);
   }
-} 
+}

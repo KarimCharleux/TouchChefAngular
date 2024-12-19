@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from '@angular/common';
-import {TimerService, Timer} from '../../timer.service';
-import {BarTimerComponent} from '../../bar-timer/bar-timer.component';
+import {Timer, TimerService} from './timer.service';
+import {BarTimerComponent} from '../bar-timer/bar-timer.component';
 import {Subscription} from 'rxjs';
+import {DataTransferTypeEnum} from '../enums/dataTransferTypeEnum';
 
 @Component({
   selector: 'app-timer',
@@ -60,7 +61,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   onDragStart(event: DragEvent) {
     if (event.dataTransfer) {
       const duration = parseInt(this.input.join(''), 10);
-      event.dataTransfer.setData('text/plain', `timer/${duration}`);
+      event.dataTransfer.setData('text/plain', `${DataTransferTypeEnum.TIMER}/${duration}`);
     }
   }
 
