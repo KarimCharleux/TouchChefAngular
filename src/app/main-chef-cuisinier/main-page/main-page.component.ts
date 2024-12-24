@@ -11,7 +11,7 @@ import {DashboardHeaderComponent} from '../../dashboard/dashboard-header/dashboa
 import {Router} from '@angular/router';
 import {filter, map, Observable} from 'rxjs';
 import {RaiseHandsFinalComponent} from '../../raise-hands-final/raise-hands-final.component';
-import {TaskService, AssignedTask} from '../../task.service';
+import {TaskService} from '../../task.service';
 import {TimerService} from '../../timer.service';
 
 @Component({
@@ -209,18 +209,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     if (event.dataTransfer) {
       const data = event.dataTransfer.getData('text/plain');
-      console.log('data', data);
-      const [type, taskName, taskId, taskIcons] = data.split('/');
+      const [type, field] = data.split('/');
 
       if (type === 'task') {
-        this.wsService.sendMessage({
-          type: 'table_task',
-          task: taskName,
-          taskId: taskId,
-          taskIcons: taskIcons,
-          from: 'angular',
-          to: 'table',
-        });
+        const task = this.taskService.getTaskById(field);
+        if (task) {
+          this.wsService.sendMessage({
+            type: 'table_task',
+            task: task.name,
+            taskId: task.id,
+            taskIcons: task.icons,
+            from: 'angular',
+            to: 'table',
+          });
+        }
       }
     }
   }

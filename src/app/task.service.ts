@@ -30,6 +30,10 @@ export class TaskService {
     return this.currentTasks;
   }
 
+  getTaskById(taskId: string): Task | undefined {
+    return this.currentTasks.find(t => t.id === taskId);
+  }
+
   /**
    * Assign a task to a cook by sending a message to the websocket server 
    * If the task is already assigned to the cook, do nothing
