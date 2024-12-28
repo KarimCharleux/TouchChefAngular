@@ -1,19 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Cook } from './device.service';
-import { Task } from './dashboard/burger.model';
-import { BURGERS } from './dashboard/burgers.data';
-import { WebSocketService } from './websocket.service';
-
-
-export interface AssignedTask {
-  taskId: string;
-  taskName: string;
-  taskIcons: string;
-  cook: Cook;
-  quantity: number;
-  workStation?: string;
-  duration?: number;
-}
+import {Injectable} from '@angular/core';
+import {Cook} from '../device.service';
+import {Task} from '../dashboard/burger.model';
+import {BURGERS} from '../dashboard/burgers.data';
+import {TaskWebSocketService} from './task-websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +12,9 @@ export class TaskService {
   private indexOfLastAssignation: number = 0;
 
   constructor(
-    private wsService: WebSocketService 
-  ) {}
+    private taskWsService: TaskWebSocketService
+  ) {
+  }
 
   getCurrentTasks(): Task[] {
     return this.currentTasks;
@@ -35,19 +25,19 @@ export class TaskService {
   }
 
   /**
-   * Assign a task to a cook by sending a message to the websocket server 
+   * Assign a task to a cook by sending a message to the websocket server
    * If the task is already assigned to the cook, do nothing
    * If the task is already assigned to a cook, replace the cook with the new cook
    * If the task is already assigned to the maximum number of cooks, replace the next cook in the list with the new cook
-   * If the task is not assigned to a cook, assign it to the cook 
-   * 
+   * If the task is not assigned to a cook, assign it to the cook
+   *
    * @param taskId - The id of the task to assign
    * @param cook - The cook to assign the task to
    */
   assignTask(taskId: string, cook: Cook): void {
     const task = this.currentTasks.find(t => t.id === taskId);
     if (task && task.assignedCooks) { // Check if the task exists and has assigned cooks
-      if(!task.assignedCooks.find(c => c.deviceId === cook.deviceId)) { // Check if the cook is not already assigned to the task
+      if (!task.assignedCooks.find(c => c.deviceId === cook.deviceId)) { // Check if the cook is not already assigned to the task
         if (task.assignedCooks.length < task.nbCooksNeeded) { // Check if the task has less cooks assigned than needed
           task.assignedCooks.push(cook); // Assign the cook to the task
         } else {
@@ -58,7 +48,7 @@ export class TaskService {
             this.indexOfLastAssignation = 0;
           }
         }
-        this.wsService.sendTask(task, cook);
+        this.taskWsService.sendTask(task, cook);
       } else {
         console.error("Impossible d'assigner la tâche à " + cook.name + " car il est déjà assigné à cette tâche. TaskId : " + taskId);
       }
@@ -84,7 +74,7 @@ export class TaskService {
     }
   }
 
-  unCompleteTask(taskId: string): void {
+  uncompleteTask(taskId: string): void {
     const task = this.currentTasks.find(t => t.id === taskId);
     if (task) {
       task.isCompleted = false;
@@ -102,4 +92,4 @@ export class TaskService {
   changeBurger(burgerId: number): void {
     this.currentTasks = BURGERS[burgerId].tasks;
   }
-} 
+}
