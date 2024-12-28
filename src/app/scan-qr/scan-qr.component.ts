@@ -8,10 +8,10 @@ import {DialogModule} from 'primeng/dialog';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {FormsModule} from '@angular/forms';
-import {Cook, COOK_COLORS, CookColor, DeviceService} from '../device.service';
+import {COOK_COLORS, CookColor, DeviceService} from '../device.service';
 import {Router} from '@angular/router';
-import {WebSocketService} from '../websocket.service';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {ScanQRWebSocketService} from './scan-qr-websocket.service';
 
 
 @Component({
@@ -56,7 +56,7 @@ export class ScanQrComponent implements OnInit {
   constructor(
     protected messageService: MessageService,
     protected deviceService: DeviceService,
-    protected wsService: WebSocketService,
+    protected scanQRWsService: ScanQRWebSocketService,
     private readonly router: Router
   ) {
   }
@@ -120,37 +120,18 @@ export class ScanQrComponent implements OnInit {
     this.isWaitingResponse = true;
 
     try {
-      this.wsService.sendMessage({
-        from: 'angular',
-        to: this.currentDeviceId,
-        type: 'addCook',
-        name: this.cookName,
-        avatar: this.selectedAvatar.toString(),
-        avatarColor: this.selectedColor
-      });
+      this.scanQRWsService.sendAddCook(this.currentDeviceId, this.cookName, this.selectedAvatar.toString(), this.selectedColor);
 
       const response = await Promise.race([
         new Promise((resolve, reject) => {
-          const subscription = this.wsService.messages$.subscribe(message => {
-            try {
-              console.log(message.type);
-              if (message.type === 'confirmation' && 
-                message.to === 'angular' && 
-                message.from === this.currentDeviceId) {
-                subscription.unsubscribe();
-                resolve(message);
-              }
-            } catch (e) {
-              console.error('Erreur de parsing du message:', e);
-            }
-          });
+          const subscription = this.scanQRWsService.addCookResponse(this.currentDeviceId, resolve);
 
           setTimeout(() => {
             subscription.unsubscribe();
             reject('timeout');
           }, 10000);
         }),
-        
+
         new Promise((_, reject) =>
           setTimeout(() => reject('timeout'), 10000)
         )
@@ -182,7 +163,7 @@ export class ScanQrComponent implements OnInit {
           this.deviceService.getNbPlayers()
         ) {
           console.log('All cooks added to the list : ', this.deviceService.getCooks());
-          this.sendCooksListToWatch(this.deviceService.getCooks());
+          await this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
 
           this.scannerEnabled = false;
           this.messageService.add({
@@ -207,18 +188,6 @@ export class ScanQrComponent implements OnInit {
       });
     } finally {
       this.isWaitingResponse = false;
-    }
-  }
-
-  async sendCooksListToWatch(cooks: Cook[]) {
-    if (cooks) {
-      console.log('Sending cooks list to watch : ', cooks);
-      this.wsService.sendMessage({
-        from: 'angular',
-        to: 'allWatches',
-        type: 'cooksList',
-        cooksList: cooks
-      });
     }
   }
 
@@ -269,10 +238,10 @@ export class ScanQrComponent implements OnInit {
     if (remainingSlots <= 0) return;
 
     const mockCooks = [
-      { name: 'Karim', deviceId: '1', avatar: '1', color: COOK_COLORS.RED },
-      { name: 'Anas', deviceId: '2', avatar: '2', color: COOK_COLORS.BLUE },
-      { name: 'Damien', deviceId: '3', avatar: '3', color: COOK_COLORS.GREEN },
-      { name: 'Saad', deviceId: '4', avatar: '4', color: COOK_COLORS.YELLOW }
+      {name: 'Karim', deviceId: '1', avatar: '1', color: COOK_COLORS.RED},
+      {name: 'Anas', deviceId: '2', avatar: '2', color: COOK_COLORS.BLUE},
+      {name: 'Damien', deviceId: '3', avatar: '3', color: COOK_COLORS.GREEN},
+      {name: 'Saad', deviceId: '4', avatar: '4', color: COOK_COLORS.YELLOW}
     ];
 
     // Ajouter le nombre nécessaire de mocks

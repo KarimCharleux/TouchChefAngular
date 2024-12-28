@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Observable, Subject } from 'rxjs';
-import { environment } from '../environments/environment';
-import { Task } from './dashboard/burger.model';
-import { Cook } from './device.service';
-import { Timer } from './timer.service';
+import {Injectable} from '@angular/core';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import {Observable, Subject} from 'rxjs';
+import {environment} from '../environments/environment';
+import {Timer} from './timer/timer.service';
+import {FROM_TO_VALUES} from './enums/fromToValuesEnum';
+import {WebSocketMessageTypeEnum} from './webSocketMessageTypeEnum';
 
 @Injectable({
   providedIn: 'root',
@@ -40,36 +40,5 @@ export class WebSocketService {
 
   closeConnection(): void {
     this.socket$.complete();
-  }
-
-  sendTask(task: Task, cook: Cook): void {
-    this.sendMessage({
-      from: 'angular',
-      to: cook.deviceId,
-      type: 'addTask',
-      assignedTask: {
-        taskId: task.id,
-        taskName: task.name,
-        taskIcons: task.icons,
-        cook: cook,
-        quantity: task.quantity,
-        workStation: task.workStation,
-        duration: task.duration
-      }
-    });
-  }
-
-  sendTimer(timer: Timer): void {
-    if (timer.cook) {
-      this.sendMessage({
-        from: 'angular',
-        to: timer.cook.deviceId,
-        type: 'addTimer',
-        timer: {
-          timerId: timer.id.toString(),
-          timerDuration: timer.duration.toString()
-        }
-      });
-    }
   }
 }

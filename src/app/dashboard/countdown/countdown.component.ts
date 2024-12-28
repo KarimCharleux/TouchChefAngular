@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-countdown',

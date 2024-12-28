@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-stars',
@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       }}</span>
       <img src="assets/star.png" alt="star" class="w-6" />
     </div>
-  `,  
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StarsComponent {
