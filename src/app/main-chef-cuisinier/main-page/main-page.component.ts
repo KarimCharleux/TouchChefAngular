@@ -13,6 +13,7 @@ import {TaskService} from '../../task/task.service';
 import {TimerService} from '../../timer/timer.service';
 import {DataTransferType} from '../../enums/dataTransferTypeEnum';
 import {MainPageWebSocketService} from './main-page-websocket.service';
+import {Task} from '../../dashboard/burger.model';
 
 @Component({
   selector: 'app-main-page',
@@ -196,8 +197,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
       const [type, field] = data.split('/');
 
       if (DataTransferType.isTask(type)) {
-        const task = this.taskService.getTaskById(field);
-        this.mainPageWsService.sendTaskToTable(taskId, taskName, taskIcons);
+        const task: Task | undefined = this.taskService.getTaskById(field);
+        if (task) {
+          this.mainPageWsService.sendTaskToTable(task);
+        } else {
+          console.error("Task cannot be sent to table because task with ID :" + field + " is not found");
+        }
       }
     }
   }

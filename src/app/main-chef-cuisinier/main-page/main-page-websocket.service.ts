@@ -3,6 +3,7 @@ import {WebSocketMessageTypeEnum} from '../../webSocketMessageTypeEnum';
 import {WebSocketService} from '../../websocket.service';
 import {filter, map, Observable} from 'rxjs';
 import {FROM_TO_VALUES} from '../../enums/fromToValuesEnum';
+import {Task} from '../../dashboard/burger.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class MainPageWebSocketService {
   constructor(private readonly wsService: WebSocketService) {
   }
 
-  sendTaskToTable(taskId: string, taskName: string, taskIcons: string) {
-    this.wsService.sendMessage(this.createObjectSendTaskToTable(taskId, taskName, taskIcons));
+  sendTaskToTable(task: Task) {
+    this.wsService.sendMessage(this.createObjectSendTaskToTable(task.id, task.name, task.icons));
   }
 
   private createObjectSendTaskToTable(taskId: string, taskName: string, taskIcons: string) {
