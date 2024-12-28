@@ -14,6 +14,7 @@ export class TaskService {
   constructor(
     private taskWsService: TaskWebSocketService
   ) {
+    this.changeBurger(0); // TODO: change to current burger
   }
 
   getCurrentTasks(): Task[] {
@@ -91,5 +92,6 @@ export class TaskService {
 
   changeBurger(burgerId: number): void {
     this.currentTasks = BURGERS[burgerId].tasks;
+    this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
   }
 }

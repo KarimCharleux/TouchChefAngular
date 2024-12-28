@@ -4,6 +4,7 @@ import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 import {WebSocketService} from '../websocket.service';
 import {Injectable} from '@angular/core';
+import {RecipeItem} from '../recipes/recipe.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,27 @@ export class TaskWebSocketService {
       }
     }
   }
+
+
+  sendRecipeItemsToTable(recipeItems: RecipeItem[]): void {
+    this.wsService.sendMessage(this.createRecipeItemsToSend(recipeItems));
+  }
+
+  private createRecipeItemsToSend(recipeItems: RecipeItem[]): RecipeItemToSend {
+    return {
+      from: FROM_TO_VALUES.ANGULAR,
+      to: FROM_TO_VALUES.TABLE,
+      type: WebSocketMessageTypeEnum.RECIPE,
+      recipeItems: recipeItems
+    };
+  }
+}
+
+interface RecipeItemToSend {
+  from: FROM_TO_VALUES;
+  to: FROM_TO_VALUES;
+  type: WebSocketMessageTypeEnum;
+  recipeItems: RecipeItem[]
 }
 
 interface TaskToSend {
