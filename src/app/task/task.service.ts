@@ -17,6 +17,7 @@ export class TaskService implements OnInit, OnDestroy {
   constructor(
     private taskWsService: TaskWebSocketService
   ) {
+    this.changeBurger(0); // TODO: change to current burger
   }
 
   ngOnInit() {
@@ -98,6 +99,7 @@ export class TaskService implements OnInit, OnDestroy {
 
   changeBurger(burgerId: number): void {
     this.currentTasks = BURGERS[burgerId].tasks;
+    this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
   }
 
   updateTaskProgress(progressData: ProgressData) {
