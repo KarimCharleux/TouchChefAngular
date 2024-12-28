@@ -5,13 +5,31 @@ export const BURGERS: Burger[] = [
     id: 1,
     name: 'Classic Burger',
     imageUrl: 'assets/burger/burger1.png',
-    ingredients: [
-      {name: 'Haut pain burger', imageUrl: 'assets/burger/bread-top.png'},
-      {name: 'Steak haché', imageUrl: 'assets/burger/steak.png'},
-      {name: 'Salade', imageUrl: 'assets/burger/salad.png'},
-      {name: 'Tomate', imageUrl: 'assets/burger/tomato.png'},
-      {name: 'Fromage', imageUrl: 'assets/burger/cheese.png'},
-      {name: 'Bas pain burger', imageUrl: 'assets/burger/bread-bottom.png'}
+    recipeItems: [
+      {
+        ingredient: { name: 'Haut pain burger', imageUrl: 'assets/burger/bread-top.png' },
+        numberOfIngredients: 1,
+      },
+      {
+        ingredient: { name: 'Steak haché', imageUrl: 'assets/burger/steak.png' },
+        numberOfIngredients: 1,
+      },
+      {
+        ingredient: { name: 'Salade', imageUrl: 'assets/burger/salad.png' },
+        numberOfIngredients: 1,
+      },
+      {
+        ingredient: { name: 'Tomate', imageUrl: 'assets/burger/tomato.png' },
+        numberOfIngredients: 1,
+      },
+      {
+        ingredient: { name: 'Fromage', imageUrl: 'assets/burger/cheese.png' },
+        numberOfIngredients: 1,
+      },
+      {
+        ingredient: { name: 'Bas pain burger', imageUrl: 'assets/burger/bread-bottom.png' },
+        numberOfIngredients: 1,
+      },
     ],
     tasks: [
       {
@@ -97,7 +115,7 @@ export const BURGERS: Burger[] = [
         subTasks: [
           {order: 1, description: 'Prendre du fromage'},
           {order: 2, description: 'Le déplacer sur la planche à découper'},
-          {order: 3, description: 'Couper le fromage en tranches avec la tranche de la main'} 
+          {order: 3, description: 'Couper le fromage en tranches avec la tranche de la main'}
         ],
         nbCooksNeeded: 1,
         icons: "🔪🧀",
