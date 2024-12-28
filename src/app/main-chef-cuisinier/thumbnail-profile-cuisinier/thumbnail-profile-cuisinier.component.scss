@@ -1,9 +1,9 @@
 :host {
-    overflow: hidden;
-    border-radius: 43px;
-    margin: 10px 0 5px;
-    background-color: white;
-    box-shadow: 10px 10px 60px #d9d9d967, -10px -10px 60px #f5f5f5;
+  overflow: hidden;
+  border-radius: 43px;
+  margin: 10px 0 5px;
+  background-color: white;
+  box-shadow: 10px 10px 60px #d9d9d967, -10px -10px 60px #f5f5f5;
 }
 
 .profile-container {
@@ -14,7 +14,7 @@
   position: relative;
   box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-5px);
   }
@@ -57,6 +57,21 @@
   }
 }
 
+.player-number-of-assigned-uncompleted-tasks {
+  position: absolute;
+  bottom: 8%;
+  right: 4%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .player-number-of-assigned-uncompleted-tasks-number {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--cook-color);
+  }
+}
+
 .sleeping-animation {
   position: absolute;
   right: 79px;
@@ -68,17 +83,17 @@
     font-weight: bold;
     font-size: 1.2rem;
     opacity: 0;
-    
+
     &:nth-child(1) {
       animation: floatZ 2s infinite;
       animation-delay: 0s;
     }
-    
+
     &:nth-child(2) {
       animation: floatZ 2s infinite;
       animation-delay: 0.6s;
     }
-    
+
     &:nth-child(3) {
       animation: floatZ 2s infinite;
       animation-delay: 1.2s;
