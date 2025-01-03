@@ -39,11 +39,24 @@ export class RaiseHandsFinalComponent implements OnDestroy {
   @Input() cooks: Cook[] = [];
 
   raised: boolean[] = [];
+  vibration: number[][] = [[100,200,200], [400, 300, 400], [500, 100, 300], [200, 100, 400]]
   private raisedSubscription: Subscription[] = [];
 
   constructor(private raiseHandsWsService: RaiseHandsFinalWebSocketService, private deviceService: DeviceService, private cdr: ChangeDetectorRef) {
     this.cooks = this.deviceService.getCooks();
     this.setupRaisedTracking(this.cooks.length);
+  }
+
+  isVibrationSupported(): boolean {
+    return 'vibrate' in navigator;
+  }
+
+  vibrateDevice(pattern: number | number[]): void {
+    if (this.isVibrationSupported()) {
+      navigator.vibrate(pattern);
+    } else {
+      console.warn('L\'API Vibration n\'est pas prise en charge sur cet appareil.');
+    }
   }
 
   setupRaisedTracking(nbCooks: number) {
@@ -56,6 +69,7 @@ export class RaiseHandsFinalComponent implements OnDestroy {
         .listenToHandRaise(cook)
         .subscribe(() => {
           this.raised[index] = true;
+          this.vibrateDevice(this.vibration[index]); // TODO : assigner une vibration différente aux cuisiniers selon leur efficacité par exemple
           this.cdr.detectChanges();
           this.checkAllRaised();
         });
