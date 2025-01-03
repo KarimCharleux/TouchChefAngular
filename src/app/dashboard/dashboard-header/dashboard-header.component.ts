@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {StarsComponent} from '../../stars/stars.component';
+import {DashboardHeaderWebSocketService} from './dashboard-header-websocket.service';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -14,10 +15,10 @@ export class DashboardHeaderComponent {
   @Input() nbEarnedStars: number = 15;
   @Input() showStopGameButton: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private readonly dashboardHeaderWsService: DashboardHeaderWebSocketService) {}
 
   stopGame() {
-    // TODO: Send message to Unity
+    this.dashboardHeaderWsService.sendStopGame();
     this.router.navigate(['/']);
   }
 }

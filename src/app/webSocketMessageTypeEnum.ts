@@ -9,5 +9,6 @@ export enum WebSocketMessageTypeEnum {
   ADD_TIMER = 'addTimer',
   ADD_TASK = 'addTask',
   TABLE_TASK = 'table_task',
-  ADD_PRODUCT = 'add_product'
+  ADD_PRODUCT = 'add_product',
+  STOP_GAME = 'stop_game'
 }

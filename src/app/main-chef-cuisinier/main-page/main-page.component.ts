@@ -14,6 +14,7 @@ import {TimerService} from '../../timer/timer.service';
 import {DataTransferType} from '../../enums/dataTransferTypeEnum';
 import {MainPageWebSocketService} from './main-page-websocket.service';
 import {Task} from '../../dashboard/burger.model';
+import {DashboardHeaderWebSocketService} from '../../dashboard/dashboard-header/dashboard-header-websocket.service';
 
 @Component({
   selector: 'app-main-page',
@@ -53,6 +54,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private deviceService: DeviceService,
     private taskService: TaskService,
     private mainPageWsService: MainPageWebSocketService,
+    private readonly dashboardHeaderWsService: DashboardHeaderWebSocketService,
     private cdr: ChangeDetectorRef,
     private timerService: TimerService
   ) {
@@ -164,6 +166,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
       totalStars: this.nbEarnedStars
     };
 
+    this.dashboardHeaderWsService.sendStopGame();
     // Naviguer vers la page de fin avec les données
     this.router.navigate(['/finish'], {
       state: {score: finalScore}
