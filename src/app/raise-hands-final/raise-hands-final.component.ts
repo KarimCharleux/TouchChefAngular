@@ -51,7 +51,6 @@ export class RaiseHandsFinalComponent implements OnDestroy {
     return 'vibrate' in navigator;
   }
 
-  // Méthode pour faire vibrer l'appareil
   vibrateDevice(pattern: number | number[]): void {
     if (this.isVibrationSupported()) {
       navigator.vibrate(pattern);
