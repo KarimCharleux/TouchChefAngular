@@ -1,4 +1,5 @@
 import {Cook} from '../device.service';
+import {RecipeItem} from '../recipes/recipe.model';
 
 export interface Ingredient {
   name: string;
@@ -27,6 +28,6 @@ export interface Burger {
   id: number;
   name: string;
   imageUrl: string;
-  ingredients: Ingredient[];
+  recipeItems: RecipeItem[];
   tasks: Task[];
 }
