@@ -1,19 +1,26 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import {Cook} from '../device.service';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
-import {TaskWebSocketService} from './task-websocket.service';
+import {ProgressData, TaskWebSocketService} from './task-websocket.service';
+import {Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskService {
+export class TaskService implements OnInit, OnDestroy {
   private currentTasks: Task[] = BURGERS[0].tasks; // TODO: change to current burger
   private indexOfLastAssignation: number = 0;
+  private progressSubscription: Subscription | null = null;
+
 
   constructor(
     private taskWsService: TaskWebSocketService
   ) {
+  }
+
+  ngOnInit() {
+    this.setupTaskProgressTracking();
   }
 
   getCurrentTasks(): Task[] {
@@ -91,5 +98,40 @@ export class TaskService {
 
   changeBurger(burgerId: number): void {
     this.currentTasks = BURGERS[burgerId].tasks;
+  }
+
+  updateTaskProgress(progressData: ProgressData) {
+    // Logique pour mettre à jour la progression de la tâche
+    if (progressData.currentProgress === progressData.targetProgress) {
+      // Tâche terminée
+      const task = this.currentTasks.find(t => t.id === progressData.taskId);
+      if (task) {
+        task.isCompleted = true
+        this.taskWsService.unactiveTaskOnTable(task, progressData.playerId);
+        this.taskWsService.unactiveTaskOnWatch(task, progressData.playerId)
+      }
+    }
+  }
+
+  setupTaskProgressTracking() {
+    // Pour chaque tâche, configurez le suivi de progression
+    this.currentTasks.forEach(task => {
+      //if (task.assignedCooks && task.assignedCooks.length > 0) {
+      //const playerID = task.assignedCooks[0].deviceId;
+      //const taskName = task.name;
+
+      const taskProgressTracking = this.taskWsService.setupTaskProgressTrackingWS();
+      if (taskProgressTracking?.message?.type === "taskProgress") {
+        const progressData: ProgressData = taskProgressTracking.message.progressData;
+        this.updateTaskProgress(progressData);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Nettoyez l'abonnement lors de la destruction du composant
+    if (this.progressSubscription) {
+      this.progressSubscription.unsubscribe();
+    }
   }
 }

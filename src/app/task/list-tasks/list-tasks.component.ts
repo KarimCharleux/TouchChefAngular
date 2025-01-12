@@ -40,6 +40,7 @@ export class ListTasksComponent {
     this.progress = Math.round((this.taskService.getCurrentTasks().filter(t => t.isCompleted).length / this.taskService.getCurrentTasks().length) * 100);
   }
 
+
   showTaskDetails(task: Task) {
     if (task.subTasks && task.subTasks.length > 0) {
       this.selectedTask = task;
