@@ -89,6 +89,10 @@ export class TaskService implements OnInit, OnDestroy {
     }
   }
 
+  getNumberOfAssignedUncompletedTasksOfCook(cook: Cook): number {
+    return this.currentTasks.filter(t => !t.isCompleted && t.assignedCooks?.some(c => c.deviceId === cook.deviceId)).length;
+  }
+
   numberOfCookTasks(cook: Cook): number {
     return this.currentTasks.filter(t => t.assignedCooks?.some(c => c.deviceId === cook.deviceId)).length;
   }

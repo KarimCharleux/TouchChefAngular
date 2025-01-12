@@ -11,7 +11,7 @@
         [$playerAvatar]="cook.avatar"
         [$playerColor]="cook.color"
         [$playerHeartRate]="heartRates[i]"
-        [hasTask]="hasCookTasks(cook)"
+        [numberOfAssignedUncompletedTasks]="getNumberOfAssignedUncompletedTasksOfCook(cook)"
         (dragover)="allowDrop($event, i)"
         (dragleave)="dropLeave($event, i)"
         (drop)="onDrop($event, i, cook)"

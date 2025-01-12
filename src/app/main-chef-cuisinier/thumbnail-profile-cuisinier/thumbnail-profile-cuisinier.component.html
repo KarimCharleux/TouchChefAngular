@@ -1,5 +1,6 @@
 <div class="profile-container">
-  <div class="profile-background" [style.background-color]="$playerColor" [style.outline]="'7px solid ' + $playerColor + '40'"></div>
+  <div class="profile-background" [style.background-color]="$playerColor"
+       [style.outline]="'7px solid ' + $playerColor + '40'"></div>
   <div class="content" [style.paddingTop]="!this.displayStats ? '40px' : '0'">
     <div class="stats-container" *ngIf="this.displayStats">
       <div class="heart-rate">
@@ -23,7 +24,7 @@
         </app-player-data-value>
       </div>
     </div>
-    <div class="sleeping-animation" *ngIf="!hasTask && this.displayStats">
+    <div class="sleeping-animation" *ngIf="this.numberOfAssignedUncompletedTasks <= 0 && this.displayStats">
       <span class="z">Z</span>
       <span class="z">Z</span>
       <span class="z">Z</span>
@@ -37,5 +38,18 @@
     <span class="player-name" [style.--cook-color]="$playerColor">
       {{ $playerName }}
     </span>
-  </div>
+    </div>
 </div>
+<div class="player-number-of-assigned-uncompleted-tasks">
+  <span class="player-number-of-assigned-uncompleted-tasks-number" [style.--cook-color]="$playerColor">{{ numberOfAssignedUncompletedTasks }}</span>
+  <img
+    ngSrc="/assets/tasks-icons/task-list.svg"
+    [alt]="$playerName"
+    width="28"
+    height="28">
+
+</div>
+
+
+
+
