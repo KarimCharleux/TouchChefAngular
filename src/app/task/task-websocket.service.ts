@@ -4,6 +4,7 @@ import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 import {WebSocketService} from '../websocket.service';
 import {Injectable} from '@angular/core';
+import {Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,8 @@ export class TaskWebSocketService {
 
   constructor(private wsService: WebSocketService) {
   }
+
+  private unactiveTaskConst: string = "unactiveTask";
 
   sendTask(task: Task, cook: Cook): void {
     this.wsService.sendMessage(this.createTaskToSend(cook, task));
@@ -33,6 +36,47 @@ export class TaskWebSocketService {
       }
     }
   }
+
+  setupTaskProgressTrackingWS(): TrackingResult | null {
+
+    let currentMessage: TaskProgressMessage | null = null;
+
+    const subscription = this.wsService
+      .waitMessage()
+      .subscribe(message => {
+        const taskProgressMessage = message as TaskProgressMessage;
+        if (taskProgressMessage.type === "taskProgress") {
+          currentMessage = taskProgressMessage;
+        }
+      });
+
+    return {
+      subscription: subscription,
+      message: currentMessage
+    };
+  }
+
+
+  unactiveTaskOnTable(task: Task, playerId: string) {
+    if (task.assignedCooks) {
+      this.wsService.sendMessage({
+        from: playerId,
+        to: FROM_TO_VALUES.TABLE,
+        type: this.unactiveTaskConst
+      })
+    }
+  }
+
+  unactiveTaskOnWatch(task: Task, playerId: string) {
+    if (task.assignedCooks) {
+      this.wsService.sendMessage({
+        from: FROM_TO_VALUES.ANGULAR,
+        to: playerId,
+        type: this.unactiveTaskConst
+      })
+    }
+  }
+
 }
 
 interface TaskToSend {
@@ -50,4 +94,23 @@ export interface AssignedTask {
   quantity: number;
   workStation?: string;
   duration?: number;
+}
+
+export interface ProgressData {
+  taskId: string;
+  playerId: string;
+  currentProgress: number;
+  targetProgress: number;
+}
+
+interface TaskProgressMessage {
+  type: string;
+  from: string;
+  to: string;
+  progressData: ProgressData;
+}
+
+interface TrackingResult {
+  subscription: Subscription;
+  message: TaskProgressMessage | null;
 }
