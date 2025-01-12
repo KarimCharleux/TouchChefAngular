@@ -40,7 +40,7 @@
     </span>
     </div>
 </div>
-<div class="player-number-of-assigned-uncompleted-tasks">
+<div class="player-number-of-assigned-uncompleted-tasks" *ngIf="this.displayStats">
   <span class="player-number-of-assigned-uncompleted-tasks-number" [style.--cook-color]="$playerColor">{{ numberOfAssignedUncompletedTasks }}</span>
   <img
     ngSrc="/assets/tasks-icons/task-list.svg"
