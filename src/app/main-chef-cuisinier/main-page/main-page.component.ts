@@ -210,7 +210,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  hasCookTasks(cook: Cook): boolean {
-    return this.taskService.numberOfCookTasks(cook) > 0;
+  getNumberOfAssignedUncompletedTasksOfCook(cook: Cook) {
+    return this.taskService.getNumberOfAssignedUncompletedTasksOfCook(cook);
   }
 }
