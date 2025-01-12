@@ -10,6 +10,7 @@ export enum WebSocketMessageTypeEnum {
   ADD_TASK = 'addTask',
   TABLE_TASK = 'table_task',
   ADD_PRODUCT = 'add_product',
+  END_GAME = 'endGame',
   STOP_GAME = 'stop_game',
   RECIPE = 'recipe'
 }

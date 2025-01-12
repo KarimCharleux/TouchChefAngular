@@ -32,6 +32,10 @@ export class MainPageWebSocketService {
     this.wsService.sendMessage({type: WebSocketMessageTypeEnum.START_GAME});
   }
 
+  sendMessageEndGame() {
+    this.wsService.sendMessage({type: WebSocketMessageTypeEnum.END_GAME});
+  }
+
   getBPMOfCook(deviceId: string): Observable<number> {
     return this.wsService.waitMessage()
       .pipe(

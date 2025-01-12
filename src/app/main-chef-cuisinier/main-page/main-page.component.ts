@@ -143,6 +143,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.finishSound.play().then();
 
     this.showRaiseHandsModal = true;
+    this.mainPageWsService.sendMessageEndGame();
 
     // Calculer le score final
     const finalScore = {
