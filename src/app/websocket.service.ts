@@ -2,9 +2,6 @@ import {Injectable} from '@angular/core';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import {Observable, Subject} from 'rxjs';
 import {environment} from '../environments/environment';
-import {Timer} from './timer/timer.service';
-import {FROM_TO_VALUES} from './enums/fromToValuesEnum';
-import {WebSocketMessageTypeEnum} from './webSocketMessageTypeEnum';
 
 @Injectable({
   providedIn: 'root',

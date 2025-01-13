@@ -15,6 +15,7 @@ import {DataTransferType} from '../../enums/dataTransferTypeEnum';
 import {MainPageWebSocketService} from './main-page-websocket.service';
 import {Task} from '../../dashboard/burger.model';
 import {DashboardHeaderWebSocketService} from '../../dashboard/dashboard-header/dashboard-header-websocket.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
@@ -48,6 +49,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   cooks: Cook[] = [];
   heartRates: number[] = [];
   showRaiseHandsModal: boolean = false;
+  private tableAssignmentSubscription?: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -86,12 +88,24 @@ export class MainPageComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       });
     });
+
+    // Écoute des assignations de tâches venant de la table
+    this.tableAssignmentSubscription = this.mainPageWsService.listenToTableAssignments()
+      .subscribe(message => {
+        const cook = this.deviceService.getCooks().find(c => c.deviceId === message.playerId);
+        if (cook) {
+          this.assignTaskToCook(message.taskId, cook);
+        } else {
+          console.error(`Cook with deviceId ${message.playerId} not found`);
+        }
+      });
   }
 
   ngOnDestroy() {
     // Arrêter la musique quand on quitte le composant
     this.backgroundMusic.pause();
     this.backgroundMusic.currentTime = 0;
+    this.tableAssignmentSubscription?.unsubscribe();
   }
 
   allowDrop(event: DragEvent, profileNumber: number) {
@@ -121,10 +135,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   assignTaskToCook(taskId: string, cook: Cook) {
+    console.log('Assign task to cook : ', taskId, cook);
+    
     // Vérifie si la tâche existe dans la liste des tâches courantes
     const task = this.taskService.getCurrentTasks().find(t => t.id === taskId);
     if (task) {
       this.taskService.assignTask(taskId, cook); // Assigne la tâche à un cuisinier
+      this.cdr.detectChanges();
     } else {
       console.error("Impossible d'assigner la tâche à " + cook.deviceId + " car la tâche n'existe pas. TaskId : " + taskId);
     }

@@ -45,6 +45,17 @@ export class MainPageWebSocketService {
         map((message: { from: number; to: string; type: string; bpm: number, timestamp: number }) => message.bpm)
       );
   }
+
+  listenToTableAssignments(): Observable<AssignTaskMessage> {
+    return this.wsService.waitMessage().pipe(
+      filter(message => 
+        message.type === 'assign_task' && 
+        message.from === 'table' && 
+        message.to === 'angular'
+      ),
+      map(message => message as AssignTaskMessage)
+    );
+  }
 }
 
 interface onDropOnTableWebSocketObject {
@@ -54,4 +65,12 @@ interface onDropOnTableWebSocketObject {
   taskIcons: string,
   from: FROM_TO_VALUES,
   to: FROM_TO_VALUES,
+}
+
+interface AssignTaskMessage {
+  type: string;
+  taskId: string;
+  playerId: string;
+  from: string;
+  to: string;
 }
