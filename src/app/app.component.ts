@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 
 @Component({
@@ -8,6 +8,15 @@ import {RouterOutlet} from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'TouchChefAngular';
+  ngOnInit() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+  }
+
+  ngOnDestroy() {
+    document.body.style.overflow = 'auto';
+    document.body.style.touchAction = 'auto';
+  }
 }
