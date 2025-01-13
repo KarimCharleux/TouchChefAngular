@@ -33,7 +33,7 @@ export class ScanQRWebSocketService {
       console.log('Sending cooks list to watch : ', cooks);
       this.wsService.sendMessage({
         from: FROM_TO_VALUES.ANGULAR,
-        to: 'allWatches',
+        to: 'all',
         type: WebSocketMessageTypeEnum.COOKS_LIST,
         cooksList: cooks
       });

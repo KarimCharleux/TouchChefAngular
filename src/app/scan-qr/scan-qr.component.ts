@@ -163,7 +163,6 @@ export class ScanQrComponent implements OnInit {
           this.deviceService.getNbPlayers()
         ) {
           console.log('All cooks added to the list : ', this.deviceService.getCooks());
-          await this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
 
           this.scannerEnabled = false;
           this.messageService.add({
@@ -219,10 +218,12 @@ export class ScanQrComponent implements OnInit {
   }
 
   showTutorial() {
+    this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
     this.router.navigate(['/tutorial']);
   }
 
   skipTutorial() {
+    this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
     this.router.navigate(['/countdown']);
   }
 
