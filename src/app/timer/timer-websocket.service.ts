@@ -14,7 +14,7 @@ export class TimerWebSocketService {
 
   waitTimerMessage(start_timer_method: START_TIMER){
     this.wsService.waitMessage().subscribe(message => {
-      if (message.type === WebSocketMessageTypeEnum.START_TIMER && message.to === FROM_TO_VALUES.ANGULAR) {
+      if (message.type === WebSocketMessageTypeEnum.TIMER_START && message.to === FROM_TO_VALUES.ANGULAR) {
         start_timer_method(parseInt(message.timerId), message.from);
       }
     });

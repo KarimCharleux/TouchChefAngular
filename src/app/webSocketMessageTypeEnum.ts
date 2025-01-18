@@ -1,8 +1,8 @@
 export enum WebSocketMessageTypeEnum {
-  START_TIMER = 'start_timer',
+  TIMER_START = 'timerStart',
   HAND_RAISE = 'handRaise',
   CONFIRMATION = 'confirmation',
-  HEART_RATE = 'heart_rate',
+  HEART_RATE = 'heartrate',
   ADD_COOK = 'addCook',
   COOKS_LIST = 'cooksList',
   START_GAME = 'startGame',
@@ -12,5 +12,6 @@ export enum WebSocketMessageTypeEnum {
   ADD_PRODUCT = 'add_product',
   END_GAME = 'endGame',
   STOP_GAME = 'stop_game',
-  RECIPE = 'recipe'
+  RECIPE = 'recipe',
+  TASK_PROGRESS = 'taskProgress',
 }

@@ -4,6 +4,7 @@ import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
 import {ProgressData, TaskWebSocketService} from './task-websocket.service';
 import {Subscription} from 'rxjs';
+import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,7 @@ export class TaskService implements OnInit, OnDestroy {
     const task = this.currentTasks.find(t => t.id === taskId);
     if (task && task.assignedCooks) {
       const index = task.assignedCooks.findIndex(c => c.deviceId === cook.deviceId);
+      this.taskWsService.unactiveTask(task);
       if (index !== -1) {
         task.assignedCooks.splice(index, 1);
       }
@@ -107,9 +109,7 @@ export class TaskService implements OnInit, OnDestroy {
   }
 
   updateTaskProgress(progressData: ProgressData) {
-    // Logique pour mettre à jour la progression de la tâche
     if (progressData.currentProgress === progressData.targetProgress) {
-      // Tâche terminée
       const task = this.currentTasks.find(t => t.id === progressData.taskId);
       if (task) {
         task.isCompleted = true
@@ -120,14 +120,10 @@ export class TaskService implements OnInit, OnDestroy {
   }
 
   setupTaskProgressTracking() {
-    // Pour chaque tâche, configurez le suivi de progression
     this.currentTasks.forEach(task => {
-      //if (task.assignedCooks && task.assignedCooks.length > 0) {
-      //const playerID = task.assignedCooks[0].deviceId;
-      //const taskName = task.name;
 
       const taskProgressTracking = this.taskWsService.setupTaskProgressTrackingWS();
-      if (taskProgressTracking?.message?.type === "taskProgress") {
+      if (taskProgressTracking?.message?.type === WebSocketMessageTypeEnum.TASK_PROGRESS) {
         const progressData: ProgressData = taskProgressTracking.message.progressData;
         this.updateTaskProgress(progressData);
       }
@@ -135,7 +131,6 @@ export class TaskService implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Nettoyez l'abonnement lors de la destruction du composant
     if (this.progressSubscription) {
       this.progressSubscription.unsubscribe();
     }

@@ -46,7 +46,7 @@ export class TaskWebSocketService {
       .waitMessage()
       .subscribe(message => {
         const taskProgressMessage = message as TaskProgressMessage;
-        if (taskProgressMessage.type === "taskProgress") {
+        if (taskProgressMessage.type === WebSocketMessageTypeEnum.TASK_PROGRESS) {
           currentMessage = taskProgressMessage;
         }
       });
@@ -74,6 +74,17 @@ export class TaskWebSocketService {
         from: FROM_TO_VALUES.ANGULAR,
         to: playerId,
         type: this.unactiveTaskConst
+      })
+    }
+  }
+
+  unactiveTask(task: Task) {
+    if (task.assignedCooks) {
+      this.wsService.sendMessage({
+        from: FROM_TO_VALUES.ANGULAR,
+        to: 'all',
+        type: this.unactiveTaskConst,
+        taskID: task.id
       })
     }
   }
