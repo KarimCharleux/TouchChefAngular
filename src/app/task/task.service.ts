@@ -19,6 +19,7 @@ export class TaskService implements OnInit, OnDestroy {
     private taskWsService: TaskWebSocketService
   ) {
     this.changeBurger(0); // TODO: change to current burger
+    this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived);
   }
 
   ngOnInit() {
@@ -71,6 +72,16 @@ export class TaskService implements OnInit, OnDestroy {
     if (task && task.assignedCooks) {
       const index = task.assignedCooks.findIndex(c => c.deviceId === cook.deviceId);
       this.taskWsService.unactiveTask(task);
+      if (index !== -1) {
+        task.assignedCooks.splice(index, 1);
+      }
+    }
+  }
+
+  unassignTaskReceived(taskId: string, deviceId: string): void {
+    const task = this.currentTasks.find(t => t.id === taskId);
+    if (task && task.assignedCooks) {
+      const index = task.assignedCooks.findIndex(c => c.deviceId === deviceId);
       if (index !== -1) {
         task.assignedCooks.splice(index, 1);
       }

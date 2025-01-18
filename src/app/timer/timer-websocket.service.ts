@@ -12,10 +12,18 @@ export class TimerWebSocketService {
   constructor(private wsService: WebSocketService) {
   }
 
-  waitTimerMessage(start_timer_method: START_TIMER){
+  waitTimerStartMessage(start_timer_method: TIMER) {
     this.wsService.waitMessage().subscribe(message => {
       if (message.type === WebSocketMessageTypeEnum.TIMER_START && message.to === FROM_TO_VALUES.ANGULAR) {
         start_timer_method(parseInt(message.timerId), message.from);
+      }
+    });
+  }
+
+  waitTimerRefuseMessage(refuse_timer_method: TIMER) {
+    this.wsService.waitMessage().subscribe(message => {
+      if (message.type === WebSocketMessageTypeEnum.TIMER_REFUSE && message.to === FROM_TO_VALUES.ANGULAR) {
+        refuse_timer_method(parseInt(message.timerId), message.from);
       }
     });
   }
@@ -51,7 +59,7 @@ interface MinimalistTimer {
   timerDuration: string;
 }
 
-interface START_TIMER {
+interface TIMER {
   (timerId: number, deviceId: string): void
 }
 

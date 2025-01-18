@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {Cook} from '../device.service';
 import {WebSocketService} from '../websocket.service';
 import {BehaviorSubject} from 'rxjs';
-import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
-import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 import {TimerWebSocketService} from './timer-websocket.service';
 
 
@@ -23,7 +21,8 @@ export class TimerService {
   private currentId = 0;
 
   constructor(private readonly wsService: WebSocketService, private readonly timerWsService: TimerWebSocketService) {
-    this.timerWsService.waitTimerMessage(this.startTimer);
+    this.timerWsService.waitTimerStartMessage(this.startTimer);
+    this.timerWsService.waitTimerRefuseMessage(this.refuseTimer);
   }
 
   getTimers(): Timer[] {
@@ -47,6 +46,15 @@ export class TimerService {
       timer.isStarted = true;
       this.timers.next(this.timers.value);
       console.log("Démarrage du timer de " + timer.duration + "s pour " + timer.cook.name);
+    }
+  }
+
+  refuseTimer(timerId: number, deviceId: string): void {
+    const timer = this.timers.value.find(t => t.id === timerId);
+    if (timer && timer.cook.deviceId === deviceId) {
+      const cookName: string = timer.cook.name;
+      this.removeTimer(timerId);
+      console.log("Suppression du timer associé à " + cookName);
     }
   }
 
