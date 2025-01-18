@@ -139,7 +139,6 @@ export class TaskService implements OnDestroy {
   }
 
   setupTaskProgressTracking() {
-    // Stocker les subscriptions pour pouvoir les nettoyer plus tard
     this.subscriptions = new Subscription();
 
     this.currentTasks.forEach(task => {
