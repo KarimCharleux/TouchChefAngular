@@ -92,6 +92,7 @@ export class TaskWebSocketService {
   waitUnactiveTaskMessage(unactive_task_method: TASK) {
     this.wsService.waitMessage().subscribe(message => {
       if (message.type === this.unactiveTaskConst) {
+        console.log("Unactive task message received : ", message);
         unactive_task_method(message.taskId, message.from);
       }
     });
