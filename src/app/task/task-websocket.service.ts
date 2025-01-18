@@ -4,7 +4,7 @@ import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 import {WebSocketService} from '../websocket.service';
 import {Injectable} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {filter, map, Observable, Subscription} from 'rxjs';
 import {RecipeItem} from '../recipes/recipe.model';
 
 @Injectable({
@@ -38,23 +38,15 @@ export class TaskWebSocketService {
     }
   }
 
-  setupTaskProgressTrackingWS(): TrackingResult | null {
-
-    let currentMessage: TaskProgressMessage | null = null;
-
-    const subscription = this.wsService
-      .waitMessage()
-      .subscribe(message => {
+  setupTaskProgressTrackingWS(taskId: string): Observable<TaskProgressMessage> {
+    return this.wsService.waitMessage().pipe(
+      filter((message: any) => {
         const taskProgressMessage = message as TaskProgressMessage;
-        if (taskProgressMessage.type === WebSocketMessageTypeEnum.TASK_PROGRESS) {
-          currentMessage = taskProgressMessage;
-        }
-      });
-
-    return {
-      subscription: subscription,
-      message: currentMessage
-    };
+        return taskProgressMessage.type === WebSocketMessageTypeEnum.TASK_PROGRESS
+          && taskProgressMessage.progressData.taskId === taskId;
+      }),
+      map(message => message as TaskProgressMessage)
+    );
   }
 
 
@@ -147,11 +139,6 @@ interface TaskProgressMessage {
   from: string;
   to: string;
   progressData: ProgressData;
-}
-
-interface TrackingResult {
-  subscription: Subscription;
-  message: TaskProgressMessage | null;
 }
 
 interface TASK {

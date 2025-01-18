@@ -1,12 +1,10 @@
-import {ChangeDetectorRef, Component, Injectable, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Injectable, OnDestroy} from '@angular/core';
 import {Cook} from '../device.service';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
 import {ProgressData, TaskWebSocketService} from './task-websocket.service';
 import {Subscription} from 'rxjs';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
-import {NgForOf, NgIf} from '@angular/common';
-import {DialogModule} from 'primeng/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -17,21 +15,19 @@ import {DialogModule} from 'primeng/dialog';
   `,
   standalone: true
 })
-export class TaskService implements OnInit, OnDestroy {
-  private currentTasks: Task[] = BURGERS[0].tasks; // TODO: change to current burger
+export class TaskService implements OnDestroy {
+  private currentTasks: Task[];
   private indexOfLastAssignation: number = 0;
-  private progressSubscription: Subscription | null = null;
+  private subscriptions: Subscription = new Subscription();
 
 
   constructor(
     private taskWsService: TaskWebSocketService,
-    private readonly cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef
   ) {
+    this.currentTasks = BURGERS[0].tasks; // TODO: change to current burger
     this.changeBurger(0); // TODO: change to current burger
     this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived.bind(this));
-  }
-
-  ngOnInit() {
     this.setupTaskProgressTracking();
   }
 
@@ -143,19 +139,24 @@ export class TaskService implements OnInit, OnDestroy {
   }
 
   setupTaskProgressTracking() {
-    this.currentTasks.forEach(task => {
+    // Stocker les subscriptions pour pouvoir les nettoyer plus tard
+    this.subscriptions = new Subscription();
 
-      const taskProgressTracking = this.taskWsService.setupTaskProgressTrackingWS();
-      if (taskProgressTracking?.message?.type === WebSocketMessageTypeEnum.TASK_PROGRESS) {
-        const progressData: ProgressData = taskProgressTracking.message.progressData;
-        this.updateTaskProgress(progressData);
-      }
+    this.currentTasks.forEach(task => {
+      const subscription = this.taskWsService
+        .setupTaskProgressTrackingWS(task.id)
+        .subscribe(message => {
+          this.updateTaskProgress(message.progressData);
+          this.cdr.detectChanges();
+        });
+
+      this.subscriptions.add(subscription);
     });
   }
 
   ngOnDestroy() {
-    if (this.progressSubscription) {
-      this.progressSubscription.unsubscribe();
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
     }
   }
 }
