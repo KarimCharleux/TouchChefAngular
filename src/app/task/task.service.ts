@@ -1,13 +1,21 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {Cook} from '../device.service';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
 import {ProgressData, TaskWebSocketService} from './task-websocket.service';
 import {Subscription} from 'rxjs';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
+import {NgForOf, NgIf} from '@angular/common';
+import {DialogModule} from 'primeng/dialog';
 
 @Injectable({
   providedIn: 'root'
+})
+@Component({
+  template: `
+
+  `,
+  standalone: true
 })
 export class TaskService implements OnInit, OnDestroy {
   private currentTasks: Task[] = BURGERS[0].tasks; // TODO: change to current burger
@@ -16,10 +24,11 @@ export class TaskService implements OnInit, OnDestroy {
 
 
   constructor(
-    private taskWsService: TaskWebSocketService
+    private taskWsService: TaskWebSocketService,
+    private readonly cdr: ChangeDetectorRef,
   ) {
     this.changeBurger(0); // TODO: change to current burger
-    this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived);
+    this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived.bind(this));
   }
 
   ngOnInit() {
@@ -62,6 +71,7 @@ export class TaskService implements OnInit, OnDestroy {
       } else {
         console.error("Impossible d'assigner la tâche à " + cook.name + " car il est déjà assigné à cette tâche. TaskId : " + taskId);
       }
+      this.cdr.detectChanges();
     } else {
       console.error("Impossible d'assigner la tâche à " + cook.name + " car la tâche n'existe pas. TaskId : " + taskId);
     }
@@ -74,6 +84,7 @@ export class TaskService implements OnInit, OnDestroy {
       this.taskWsService.unactiveTask(task);
       if (index !== -1) {
         task.assignedCooks.splice(index, 1);
+        this.cdr.detectChanges();
       }
     }
   }
@@ -84,6 +95,7 @@ export class TaskService implements OnInit, OnDestroy {
       const index = task.assignedCooks.findIndex(c => c.deviceId === deviceId);
       if (index !== -1) {
         task.assignedCooks.splice(index, 1);
+        this.cdr.detectChanges();
       }
     }
   }
