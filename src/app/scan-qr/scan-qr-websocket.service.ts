@@ -28,9 +28,9 @@ export class ScanQRWebSocketService {
     };
   }
 
-  async sendCooksListToWatch(cooks: Cook[]) {
+  async sendCooksListToAll(cooks: Cook[]) {
     if (cooks) {
-      console.log('Sending cooks list to watch : ', cooks);
+      console.log('Sending cooks list to all : ', cooks);
       this.wsService.sendMessage({
         from: FROM_TO_VALUES.ANGULAR,
         to: 'all',

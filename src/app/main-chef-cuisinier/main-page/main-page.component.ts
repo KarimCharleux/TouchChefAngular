@@ -16,6 +16,9 @@ import {MainPageWebSocketService} from './main-page-websocket.service';
 import {Task} from '../../dashboard/burger.model';
 import {DashboardHeaderWebSocketService} from '../../dashboard/dashboard-header/dashboard-header-websocket.service';
 import {Subscription} from 'rxjs';
+import {ScanQRWebSocketService} from '../../scan-qr/scan-qr-websocket.service';
+import {TaskWebSocketService} from '../../task/task-websocket.service';
+import {BURGERS} from '../../dashboard/burgers.data';
 
 @Component({
   selector: 'app-main-page',
@@ -57,6 +60,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private mainPageWsService: MainPageWebSocketService,
     private readonly dashboardHeaderWsService: DashboardHeaderWebSocketService,
+    private scanQRWsService: ScanQRWebSocketService,
+    private taskWsService: TaskWebSocketService,
     private cdr: ChangeDetectorRef,
     private timerService: TimerService
   ) {
@@ -76,10 +81,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Démarrer la musique de fond
     this.backgroundMusic.play().then();
 
-    // Attendre 4s et envoyer un message a Unity
+    this.mainPageWsService.sendMessageStartGame();
+
     setTimeout(() => {
-      this.mainPageWsService.sendMessageStartGame();
       this.clockComponent.startTimer();
+      this.taskWsService.sendTasksListToTable(BURGERS[0].tasks); // TODO make it dynamic
     }, 1000);
 
     this.cooks.forEach((cook, index) => {
@@ -88,6 +94,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       });
     });
+
+    this.scanQRWsService.sendCooksListToAll(this.deviceService.getCooks());
 
     // Écoute des assignations de tâches venant de la table
     this.tableAssignmentSubscription = this.mainPageWsService.listenToTableAssignments()
@@ -136,7 +144,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   assignTaskToCook(taskId: string, cook: Cook) {
     console.log('Assign task to cook : ', taskId, cook);
-    
+
     // Vérifie si la tâche existe dans la liste des tâches courantes
     const task = this.taskService.getCurrentTasks().find(t => t.id === taskId);
     if (task) {

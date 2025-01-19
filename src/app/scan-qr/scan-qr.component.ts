@@ -218,12 +218,10 @@ export class ScanQrComponent implements OnInit {
   }
 
   showTutorial() {
-    this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
     this.router.navigate(['/tutorial']);
   }
 
   skipTutorial() {
-    this.scanQRWsService.sendCooksListToWatch(this.deviceService.getCooks());
     this.router.navigate(['/countdown']);
   }
 
