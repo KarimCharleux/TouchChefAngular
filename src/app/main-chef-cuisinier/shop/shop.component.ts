@@ -25,12 +25,7 @@ export class ShopComponent {
     {id: 2, name: 'Laitue', icon: '🥬', isOnCooldown: false},
     {id: 3, name: 'Viande', icon: '🥩', isOnCooldown: false},
     {id: 4, name: 'Pain', icon: '🫓', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
-    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false},
+    {id: 5, name: 'Fromage', icon: '🧀', isOnCooldown: false}
   ];
 
   private readonly tapSound: HTMLAudioElement;

@@ -19,6 +19,7 @@ export class TaskService implements OnDestroy {
   private indexOfLastAssignation: number = 0;
   private subscriptionsProgressTasks: Subscription = new Subscription();
   private subscriptionsFinishedTasks: Subscription = new Subscription();
+  private currentBurgerIndex: number = 0;
 
 
   constructor(
@@ -30,6 +31,18 @@ export class TaskService implements OnDestroy {
     this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived.bind(this));
     this.setupTaskFinishTracking();
     this.setupTaskProgressTracking();
+  }
+
+  changeBurger(burgerId: number): void {
+    if (burgerId < BURGERS.length) {
+      this.currentBurgerIndex = burgerId;
+      this.currentTasks = BURGERS[burgerId].tasks;
+      this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
+    }
+  }
+
+  getCurrentTasksDishName(): string {
+    return BURGERS[this.currentBurgerIndex].name;
   }
 
   getCurrentTasks(): Task[] {
@@ -112,9 +125,13 @@ export class TaskService implements OnDestroy {
     return this.currentTasks.filter(t => t.assignedCooks?.some(c => c.deviceId === cook.deviceId));
   }
 
-  changeBurger(burgerId: number): void {
+  /*changeBurger(burgerId: number): void {
     this.currentTasks = BURGERS[burgerId].tasks;
     this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
+  }*/
+
+  private areAllTasksCompleted(): boolean {
+    return this.currentTasks.every(task => task.isCompleted);
   }
 
   updateTaskProgress(obj: ProgressData | TaskFinishedMessage) {
@@ -132,6 +149,10 @@ export class TaskService implements OnDestroy {
         task.isCompleted = true;
         this.taskWsService.unactiveTaskOnTable(task, obj.playerId);
         this.taskWsService.unactiveTaskOnWatch(task, obj.playerId);
+
+        if (this.areAllTasksCompleted()) {
+          this.changeBurger(this.currentBurgerIndex + 1);
+        }
       }
     }
   }
@@ -142,6 +163,10 @@ export class TaskService implements OnDestroy {
       task.isCompleted = true;
       this.taskWsService.unactiveTaskOnTable(task, obj.assignedTask.cook.deviceId);
       this.taskWsService.unactiveTaskOnWatch(task, obj.assignedTask.cook.deviceId);
+
+      if (this.areAllTasksCompleted()) {
+        this.changeBurger(this.currentBurgerIndex + 1);
+      }
     }
   }
 

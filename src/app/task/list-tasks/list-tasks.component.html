@@ -1,7 +1,10 @@
 <div class="list-tasks-container">
-  <h4 class="list-tasks-title">Liste des tâches pour le <br><span class="plate">Classic Burger 🍔</span> <span class="progress" *ngIf="progress > 0">({{ progress }}%)</span></h4>
+  <h4 class="list-tasks-title">Liste des tâches pour le <br>
+    <span class="plate">{{ taskService.getCurrentTasksDishName() }}</span>
+    <span class="progress" *ngIf="progress > 0">({{ progress }}%)</span>
+  </h4>
   <div class="scrollable-list">
-    <div *ngFor="let task of taskService.getCurrentTasks(); let i = index" 
+    <div *ngFor="let task of taskService.getCurrentTasks(); let i = index"
          class="task-item"
          [class.completed]="task.isCompleted"
          [style.background]="task.assignedCooks[0] && task.assignedCooks[0].color + '10'"
@@ -9,19 +12,19 @@
          (click)="showTaskDetails(task)"
          (keydown)="showTaskDetails(task)"
          (dragstart)="onDragStart($event, task)">
-      
+
       <div class="task-header">
         <h3 class="task-title">{{ task.name }}</h3>
-        
+
         <div class="task-icons">
-          <div class="icon" >{{ task.icons }}</div>
+          <div class="icon">{{ task.icons }}</div>
         </div>
       </div>
 
       <div class="task-footer">
         <div class="assigned-cooks">
           <ng-container *ngFor="let nbCook of [].constructor(task.nbCooksNeeded); let ind = index">
-            <div class="cook" 
+            <div class="cook"
                  *ngIf="task.assignedCooks && task.assignedCooks[ind]; else emptyCook"
                  [style.background]="task.assignedCooks[ind].color">
               <img [src]="'/assets/cooks/' + task.assignedCooks[ind].avatar + '.png'"
@@ -37,10 +40,10 @@
 
         <div class="timer-wheel" *ngIf="task.duration">
           <svg width="40" height="40">
-            <circle class="bg" cx="20" cy="20" r="18" />
+            <circle class="bg" cx="20" cy="20" r="18"/>
             <circle class="progress" cx="20" cy="20" r="18"
                     [style.strokeDasharray]="2 * Math.PI * 18"
-                    [style.strokeDashoffset]="getTimerOffset(task.duration)" />
+                    [style.strokeDashoffset]="getTimerOffset(task.duration)"/>
           </svg>
           <div class="timer-text">
             {{ task.duration }}s
@@ -60,10 +63,10 @@
   [resizable]="false"
   styleClass="task-dialog"
   [style]="{ width: '60vw' }">
-  
+
   <div class="dialog-content">
     <div class="subtasks-container">
-      <div *ngFor="let subtask of selectedTask?.subTasks; let i = index" 
+      <div *ngFor="let subtask of selectedTask?.subTasks; let i = index"
            class="subtask-item">
         <div class="subtask-number">{{ i + 1 }}</div>
         <p class="subtask-description">{{ subtask.description }}</p>
@@ -73,14 +76,14 @@
     <div class="assigned-cooks-container" *ngIf="selectedTask?.assignedCooks?.length">
       <h3>Cuisiniers assignés :</h3>
       <div class="assigned-cooks-list">
-        <div *ngFor="let cook of selectedTask?.assignedCooks" 
+        <div *ngFor="let cook of selectedTask?.assignedCooks"
              class="assigned-cook-item"
              [style.border-color]="cook.color">
-          <img [src]="'/assets/cooks/' + cook.avatar + '.png'" 
+          <img [src]="'/assets/cooks/' + cook.avatar + '.png'"
                [alt]="cook.name"
                class="cook-avatar">
           <span class="cook-name" [style.color]="cook.color">{{ cook.name }}</span>
-          <button class="remove-cook-btn" 
+          <button class="remove-cook-btn"
                   (click)="unassignCook(cook)"
                   [style.background-color]="cook.color">
             <i class="pi pi-times"></i>
@@ -88,7 +91,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="dialog-footer">
       <button class="close-button" (click)="showDialog = false">
         <i class="pi pi-check"></i>
