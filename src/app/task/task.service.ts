@@ -98,20 +98,6 @@ export class TaskService implements OnDestroy {
     }
   }
 
-  completeTask(taskId: string): void {
-    const task = this.currentTasks.find(t => t.id === taskId);
-    if (task) {
-      task.isCompleted = true;
-    }
-  }
-
-  uncompleteTask(taskId: string): void {
-    const task = this.currentTasks.find(t => t.id === taskId);
-    if (task) {
-      task.isCompleted = false;
-    }
-  }
-
   getNumberOfAssignedUncompletedTasksOfCook(cook: Cook): number {
     return this.currentTasks.filter(t => !t.isCompleted && t.assignedCooks?.some(c => c.deviceId === cook.deviceId)).length;
   }

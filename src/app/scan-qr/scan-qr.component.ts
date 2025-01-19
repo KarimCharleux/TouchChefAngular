@@ -119,75 +119,69 @@ export class ScanQrComponent implements OnInit {
 
     this.isWaitingResponse = true;
 
-    try {
-      this.scanQRWsService.sendAddCook(this.currentDeviceId, this.cookName, this.selectedAvatar.toString(), this.selectedColor);
+    this.scanQRWsService.sendAddCook(this.currentDeviceId, this.cookName, this.selectedAvatar.toString(), this.selectedColor);
 
-      const response = await Promise.race([
-        new Promise((resolve, reject) => {
-          const subscription = this.scanQRWsService.addCookResponse(this.currentDeviceId, resolve);
+    const response = await Promise.race([
+      new Promise((resolve, reject) => {
+        const subscription = this.scanQRWsService.addCookResponse(this.currentDeviceId, resolve);
 
-          setTimeout(() => {
-            subscription.unsubscribe();
-            reject('timeout');
-          }, 10000);
-        }),
+        setTimeout(() => {
+          subscription.unsubscribe();
+          reject('timeout');
+        }, 10000);
+      }),
 
-        new Promise((_, reject) =>
-          setTimeout(() => reject('timeout'), 10000)
-        )
-      ]);
+      new Promise((_, reject) =>
+        setTimeout(() => reject('timeout'), 10000)
+      )
+    ]);
 
-      console.log('Response:', response);
+    console.log('Response:', response);
 
 
-      const added = this.deviceService.addCook({
-        name: this.cookName,
-        deviceId: this.currentDeviceId,
-        avatar: this.selectedAvatar.toString(),
-        color: this.selectedColor
-      });
+    const added = this.deviceService.addCook({
+      name: this.cookName,
+      deviceId: this.currentDeviceId,
+      avatar: this.selectedAvatar.toString(),
+      color: this.selectedColor
+    });
 
-      if (added) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Succès',
-          detail: `${this.cookName} a été ajouté comme cuisinier!`,
-        });
-
-        this.showNameDialog = false;
-        this.cookName = '';
-        this.selectedAvatar = 1;
-
-        if (
-          this.deviceService.getCooks().length >=
-          this.deviceService.getNbPlayers()
-        ) {
-          console.log('All cooks added to the list : ', this.deviceService.getCooks());
-
-          this.scannerEnabled = false;
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Info',
-            detail: 'Tous les cuisiniers ont été ajoutés!',
-          });
-        }
-
-        const colorIndex = this.availableColors.findIndex(c => c.value === this.selectedColor);
-        if (colorIndex !== -1) {
-          this.availableColors[colorIndex].isSelected = true;
-        }
-
-        this.selectedColor = '';
-      }
-    } catch (error) {
+    if (added) {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Erreur de connexion',
-        detail: 'Veuillez vérifier que la montre de ' + this.cookName + ' est bien connectée au réseau WiFi',
+        severity: 'success',
+        summary: 'Succès',
+        detail: `${this.cookName} a été ajouté comme cuisinier!`,
       });
-    } finally {
-      this.isWaitingResponse = false;
+
+      this.showNameDialog = false;
+      this.cookName = '';
+      this.selectedAvatar = 1;
+
+      if (
+        this.deviceService.getCooks().length >=
+        this.deviceService.getNbPlayers()
+      ) {
+        console.log('All cooks added to the list : ', this.deviceService.getCooks());
+
+        this.scannerEnabled = false;
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Info',
+          detail: 'Tous les cuisiniers ont été ajoutés!',
+        });
+      }
+
+      const colorIndex = this.availableColors.findIndex(c => c.value === this.selectedColor);
+      if (colorIndex !== -1) {
+        this.availableColors[colorIndex].isSelected = true;
+      }
+
+      this.selectedColor = '';
     }
+  
+    
+    this.isWaitingResponse = false;
+    
   }
 
   onCamerasFound(cameras: MediaDeviceInfo[]): void {

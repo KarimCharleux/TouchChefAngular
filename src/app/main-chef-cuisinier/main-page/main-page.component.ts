@@ -85,7 +85,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.clockComponent.startTimer();
-      this.taskWsService.sendTasksListToTable(BURGERS[0].tasks); // TODO make it dynamic
+      this.taskWsService.sendTasksListToTable(BURGERS[0].tasks);
     }, 1000);
 
     this.cooks.forEach((cook, index) => {

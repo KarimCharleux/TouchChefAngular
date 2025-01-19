@@ -11,13 +11,6 @@
          (dragstart)="onDragStart($event, task)">
       
       <div class="task-header">
-        <div class="checkbox" 
-             [class.checked]="task.isCompleted"
-             (click)="toggleCheck(i, $event)"
-             (keydown)="toggleCheck(i, $event)">
-          <i *ngIf="task.isCompleted" class="pi pi-check" style="color: white"></i>
-        </div>
-        
         <h3 class="task-title">{{ task.name }}</h3>
         
         <div class="task-icons">
