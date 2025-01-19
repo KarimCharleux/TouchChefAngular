@@ -41,6 +41,10 @@ export class TaskService implements OnDestroy {
     }
   }
 
+  getNumberOfBurgersDone(): number {
+    return this.currentBurgerIndex;
+  }
+
   getCurrentTasksDishName(): string {
     return BURGERS[this.currentBurgerIndex].name;
   }

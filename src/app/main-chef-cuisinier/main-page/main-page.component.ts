@@ -187,7 +187,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
 
     const finalScore = {
-      nbBurgers: 1, // TODO get from burgers
+      nbBurgers: this.taskService.getNumberOfBurgersDone(),
       totalTime: this.gameDuration - this.clockComponent.currentTime,
       totalStars: this.nbEarnedStars
     };
