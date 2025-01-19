@@ -21,8 +21,8 @@ export class TimerService {
   private currentId = 0;
 
   constructor(private readonly wsService: WebSocketService, private readonly timerWsService: TimerWebSocketService) {
-    this.timerWsService.waitTimerStartMessage(this.startTimer);
-    this.timerWsService.waitTimerRefuseMessage(this.refuseTimer);
+    this.timerWsService.waitTimerStartMessage(this.startTimer.bind(this));
+    this.timerWsService.waitTimerRefuseMessage(this.refuseTimer.bind(this));
   }
 
   getTimers(): Timer[] {

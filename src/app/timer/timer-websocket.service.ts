@@ -22,6 +22,7 @@ export class TimerWebSocketService {
 
   waitTimerRefuseMessage(refuse_timer_method: TIMER) {
     this.wsService.waitMessage().subscribe(message => {
+      console.log(message);
       if (message.type === WebSocketMessageTypeEnum.TIMER_REFUSE && message.to === FROM_TO_VALUES.ANGULAR) {
         refuse_timer_method(parseInt(message.timerId), message.from);
       }
