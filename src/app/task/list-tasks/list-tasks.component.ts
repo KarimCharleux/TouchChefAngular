@@ -18,28 +18,13 @@ export class ListTasksComponent {
   showDialog: boolean = false;
   selectedTask: Task | null = null;
   tapSound: HTMLAudioElement;
-  progress: number = 0;
+  progress: number = 0; // this.progress = Math.round((this.taskService.getCurrentTasks().filter(t => t.isCompleted).length / this.taskService.getCurrentTasks().length) * 100);
 
   constructor(
     protected taskService: TaskService,
   ) {
     this.tapSound = new Audio("assets/sounds/confirm.mp3");
   }
-
-  toggleCheck(index: number, event: Event) {
-    this.tapSound.play().then();
-    event.stopPropagation();
-
-    const task = this.taskService.getCurrentTasks()[index];
-    if (task.isCompleted) {
-      this.taskService.uncompleteTask(task.id);
-    } else {
-      this.taskService.completeTask(task.id);
-    }
-
-    this.progress = Math.round((this.taskService.getCurrentTasks().filter(t => t.isCompleted).length / this.taskService.getCurrentTasks().length) * 100);
-  }
-
 
   showTaskDetails(task: Task) {
     if (task.subTasks && task.subTasks.length > 0) {
