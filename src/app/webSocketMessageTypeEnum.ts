@@ -6,6 +6,7 @@ export enum WebSocketMessageTypeEnum {
   HEART_RATE = 'heartrate',
   ADD_COOK = 'addCook',
   COOKS_LIST = 'cooksList',
+  TASKS_LIST = 'tasksList',
   START_GAME = 'startGame',
   ADD_TIMER = 'addTimer',
   ADD_TASK = 'addTask',

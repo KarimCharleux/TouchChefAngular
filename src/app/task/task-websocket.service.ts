@@ -101,6 +101,19 @@ export class TaskWebSocketService {
       recipeItems: recipeItems
     };
   }
+
+  sendTasksListToTable(tasks: Task[]): void {
+    this.wsService.sendMessage(this.createTaskToTable(tasks));
+  }
+
+  private createTaskToTable(tasks: Task[]): TaskToTable {
+    return {
+      from: FROM_TO_VALUES.ANGULAR,
+      to: FROM_TO_VALUES.TABLE,
+      type: WebSocketMessageTypeEnum.TASKS_LIST,
+      tasks: tasks
+    };
+  }
 }
 
 interface RecipeItemToSend {
@@ -115,6 +128,13 @@ interface TaskToSend {
   to: FROM_TO_VALUES | string;
   type: WebSocketMessageTypeEnum;
   assignedTask: AssignedTask
+}
+
+interface TaskToTable {
+  from: FROM_TO_VALUES;
+  to: FROM_TO_VALUES;
+  type: WebSocketMessageTypeEnum;
+  tasks: Task[]
 }
 
 export interface AssignedTask {
