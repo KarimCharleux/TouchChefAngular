@@ -54,6 +54,7 @@ export class TaskService implements OnDestroy {
     const task = this.currentTasks.find(t => t.id === taskId);
     if (task && task.assignedCooks) { // Check if the task exists and has assigned cooks
       if (!task.assignedCooks.find(c => c.deviceId === cook.deviceId)) { // Check if the cook is not already assigned to the task
+        this.unAssignTask(taskId, task.assignedCooks[0]);
         if (task.assignedCooks.length < task.nbCooksNeeded) { // Check if the task has less cooks assigned than needed
           task.assignedCooks.push(cook); // Assign the cook to the task
         } else {
