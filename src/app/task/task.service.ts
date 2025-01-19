@@ -3,7 +3,7 @@ import {Cook} from '../device.service';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
 import {ProgressData, TaskFinishedMessage, TaskWebSocketService} from './task-websocket.service';
-import {Subscription} from 'rxjs';
+import {Subscription, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,7 @@ export class TaskService implements OnDestroy {
   private subscriptionsProgressTasks: Subscription = new Subscription();
   private subscriptionsFinishedTasks: Subscription = new Subscription();
   private currentBurgerIndex: number = 0;
+  tasksChanged = new Subject<void>();
 
 
   constructor(
@@ -37,7 +38,19 @@ export class TaskService implements OnDestroy {
     if (burgerId < BURGERS.length) {
       this.currentBurgerIndex = burgerId;
       this.currentTasks = BURGERS[burgerId].tasks;
+      
+      // Envoyer les nouvelles tâches à la table
+      this.taskWsService.sendTasksListToTable(this.currentTasks);
+      
+      // Envoyer les éléments de la recette à la table
       this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
+      
+      // Émettre le changement pour mettre à jour la progression
+      this.tasksChanged.next();
+      
+      // Mettre en place le suivi des tâches pour le nouveau burger
+      this.setupTaskProgressTracking();
+      this.setupTaskFinishTracking();
     }
   }
 
@@ -153,6 +166,8 @@ export class TaskService implements OnDestroy {
         task.isCompleted = true;
         this.taskWsService.unactiveTaskOnTable(task, obj.playerId);
         this.taskWsService.unactiveTaskOnWatch(task, obj.playerId);
+        
+        this.tasksChanged.next();
 
         if (this.areAllTasksCompleted()) {
           this.changeBurger(this.currentBurgerIndex + 1);
@@ -167,6 +182,8 @@ export class TaskService implements OnDestroy {
       task.isCompleted = true;
       this.taskWsService.unactiveTaskOnTable(task, obj.assignedTask.cook.deviceId);
       this.taskWsService.unactiveTaskOnWatch(task, obj.assignedTask.cook.deviceId);
+      
+      this.tasksChanged.next();
 
       if (this.areAllTasksCompleted()) {
         this.changeBurger(this.currentBurgerIndex + 1);
@@ -176,6 +193,11 @@ export class TaskService implements OnDestroy {
 
 
   setupTaskProgressTracking() {
+    // Nettoyer les anciennes souscriptions
+    if (this.subscriptionsProgressTasks) {
+      this.subscriptionsProgressTasks.unsubscribe();
+    }
+    
     this.subscriptionsProgressTasks = new Subscription();
 
     this.currentTasks.forEach(task => {
@@ -191,6 +213,11 @@ export class TaskService implements OnDestroy {
   }
 
   setupTaskFinishTracking() {
+    // Nettoyer les anciennes souscriptions
+    if (this.subscriptionsFinishedTasks) {
+      this.subscriptionsFinishedTasks.unsubscribe();
+    }
+    
     this.subscriptionsFinishedTasks = new Subscription();
 
     this.currentTasks.forEach(task => {
@@ -212,5 +239,6 @@ export class TaskService implements OnDestroy {
     if (this.subscriptionsFinishedTasks) {
       this.subscriptionsFinishedTasks.unsubscribe();
     }
+    this.tasksChanged.complete();
   }
 }

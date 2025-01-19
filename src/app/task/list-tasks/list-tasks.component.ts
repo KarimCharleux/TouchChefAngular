@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {DialogModule} from 'primeng/dialog';
 import {Task} from '../../dashboard/burger.model';
@@ -13,17 +13,38 @@ import {DataTransferTypeEnum} from '../../enums/dataTransferTypeEnum';
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss']
 })
-export class ListTasksComponent {
+export class ListTasksComponent implements OnInit {
 
   showDialog: boolean = false;
   selectedTask: Task | null = null;
   tapSound: HTMLAudioElement;
-  progress: number = 0; // this.progress = Math.round((this.taskService.getCurrentTasks().filter(t => t.isCompleted).length / this.taskService.getCurrentTasks().length) * 100);
+  progress: number = 0;
 
   constructor(
     protected taskService: TaskService,
   ) {
     this.tapSound = new Audio("assets/sounds/confirm.mp3");
+    this.updateProgress();
+    
+    // S'abonner aux changements des tâches
+    this.taskService.tasksChanged.subscribe(() => {
+      this.updateProgress();
+    });
+  }
+
+  ngOnInit() {
+    this.updateProgress();
+  }
+
+  private updateProgress() {
+    const tasks = this.taskService.getCurrentTasks();
+    if (tasks.length === 0) {
+      this.progress = 0;
+      return;
+    }
+    
+    const completedTasks = tasks.filter(t => t.isCompleted).length;
+    this.progress = Math.round((completedTasks / tasks.length) * 100);
   }
 
   showTaskDetails(task: Task) {
