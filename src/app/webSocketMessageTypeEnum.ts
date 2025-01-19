@@ -14,5 +14,6 @@ export enum WebSocketMessageTypeEnum {
   END_GAME = 'endGame',
   STOP_GAME = 'stop_game',
   RECIPE = 'recipe',
-  TASK_PROGRESS = 'taskProgress'
+  TASK_PROGRESS = 'taskProgress',
+  TASK_FINISHED = 'taskFinished',
 }

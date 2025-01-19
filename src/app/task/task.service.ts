@@ -2,9 +2,8 @@ import {ChangeDetectorRef, Component, Injectable, OnDestroy} from '@angular/core
 import {Cook} from '../device.service';
 import {Task} from '../dashboard/burger.model';
 import {BURGERS} from '../dashboard/burgers.data';
-import {ProgressData, TaskWebSocketService} from './task-websocket.service';
+import {ProgressData, TaskFinishedMessage, TaskWebSocketService} from './task-websocket.service';
 import {Subscription} from 'rxjs';
-import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,8 @@ import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 export class TaskService implements OnDestroy {
   private currentTasks: Task[];
   private indexOfLastAssignation: number = 0;
-  private subscriptions: Subscription = new Subscription();
+  private subscriptionsProgressTasks: Subscription = new Subscription();
+  private subscriptionsFinishedTasks: Subscription = new Subscription();
 
 
   constructor(
@@ -28,6 +28,7 @@ export class TaskService implements OnDestroy {
     this.currentTasks = BURGERS[0].tasks; // TODO: change to current burger
     this.changeBurger(0); // TODO: change to current burger
     this.taskWsService.waitUnactiveTaskMessage(this.unassignTaskReceived.bind(this));
+    this.setupTaskFinishTracking();
     this.setupTaskProgressTracking();
   }
 
@@ -127,19 +128,37 @@ export class TaskService implements OnDestroy {
     this.taskWsService.sendRecipeItemsToTable(BURGERS[burgerId].recipeItems);
   }
 
-  updateTaskProgress(progressData: ProgressData) {
-    if (progressData.currentProgress === progressData.targetProgress) {
-      const task = this.currentTasks.find(t => t.id === progressData.taskId);
+  updateTaskProgress(obj: ProgressData | TaskFinishedMessage) {
+    if ('currentProgress' in obj && 'targetProgress' in obj) {
+      this.updateTaskProgressData(obj as ProgressData);
+    } else {
+      this.updateTaskFinished(obj as TaskFinishedMessage);
+    }
+  }
+
+  private updateTaskProgressData(obj: ProgressData) {
+    if (obj.currentProgress === obj.targetProgress) {
+      const task = this.currentTasks.find(t => t.id === obj.taskId);
       if (task) {
-        task.isCompleted = true
-        this.taskWsService.unactiveTaskOnTable(task, progressData.playerId);
-        this.taskWsService.unactiveTaskOnWatch(task, progressData.playerId)
+        task.isCompleted = true;
+        this.taskWsService.unactiveTaskOnTable(task, obj.playerId);
+        this.taskWsService.unactiveTaskOnWatch(task, obj.playerId);
       }
     }
   }
 
+  private updateTaskFinished(obj: TaskFinishedMessage) {
+    const task = this.currentTasks.find(t => t.id === obj.assignedTask.taskId);
+    if (task) {
+      task.isCompleted = true;
+      this.taskWsService.unactiveTaskOnTable(task, obj.assignedTask.cook.deviceId);
+      this.taskWsService.unactiveTaskOnWatch(task, obj.assignedTask.cook.deviceId);
+    }
+  }
+
+
   setupTaskProgressTracking() {
-    this.subscriptions = new Subscription();
+    this.subscriptionsProgressTasks = new Subscription();
 
     this.currentTasks.forEach(task => {
       const subscription = this.taskWsService
@@ -149,13 +168,31 @@ export class TaskService implements OnDestroy {
           this.cdr.detectChanges();
         });
 
-      this.subscriptions.add(subscription);
+      this.subscriptionsProgressTasks.add(subscription);
+    });
+  }
+
+  setupTaskFinishTracking() {
+    this.subscriptionsFinishedTasks = new Subscription();
+
+    this.currentTasks.forEach(task => {
+      const subscription = this.taskWsService
+        .setupTaskFinishedTrackingWS(task.id)
+        .subscribe(message => {
+          this.updateTaskProgress(message);
+          this.cdr.detectChanges();
+        });
+
+      this.subscriptionsFinishedTasks.add(subscription);
     });
   }
 
   ngOnDestroy() {
-    if (this.subscriptions) {
-      this.subscriptions.unsubscribe();
+    if (this.subscriptionsProgressTasks) {
+      this.subscriptionsProgressTasks.unsubscribe();
+    }
+    if (this.subscriptionsFinishedTasks) {
+      this.subscriptionsFinishedTasks.unsubscribe();
     }
   }
 }

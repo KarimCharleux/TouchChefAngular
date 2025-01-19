@@ -4,7 +4,7 @@ import {FROM_TO_VALUES} from '../enums/fromToValuesEnum';
 import {WebSocketMessageTypeEnum} from '../webSocketMessageTypeEnum';
 import {WebSocketService} from '../websocket.service';
 import {Injectable} from '@angular/core';
-import {filter, map, Observable, Subscription} from 'rxjs';
+import {filter, map, Observable} from 'rxjs';
 import {RecipeItem} from '../recipes/recipe.model';
 
 @Injectable({
@@ -46,6 +46,17 @@ export class TaskWebSocketService {
           && taskProgressMessage.progressData.taskId === taskId;
       }),
       map(message => message as TaskProgressMessage)
+    );
+  }
+
+  setupTaskFinishedTrackingWS(taskId: string): Observable<TaskFinishedMessage> {
+    return this.wsService.waitMessage().pipe(
+      filter((message: any) => {
+        const taskFinishedMessage = message as any;
+        return taskFinishedMessage.type === WebSocketMessageTypeEnum.TASK_FINISHED
+          && taskFinishedMessage.assignedTask.taskId === taskId;
+      }),
+      map(message => message as any)
     );
   }
 
@@ -139,6 +150,13 @@ interface TaskProgressMessage {
   from: string;
   to: string;
   progressData: ProgressData;
+}
+
+export interface TaskFinishedMessage {
+  type: string;
+  from: string;
+  to: string;
+  assignedTask: AssignedTask;
 }
 
 interface TASK {
