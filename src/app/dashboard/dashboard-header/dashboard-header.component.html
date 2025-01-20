@@ -1,6 +1,6 @@
 <div class="dashboard-header">
   <div class="dashboard-header__container grid grid-cols-3 items-center h-fit">
-    <app-stars [nbEarnedStars]="nbEarnedStars"></app-stars>
+    <app-stars [nbEarnedStars]="nbEarnedStars" (starsUpdated)="onStarsUpdated($event)"></app-stars>
     <img
       src="assets/logo.png"
       alt="logo"

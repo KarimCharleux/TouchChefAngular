@@ -45,7 +45,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   isDraggedOver: boolean[] = [false, false, false, false];
   nbEarnedStars: number = 0;
-  gameDuration: number = 250; // 250 seconds = 4 minutes and 10 seconds
+  gameDuration: number = 720; // 720 seconds = 12 minutes
   private readonly successSound: HTMLAudioElement;
   private readonly finishSound: HTMLAudioElement;
   private readonly backgroundMusic: HTMLAudioElement;
@@ -53,6 +53,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   heartRates: number[] = [];
   showRaiseHandsModal: boolean = false;
   private tableAssignmentSubscription?: Subscription;
+  private gameFinishedSubscription?: Subscription;
 
   constructor(
     private readonly router: Router,
@@ -75,6 +76,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Configurer la musique de fond
     this.backgroundMusic.loop = true;
     this.backgroundMusic.volume = 0.3; // Réduire le volume à 30%
+
+    // S'abonner à la fin du jeu
+    this.gameFinishedSubscription = this.taskService.gameFinished.subscribe(() => {
+      this.onTimeEnd();
+    });
   }
 
   ngOnInit() {
@@ -114,6 +120,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.backgroundMusic.pause();
     this.backgroundMusic.currentTime = 0;
     this.tableAssignmentSubscription?.unsubscribe();
+    this.gameFinishedSubscription?.unsubscribe();
   }
 
   allowDrop(event: DragEvent, profileNumber: number) {
@@ -161,25 +168,16 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   onTimeEnd() {
+    // Arrêter le timer
+    this.clockComponent.stopTimer();
+    
     // Arrêter la musique de fond avant de jouer le son de fin
     this.backgroundMusic.pause();
-
     // Jouer le son de fin
     this.finishSound.play().then();
-
     this.showRaiseHandsModal = true;
     this.mainPageWsService.sendMessageEndGame();
-
-    // Calculer le score final
-    const finalScore = {
-      nbBurgers: 1, // TODO get from burgers
-      totalTime: this.clockComponent.currentTime,
-      totalStars: this.nbEarnedStars
-    };
-  }
-
-  stopTimer() {
-    this.clockComponent.stopTimer();
+    this.cdr.detectChanges();
   }
 
   unableModale() {
@@ -188,7 +186,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
     const finalScore = {
       nbBurgers: this.taskService.getNumberOfBurgersDone(),
-      totalTime: this.gameDuration - this.clockComponent.currentTime,
+      totalTime: this.gameDuration - this.clockComponent.getCurrentTime(),
       totalStars: this.nbEarnedStars
     };
 

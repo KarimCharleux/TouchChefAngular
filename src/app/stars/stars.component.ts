@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output, EventEmitter} from '@angular/core';
 import {WebSocketService} from '../websocket.service';
 
 @Component({
@@ -16,13 +16,13 @@ import {WebSocketService} from '../websocket.service';
 })
 export class StarsComponent {
   @Input() nbEarnedStars: number = 0;
+  @Output() starsUpdated = new EventEmitter<number>();
 
   constructor(private wsService: WebSocketService, private cdr: ChangeDetectorRef) {
     this.setupScoreUpdateTracking();
   }
 
   setupScoreUpdateTracking() {
-
     this.wsService
       .waitMessage()
       .subscribe(message => {
@@ -43,6 +43,7 @@ export class StarsComponent {
             // Obtenir les points associés
             const points = IngredientStatePoints[ingredientStateKey as keyof typeof IngredientStatePoints];
             this.updateScore(points);
+            
           } else {
             console.error("Invalid ingredientState received:", scoreUpdateMessage.ingredientState);
           }
@@ -52,6 +53,7 @@ export class StarsComponent {
 
   updateScore(points: number) {
     this.nbEarnedStars = Number(this.nbEarnedStars) + Number(points);
+    this.starsUpdated.emit(this.nbEarnedStars);
     this.cdr.detectChanges();
   }
 }

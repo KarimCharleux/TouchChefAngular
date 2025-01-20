@@ -21,6 +21,7 @@ export class TaskService implements OnDestroy {
   private subscriptionsFinishedTasks: Subscription = new Subscription();
   private currentBurgerIndex: number = 0;
   tasksChanged = new Subject<void>();
+  gameFinished = new Subject<void>();
 
 
   constructor(
@@ -51,6 +52,9 @@ export class TaskService implements OnDestroy {
       // Mettre en place le suivi des tâches pour le nouveau burger
       this.setupTaskProgressTracking();
       this.setupTaskFinishTracking();
+    } else {
+      // Si on a dépassé le dernier burger, c'est que le jeu est terminé
+      this.gameFinished.next();
     }
   }
 

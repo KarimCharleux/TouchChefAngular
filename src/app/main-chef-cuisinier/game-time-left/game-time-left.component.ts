@@ -22,7 +22,7 @@ import {NgOptimizedImage} from '@angular/common';
 })
 export class GameTimeLeftComponent implements OnInit, OnDestroy {
 
-  @Input() gameDuration: number = 250;
+  @Input() gameDuration: number = 720;
   @Output() timerComplete = new EventEmitter<void>();
 
   minutes: string = '00';
@@ -52,7 +52,6 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
 
   stopTimer() {
     clearInterval(this.timer);
-    this.resetTimer();
   }
 
   resetTimer() {
@@ -79,6 +78,10 @@ export class GameTimeLeftComponent implements OnInit, OnDestroy {
 
       this.cdr.detectChanges();
     }, 1000);
+  }
+
+  public getCurrentTime() {
+    return this.currentTime;
   }
 
   private updateDisplay() {
