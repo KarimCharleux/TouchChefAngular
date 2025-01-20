@@ -18,7 +18,7 @@ import {NgIf, NgStyle} from '@angular/common';
 })
 
 export class PlayerDataValueComponent {
-  maxValue: number = 150;
+  @Input() maxValue: number = 0;
   defaultSize: number = 52;
   @Input() playerData: number = 0;
   @Input() iconColor: string = "#ffffff";

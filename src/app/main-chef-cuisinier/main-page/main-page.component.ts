@@ -199,43 +199,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }).then();
   }
 
-  getTableWidth(): string {
-    const profileWidth = 180; // Largeur d'un profil en px
-    const gap = 12; // Gap entre les profils en px
-    const totalWidth =
-      this.cooks.length * profileWidth + (this.cooks.length - 1) * gap;
-    return `${totalWidth}px`;
-  }
-
-  allowDropOnTable(event: DragEvent) {
-    event.preventDefault();
-    (event.target as HTMLElement).classList.add('drag-over');
-  }
-
-  dropLeaveTable(event: DragEvent) {
-    event.preventDefault();
-    (event.target as HTMLElement).classList.remove('drag-over');
-  }
-
-  onDropOnTable(event: DragEvent) {
-    event.preventDefault();
-    (event.target as HTMLElement).classList.remove('drag-over');
-
-    if (event.dataTransfer) {
-      const data = event.dataTransfer.getData('text/plain');
-      const [type, field] = data.split('/');
-
-      if (DataTransferType.isTask(type)) {
-        const task: Task | undefined = this.taskService.getTaskById(field);
-        if (task) {
-          this.mainPageWsService.sendTaskToTable(task);
-        } else {
-          console.error("Task cannot be sent to table because task with ID :" + field + " is not found");
-        }
-      }
-    }
-  }
-
   getNumberOfAssignedUncompletedTasksOfCook(cook: Cook) {
     return this.taskService.getNumberOfAssignedUncompletedTasksOfCook(cook);
   }

@@ -6,6 +6,7 @@
       <div class="heart-rate">
         <app-player-data-value
           [playerData]="$playerHeartRate"
+          [maxValue]="150"
           iconType="heart"
           alternativeText="BPM"
           iconColor="#d96060"
@@ -13,10 +14,11 @@
           [iconWidth]="24">
         </app-player-data-value>
       </div>
-      <div class="energy" *ngIf="false">
+      <div class="energy">
         <app-player-data-value
-          [playerData]="$playerActivity"
+          [playerData]="numberOfAssignedUncompletedTasks"
           iconType="thunder"
+          [maxValue]="4"
           alternativeText="Énergie"
           iconColor="#6098d9"
           [iconHeight]="24"
@@ -39,15 +41,6 @@
       {{ $playerName }}
     </span>
     </div>
-</div>
-<div class="player-number-of-assigned-uncompleted-tasks" *ngIf="this.displayStats">
-  <span class="player-number-of-assigned-uncompleted-tasks-number" [style.--cook-color]="$playerColor">{{ numberOfAssignedUncompletedTasks }}</span>
-  <img
-    ngSrc="/assets/tasks-icons/task-list.svg"
-    [alt]="$playerName"
-    width="28"
-    height="28">
-
 </div>
 
 

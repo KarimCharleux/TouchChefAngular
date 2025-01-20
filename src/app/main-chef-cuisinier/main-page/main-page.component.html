@@ -19,14 +19,6 @@
         class="transition-transform transform hover:scale-105">
       </app-thumbnail-profile-cuisinier>
     </div>
-    <div
-      class="wooden-table"
-      (dragover)="allowDropOnTable($event)"
-      (dragleave)="dropLeaveTable($event)"
-      (drop)="onDropOnTable($event)"
-      [style.width]="getTableWidth()">
-      <span class="table-text">Déposer sur la table</span>
-    </div>
     <div class="flex flex-row w-full space-between items-start mid-row">
       <div class="flex flex-col flex-1 w-1/2 justify-center items-center gap-3">
         <app-list-tasks></app-list-tasks>
